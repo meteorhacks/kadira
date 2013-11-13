@@ -11,7 +11,7 @@ Meteor.methods({
 
       sessionProto = session.constructor.prototype;
       //do the wrapping
-      MeteorAPM._wrapSession(sessionProto);
+      wrapSession(sessionProto);
 
       console.log('Meteor APM Initialized!');
       session.__apkOk = true;
