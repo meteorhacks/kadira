@@ -1,8 +1,29 @@
 
+# Methods
+
 Script to Sync Package to Test
 Hijack Sessions
 * Hijack DB
 * Hijack HTTP
 * Notification Manager
 * Api Initialization
+
+* Some Other Stuff to Hijack
+----------------------------
+* HTTP
+* Email
+* Other Async Time (HiJack Future)
+
+# Pub/Sub
+
+* How many subscriptions I've
+* Unsub/auto unsub ratio
+* Histogram of Subscriptions
+  * By Count
+  * By Data Usage
+
+
+
+
+
 
