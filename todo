@@ -3,9 +3,8 @@
 
 Script to Sync Package to Test
 Hijack Sessions
-* Hijack DB
-* Hijack HTTP
-* Notification Manager
+Hijack DB
+Notification Manager
 * Api Initialization
 
 * Some Other Stuff to Hijack
@@ -14,16 +13,29 @@ Hijack Sessions
 * Email
 * Other Async Time (HiJack Future)
 
-# Pub/Sub
+##Pub/Sub
 
 * How many subscriptions I've
+* Histogram of Users
 * Unsub/auto unsub ratio
 * Histogram of Subscriptions
   * By Count
   * By Data Usage
 
+ ##DB
+
+ * Most Costly Operations
+   * what they are related, from a Method, Publication
+ * Write Operations and Polling
+   * See related methods
+ * Memory Usage for Caching
+   * Breakdown for each query
+   * Breakdown for each collection
 
 
 
 
 
+
+
+["{\"msg\":\"sub\",\"id\":\"2g8JDFHXyQ3qHSwfJ\",\"name\":\"postsList\",\"params\":[{\"status\":2,\"$or\":[{\"headline\":{\"$regex\":\"meteor\",\"$options\":\"i\"}},{\"url\":{\"$regex\":\"meteor\",\"$options\":\"i\"}},{\"body\":{\"$regex\":\"meteor\",\"$options\":\"i\"}}]},{\"limit\":10,\"sort\":{\"_id\":-1}}]}"]
