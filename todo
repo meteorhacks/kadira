@@ -4,14 +4,15 @@
 Script to Sync Package to Test
 Hijack Sessions
 Hijack DB
+add cursor methods
 Notification Manager
 * Api Initialization
 
 * Some Other Stuff to Hijack
 ----------------------------
-* HTTP
+HTTP
 * Email
-* Other Async Time (HiJack Future)
+Other Async Time (HiJack Future)
 
 ##Pub/Sub
 

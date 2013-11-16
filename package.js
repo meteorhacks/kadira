@@ -14,6 +14,7 @@ Package.on_use(function(api) {
     'lib/hijack/session.js',
     'lib/hijack/db.js',
     'lib/hijack/http.js',
+    'lib/hijack/async.js',
     'lib/test_methods.js'
   ], 'server');
 });
