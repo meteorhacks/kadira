@@ -6,6 +6,7 @@ Npm.depends({
   
 });
 
+
 Package.on_use(function(api) {
   api.use(['minimongo', 'livedata', 'mongo-livedata', 'ejson', 'underscore', 'http'], ['server']);
   api.add_files([
@@ -15,6 +16,9 @@ Package.on_use(function(api) {
     'lib/hijack/db.js',
     'lib/hijack/http.js',
     'lib/hijack/async.js',
+    'lib/apm.js',
     'lib/test_methods.js'
   ], 'server');
+  
+  api.export('Apm');
 });
