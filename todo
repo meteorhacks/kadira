@@ -7,6 +7,13 @@ Hijack DB
 add cursor methods
 Notification Manager
 Api Initialization
+* refactor codebase (wrap methodStore and related methods into a model)
+* Build Payload 
+  support for methodMetrics
+  * send max and min request per every minute
+  send errors
+  do not interchange minutes
+
 
 * Some Other Stuff to Hijack
 ----------------------------
