@@ -11,6 +11,7 @@ Api Initialization
 * Build Payload 
   support for methodMetrics
   * send max and min request per every minute
+  * try to pick the wait time
   send errors
   do not interchange minutes
 
