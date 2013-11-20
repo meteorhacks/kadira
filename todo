@@ -7,11 +7,11 @@ Hijack DB
 add cursor methods
 Notification Manager
 Api Initialization
-* refactor codebase (wrap methodStore and related methods into a model)
+refactor codebase (wrap methodStore and related methods into a model)
 * Build Payload 
   support for methodMetrics
-  * send max and min request per every minute
-  * try to pick the wait time
+  send max and min request per every minute
+  try to pick the wait time (hijack processMessage)
   send errors
   do not interchange minutes
 
