@@ -18,6 +18,15 @@ Package.on_use(function(api) {
     'lib/hijack/http.js',
     'lib/hijack/async.js'
   ], 'server');
+
+  if(process.env.__TEST_APM_EXPORTS) {
+    //use for testing
+    var exportFields = process.env.__TEST_APM_EXPORTS.split(',').map(function(v) {
+      return v.trim();
+    });
+    api.export(exportFields);
+  } else {
+    api.export(['Apm']);
+  }
   
-  api.export('Apm');
 });

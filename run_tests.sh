@@ -12,3 +12,16 @@ mkdir -p $DEST_PATH
 
 cp -rf lib $DEST_PATH/lib
 cp package.js $DEST_PATH/package.js
+
+#exports intenal namespaces in the tests
+export __TEST_APM_EXPORTS="Apm, NotificationManager"
+
+cd test
+
+PARAMS=""
+if [[ $VERBOSE ]]; then
+  PARAMS="$PARAMS -V"
+fi
+laika -g "$1" $PARAMS
+
+cd ..
