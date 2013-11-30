@@ -35,7 +35,9 @@ Other Async Time (HiJack Future)
 
  * Most Costly Operations
    * what they are related, from a Method, Publication
- * Write Operations and Polling
+ * Write Operations
+ * Polling and WriteQueue (show these two in the same view)
+     - we can use _pollMongo 
    * See related methods
  * Memory Usage for Caching
    * Breakdown for each query
