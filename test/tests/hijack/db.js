@@ -1,0 +1,298 @@
+var assert = require('assert');
+
+suite('Hijack - DB', function() {
+  suite('MongoConnector', function() {
+    test('insert', function(done, server, client) {
+      server.evalSync(function() {
+        Posts = new Meteor.Collection('posts');
+        Meteor.methods({
+          'doCall': function() {
+            Posts.insert({aa: 10});
+          }
+        });
+        emit('return');
+      });
+
+      callMethod(client, 'doCall');
+      
+      var events = getLastMethodEvents(server, ['type', 'data']);
+      assert.deepEqual(events, [
+        {type: 'start', data: undefined},
+        {type: 'wait', data: undefined},
+        {type: 'waitend', data: undefined},
+        {type: 'db', data: {coll: 'posts', func: 'insert'}},
+        {type: 'dbend', data: undefined},
+        {type: 'complete', data: undefined}
+      ]);
+      done();
+    });
+
+    test('update', function(done, server, client) {
+      server.evalSync(function() {
+        Posts = new Meteor.Collection('posts');
+        Posts.insert({_id: 'aa', dd: 10});
+        Meteor.methods({
+          'doCall': function() {
+            Posts.update({_id: 'aa'}, {$set: {dd: 30}});
+          }
+        });
+        emit('return');
+      });
+
+      callMethod(client, 'doCall');
+      
+      var events = getLastMethodEvents(server, ['type', 'data']);
+      assert.deepEqual(events, [
+        {type: 'start', data: undefined},
+        {type: 'wait', data: undefined},
+        {type: 'waitend', data: undefined},
+        {type: 'db', data: {coll: 'posts', func: 'update', selector: {_id: 'aa'}}},
+        {type: 'dbend', data: undefined},
+        {type: 'complete', data: undefined}
+      ]);
+      done();
+    });
+
+    test('remove', function(done, server, client) {
+      server.evalSync(function() {
+        Posts = new Meteor.Collection('posts');
+        Posts.insert({_id: 'aa', dd: 10});
+        Meteor.methods({
+          'doCall': function() {
+            Posts.remove({_id: 'aa'});
+          }
+        });
+        emit('return');
+      });
+
+      callMethod(client, 'doCall');
+      
+      var events = getLastMethodEvents(server, ['type', 'data']);
+      assert.deepEqual(events, [
+        {type: 'start', data: undefined},
+        {type: 'wait', data: undefined},
+        {type: 'waitend', data: undefined},
+        {type: 'db', data: {coll: 'posts', func: 'remove', selector: {_id: 'aa'}}},
+        {type: 'dbend', data: undefined},
+        {type: 'complete', data: undefined}
+      ]);
+      done();
+    });
+
+    test('findOne', function(done, server, client) {
+      server.evalSync(function() {
+        Posts = new Meteor.Collection('posts');
+        Posts.insert({_id: 'aa', dd: 10});
+        Meteor.methods({
+          'doCall': function() {
+            return Posts.findOne({_id: 'aa'});
+          }
+        });
+        emit('return');
+      });
+
+      var res = callMethod(client, 'doCall');
+      assert.deepEqual(res, {_id: 'aa', dd: 10});
+      
+      var events = getLastMethodEvents(server, ['type', 'data']);
+      assert.deepEqual(events, [
+        {type: 'start', data: undefined},
+        {type: 'wait', data: undefined},
+        {type: 'waitend', data: undefined},
+        {type: 'db', data: {coll: 'posts', func: 'find', selector: {_id: 'aa'}}},
+        {type: 'dbend', data: undefined},
+        {type: 'db', data: {coll: 'posts', func: 'fetch', selector: {_id: 'aa'}}},
+        {type: 'dbend', data: undefined},
+        {type: 'complete', data: undefined}
+      ]);
+      done();
+    });
+
+    test('upsert', function(done, server, client) {
+      server.evalSync(function() {
+        Posts = new Meteor.Collection('posts');
+        Meteor.methods({
+          'doCall': function() {
+            Posts.upsert({_id: 'aa'}, {$set: {bb: 20}});
+          }
+        });
+        emit('return');
+      });
+
+      callMethod(client, 'doCall');
+      
+      var events = getLastMethodEvents(server, ['type', 'data']);
+      assert.deepEqual(events, [
+        {type: 'start', data: undefined},
+        {type: 'wait', data: undefined},
+        {type: 'waitend', data: undefined},
+        {type: 'db', data: {coll: 'posts', func: 'upsert', selector: {_id: 'aa'}}},
+        {type: 'dbend', data: undefined},
+        {type: 'complete', data: undefined}
+      ]);
+      done();
+    });
+
+    test('indexes', function(done, server, client) {
+      server.evalSync(function() {
+        Posts = new Meteor.Collection('posts');
+        Meteor.methods({
+          'doCall': function() {
+            Posts._ensureIndex({aa: 1, bb: 1});
+            Posts._dropIndex({aa: 1, bb: 1});
+          }
+        });
+        emit('return');
+      });
+
+      callMethod(client, 'doCall');
+      
+      var events = getLastMethodEvents(server, ['type', 'data']);
+      assert.deepEqual(events, [
+        {type: 'start', data: undefined},
+        {type: 'wait', data: undefined},
+        {type: 'waitend', data: undefined},
+        {type: 'db', data: {coll: 'posts', func: '_ensureIndex', index: {aa: 1, bb: 1}}},
+        {type: 'dbend', data: undefined},
+        {type: 'db', data: {coll: 'posts', func: '_dropIndex', index: {aa: 1, bb: 1}}},
+        {type: 'dbend', data: undefined},
+        {type: 'complete', data: undefined}
+      ]);
+      done();
+    });
+  });
+
+  suite('Cursor', function() {
+    test('count', function(done, server, client) {
+      server.evalSync(function() {
+        Posts = new Meteor.Collection('posts');
+        Posts.insert({aa: 100});
+        Posts.insert({aa: 300});
+
+        Meteor.methods({
+          'doCall': function() {
+            return Posts.find().count();
+          }
+        });
+        emit('return');
+      });
+
+      var result = callMethod(client, 'doCall');
+      assert.deepEqual(result, 2);
+      
+      var events = getLastMethodEvents(server, ['type', 'data']);
+      assert.deepEqual(events, [
+        {type: 'start', data: undefined},
+        {type: 'wait', data: undefined},
+        {type: 'waitend', data: undefined},
+        {type: 'db', data: {coll: 'posts', func: 'find', selector: {}}},
+        {type: 'dbend', data: undefined},
+        {type: 'db', data: {coll: 'posts', func: 'count', selector: {}}},
+        {type: 'dbend', data: undefined},
+        {type: 'complete', data: undefined}
+      ]);
+      done();
+    });
+
+    test('fetch', function(done, server, client) {
+      server.evalSync(function() {
+        Posts = new Meteor.Collection('posts');
+        Posts.insert({_id: 'aa'});
+        Posts.insert({_id: 'bb'});
+
+        Meteor.methods({
+          'doCall': function() {
+            return Posts.find({_id: {$exists: true}}).fetch();
+          }
+        });
+        emit('return');
+      });
+
+      var result = callMethod(client, 'doCall');
+      assert.deepEqual(result, [{_id: 'aa'}, {_id: 'bb'}]);
+      
+      var events = getLastMethodEvents(server, ['type', 'data']);
+      assert.deepEqual(events, [
+        {type: 'start', data: undefined},
+        {type: 'wait', data: undefined},
+        {type: 'waitend', data: undefined},
+        {type: 'db', data: {coll: 'posts', func: 'find', selector: {_id: {$exists: true}}}},
+        {type: 'dbend', data: undefined},
+        {type: 'db', data: {coll: 'posts', func: 'fetch', selector: {_id: {$exists: true}}}},
+        {type: 'dbend', data: undefined},
+        {type: 'complete', data: undefined}
+      ]);
+      done();
+    });
+
+    test('map', function(done, server, client) {
+      server.evalSync(function() {
+        Posts = new Meteor.Collection('posts');
+        Posts.insert({_id: 'aa'});
+        Posts.insert({_id: 'bb'});
+
+        Meteor.methods({
+          'doCall': function() {
+            return Posts.find({_id: {$exists: true}}).map(function(doc) {
+              return doc._id;
+            });
+          }
+        });
+        emit('return');
+      });
+
+      var result = callMethod(client, 'doCall');
+      assert.deepEqual(result, ['aa', 'bb']);
+      
+      var events = getLastMethodEvents(server, ['type', 'data']);
+      assert.deepEqual(events, [
+        {type: 'start', data: undefined},
+        {type: 'wait', data: undefined},
+        {type: 'waitend', data: undefined},
+        {type: 'db', data: {coll: 'posts', func: 'find', selector: {_id: {$exists: true}}}},
+        {type: 'dbend', data: undefined},
+        {type: 'db', data: {coll: 'posts', func: 'map', selector: {_id: {$exists: true}}}},
+        {type: 'dbend', data: undefined},
+        {type: 'complete', data: undefined}
+      ]);
+      done();
+    });
+
+    test('forEach', function(done, server, client) {
+      server.evalSync(function() {
+        Posts = new Meteor.Collection('posts');
+        Posts.insert({_id: 'aa'});
+        Posts.insert({_id: 'bb'});
+
+        Meteor.methods({
+          'doCall': function() {
+            var res = [];
+            Posts.find({_id: {$exists: true}}).forEach(function(doc) {
+               res.push(doc._id);
+            });
+            return res;
+          }
+        });
+        emit('return');
+      });
+
+      var result = callMethod(client, 'doCall');
+      assert.deepEqual(result, ['aa', 'bb']);
+      
+      var events = getLastMethodEvents(server, ['type', 'data']);
+      assert.deepEqual(events, [
+        {type: 'start', data: undefined},
+        {type: 'wait', data: undefined},
+        {type: 'waitend', data: undefined},
+        {type: 'db', data: {coll: 'posts', func: 'find', selector: {_id: {$exists: true}}}},
+        {type: 'dbend', data: undefined},
+        {type: 'db', data: {coll: 'posts', func: 'forEach', selector: {_id: {$exists: true}}}},
+        {type: 'dbend', data: undefined},
+        {type: 'complete', data: undefined}
+      ]);
+      done();
+    });
+
+  });
+});
+
