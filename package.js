@@ -9,6 +9,7 @@ Npm.depends({
 Package.on_use(function(api) {
   api.use(['minimongo', 'livedata', 'mongo-livedata', 'ejson', 'underscore', 'http', 'email'], ['server']);
   api.add_files([
+    'lib/ntp.js',
     'lib/models/methods.js',
     'lib/apm.js',
     'lib/notification_manager.js',
