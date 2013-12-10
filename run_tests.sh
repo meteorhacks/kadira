@@ -14,7 +14,7 @@ cp -rf lib $DEST_PATH/lib
 cp package.js $DEST_PATH/package.js
 
 #exports intenal namespaces in the tests
-export __TEST_APM_EXPORTS="Apm, NotificationManager"
+export __TEST_APM_EXPORTS="Apm, NotificationManager, MethodsModel"
 
 cd test
 
