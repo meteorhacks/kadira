@@ -68,6 +68,35 @@ suite('Methods Model', function() {
     done();
   });
 
+  test('buildPayload - with errors - the response', function(done, server) {
+    server.evalSync(createMethodCompleted, 'aa', 'hello', 1, 100, 5);
+    server.evalSync(createMethodErrored, 'aa', 'hello', 2, 'the-error', 800, 10);
+    var payload = server.evalSync(function() {
+      var payload = model.buildPayload();
+      emit('return', payload);
+    });
+
+    var expectedResult = {
+      _id: "aa::2",
+      name: "hello",
+      session: "aa",
+      methodId: 2,
+      events: [
+        {type: 'start', at: 800},
+        {type: 'error', at: 810, data: {error: 'the-error'}}
+      ],
+      type: "error",
+      metrics: {
+        compute: 10,
+        total: 10
+      }
+    };
+
+    assert.deepEqual(payload.methodRequests[0], expectedResult);
+    assert.equal(payload.methodRequests.length, 1);
+    done();
+  });
+
   test('buildPayload - max min', function(done, server) {
     server.evalSync(function() {
       model = new MethodsModel();
@@ -99,10 +128,53 @@ suite('Methods Model', function() {
     
     var processedResult = {};
     payload2.methodRequests.forEach(function(method) {
-      processedResult[method.event] = pick(method, ['_id', method.event]);
+      processedResult[method.event] = {_id: method._id};
+      processedResult[method.event][method.event] = method.metrics[method.event];
     });
 
     assert.deepEqual(processedResult, expectedResult);
+    done();
+  });
+
+  test('buildPayload - max min - the response', function(done, server) {
+    server.evalSync(function() {
+      model = new MethodsModel();
+      model.sendMaxMinInterval = 1;
+      emit('return');
+    });
+
+    server.evalSync(createMethodCompleted, 'aa', 'hello', 1, 100, 5);
+    var payload1 = server.evalSync(getPayload);
+
+    var expectedResult = {
+      "_id": "aa::1",
+      "name": "hello",
+      "session": "aa",
+      "methodId": 1,
+      "events": [
+        {
+          "type": "start",
+          "at": 100
+        },
+        {
+          "type": "complete",
+          "at": 105
+        }
+      ],
+      "metrics": {
+        "compute": 5,
+        "total": 5,
+        "wait": 0,
+        "db": 0,
+        "http": 0,
+        "email": 0,
+        "async": 0
+      },
+      "type": "max",
+      "event": "total"
+    };
+
+    assert.deepEqual(payload1.methodRequests, [expectedResult]);
     done();
   });
 
@@ -145,7 +217,8 @@ suite('Methods Model', function() {
     var processedResult = {};
     payload2.methodRequests.forEach(function(method) {
       var id = method.name + "::" + method.event;
-      processedResult[id] = pick(method, ['_id', method.event]);
+      processedResult[id] = {_id: method._id};
+      processedResult[id][method.event] = method.metrics[method.event];
     });
 
     assert.deepEqual(processedResult, expectedResult);
