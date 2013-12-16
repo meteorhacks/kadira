@@ -201,7 +201,7 @@ suite('Methods Model', function() {
       errorCount: 2
     };
 
-    // assert.deepEqual(payload.methodRequests[0], expectedResult);
+    assert.deepEqual(payload.methodRequests[0], expectedResult);
     assert.deepEqual(payload.methodRequests[1], expectedResult2);
     assert.equal(payload.methodRequests.length, 2);
     done();
