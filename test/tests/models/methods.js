@@ -87,13 +87,123 @@ suite('Methods Model', function() {
       ],
       type: "error",
       metrics: {
-        compute: 10,
-        total: 10
-      }
+        "compute": 10,
+        "total": 10,
+        "wait": 0,
+        "db": 0,
+        "http": 0,
+        "email": 0,
+        "async": 0
+      },
+      errorCount: 1
     };
 
     assert.deepEqual(payload.methodRequests[0], expectedResult);
     assert.equal(payload.methodRequests.length, 1);
+    done();
+  });
+
+  test('buildPayload - with errors - same error, multiple times', function(done, server) {
+    server.evalSync(createMethodCompleted, 'aa', 'hello', 1, 100, 5);
+    server.evalSync(createMethodErrored, 'aa', 'hello', 2, {message: "the-error"}, 800, 10);
+    server.evalSync(createMethodErrored, 'aa', 'hello', 3, {message: "the-error"}, 800, 10);
+    server.evalSync(createMethodErrored, 'aa', 'hello', 4, {message: "the-error"}, 800, 10);
+    var payload = server.evalSync(function() {
+      var payload = model.buildPayload();
+      emit('return', payload);
+    });
+
+    var expectedResult = {
+      _id: "aa::2",
+      name: "hello",
+      session: "aa",
+      methodId: 2,
+      events: [
+        {type: 'start', at: 800},
+        {type: 'error', at: 810, data: {error: {
+          message: 'the-error'
+        }}}
+      ],
+      type: "error",
+      metrics: {
+        "compute": 10,
+        "total": 10,
+        "wait": 0,
+        "db": 0,
+        "http": 0,
+        "email": 0,
+        "async": 0
+      },
+      errorCount: 3
+    };
+
+    assert.deepEqual(payload.methodRequests[0], expectedResult);
+    assert.equal(payload.methodRequests.length, 1);
+    done();
+  });
+
+  test('buildPayload - with errors - same error, diff methods, multiple times', function(done, server) {
+    server.evalSync(createMethodCompleted, 'aa', 'hello', 1, 100, 5);
+    server.evalSync(createMethodErrored, 'aa', 'hello', 2, {message: "the-error"}, 800, 10);
+    server.evalSync(createMethodErrored, 'aa', 'hello', 3, {message: "the-error"}, 800, 10);
+    server.evalSync(createMethodErrored, 'aa', 'hello2', 4, {message: "the-error"}, 800, 10);
+    server.evalSync(createMethodErrored, 'aa', 'hello2', 5, {message: "the-error"}, 800, 10);
+    var payload = server.evalSync(function() {
+      var payload = model.buildPayload();
+      emit('return', payload);
+    });
+
+    var expectedResult = {
+      _id: "aa::2",
+      name: "hello",
+      session: "aa",
+      methodId: 2,
+      events: [
+        {type: 'start', at: 800},
+        {type: 'error', at: 810, data: {error: {
+          message: 'the-error'
+        }}}
+      ],
+      type: "error",
+      metrics: {
+        "compute": 10,
+        "total": 10,
+        "wait": 0,
+        "db": 0,
+        "http": 0,
+        "email": 0,
+        "async": 0
+      },
+      errorCount: 2
+    };
+
+    var expectedResult2 = {
+      _id: "aa::4",
+      name: "hello2",
+      session: "aa",
+      methodId: 4,
+      events: [
+        {type: 'start', at: 800},
+        {type: 'error', at: 810, data: {error: {
+          message: 'the-error'
+        }}}
+      ],
+      type: "error",
+      metrics: {
+        "compute": 10,
+        "total": 10,
+        "wait": 0,
+        "db": 0,
+        "http": 0,
+        "email": 0,
+        "async": 0
+      },
+      errorCount: 2
+    };
+
+    // assert.deepEqual(payload.methodRequests[0], expectedResult);
+    assert.deepEqual(payload.methodRequests[1], expectedResult2);
+    assert.equal(payload.methodRequests.length, 2);
     done();
   });
 
