@@ -218,12 +218,14 @@ suite('Methods Model', function() {
     server.evalSync(createMethodCompleted, 'aa', 'hello', 2, 800 , 15);
 
     var payload1 = server.evalSync(getPayload);
+
     assert.deepEqual(payload1.methodRequests, []);
 
     server.evalSync(createMethodCompleted, 'aa', 'hello', 3, 900 , 2000);
     var lastMethodId = 3;
     var expectedResult = {
-      total: {_id: 'aa::3', total: 2000}
+      total: {_id: 'aa::3', total: 2000},
+      compute: {_id: 'aa::3', compute: 2000},
     };
 
     ['wait', 'http', 'db', 'email', 'async'].forEach(function(eventType) {
@@ -234,12 +236,13 @@ suite('Methods Model', function() {
     });
 
     var payload2 = server.evalSync(getPayload);  
-    assert.equal(payload2.methodRequests.length, 6);
+
+    assert.equal(payload2.methodRequests.length, 7);
     
     var processedResult = {};
     payload2.methodRequests.forEach(function(method) {
-      processedResult[method.event] = {_id: method._id};
-      processedResult[method.event][method.event] = method.metrics[method.event];
+      processedResult[method.maxMetric] = {_id: method._id};
+      processedResult[method.maxMetric][method.maxMetric] = method.metrics[method.maxMetric];
     });
 
     assert.deepEqual(processedResult, expectedResult);
@@ -275,16 +278,14 @@ suite('Methods Model', function() {
         "compute": 5,
         "total": 5,
         "wait": 0,
-        "db": 0,
-        "http": 0,
-        "email": 0,
-        "async": 0
       },
       "type": "max",
-      "event": "total"
+      // "maxMetric": "total" // this is deleted below
     };
 
-    assert.deepEqual(payload1.methodRequests, [expectedResult]);
+    delete payload1.methodRequests[0].maxMetric;
+
+    assert.deepEqual(payload1.methodRequests[0], expectedResult);
     done();
   });
 
@@ -307,6 +308,8 @@ suite('Methods Model', function() {
     var expectedResult = {
       "hello::total": {_id: 'aa::3', total: 2000},
       "hi::total": {_id: 'aa::200', total: 2000},
+      "hello::compute": {_id: 'aa::3', compute: 2000},
+      "hi::compute": {_id: 'aa::200', compute: 2000},
     };
 
     ['hello', 'hi'].forEach(function(methodName) {
@@ -322,13 +325,13 @@ suite('Methods Model', function() {
     });
 
     var payload2 = server.evalSync(getPayload);  
-    assert.equal(payload2.methodRequests.length, 12);
+    assert.equal(payload2.methodRequests.length, 14);
     
     var processedResult = {};
     payload2.methodRequests.forEach(function(method) {
-      var id = method.name + "::" + method.event;
+      var id = method.name + "::" + method.maxMetric;
       processedResult[id] = {_id: method._id};
-      processedResult[id][method.event] = method.metrics[method.event];
+      processedResult[id][method.maxMetric] = method.metrics[method.maxMetric];
     });
 
     assert.deepEqual(processedResult, expectedResult);
