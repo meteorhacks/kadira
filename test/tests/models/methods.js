@@ -249,6 +249,48 @@ suite('Methods Model', function() {
     done();
   });
 
+  test('buildPayload - max min - threshold', function(done, server) {
+    server.evalSync(function() {
+      //define threshold with 1500
+      model = new MethodsModel({total: 1500});
+      model.sendMaxMinInterval = 2;
+      emit('return');
+    });
+
+    server.evalSync(createMethodCompleted, 'aa', 'hello', 1, 100, 5);
+    server.evalSync(createMethodCompleted, 'aa', 'hello', 2, 800 , 15);
+
+    var payload1 = server.evalSync(getPayload);
+
+    assert.deepEqual(payload1.methodRequests, []);
+
+    server.evalSync(createMethodCompleted, 'aa', 'hello', 3, 900 , 2000);
+    var lastMethodId = 3;
+    var expectedResult = {
+      total: {_id: 'aa::3', total: 2000},
+      compute: {_id: 'aa::3', compute: 2000},
+    };
+
+    //these are below the threashold, so not counting
+    ['wait', 'http', 'db', 'email', 'async'].forEach(function(eventType) {
+      server.evalSync(createMethodWithEvent, 'aa', 'hello', ++lastMethodId, 800 , eventType, 50);
+      server.evalSync(createMethodWithEvent, 'aa', 'hello', ++lastMethodId, 800 , eventType, 10);
+    });
+
+    var payload2 = server.evalSync(getPayload);  
+
+    assert.equal(payload2.methodRequests.length, 2);
+    
+    var processedResult = {};
+    payload2.methodRequests.forEach(function(method) {
+      processedResult[method.maxMetric] = {_id: method._id};
+      processedResult[method.maxMetric][method.maxMetric] = method.metrics[method.maxMetric];
+    });
+
+    assert.deepEqual(processedResult, expectedResult);
+    done();
+  });
+
   test('buildPayload - max min - the response', function(done, server) {
     server.evalSync(function() {
       model = new MethodsModel();
@@ -256,7 +298,7 @@ suite('Methods Model', function() {
       emit('return');
     });
 
-    server.evalSync(createMethodCompleted, 'aa', 'hello', 1, 100, 5);
+    server.evalSync(createMethodCompleted, 'aa', 'hello', 1, 100, 120);
     var payload1 = server.evalSync(getPayload);
 
     var expectedResult = {
@@ -271,13 +313,17 @@ suite('Methods Model', function() {
         },
         {
           "type": "complete",
-          "at": 105
+          "at": 220
         }
       ],
       "metrics": {
-        "compute": 5,
-        "total": 5,
+        "compute": 120,
+        "total": 120,
         "wait": 0,
+        "db": 0,
+        "http": 0,
+        "email": 0,
+        "async": 0
       },
       "type": "max",
       // "maxMetric": "total" // this is deleted below
