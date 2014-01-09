@@ -18,7 +18,7 @@ suite('Hijack - DB', function() {
       var events = getLastMethodEvents(server, ['type', 'data']);
       assert.deepEqual(events, [
         {type: 'start', data: undefined},
-        {type: 'wait', data: undefined},
+        {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'insert'}},
         {type: 'dbend', data: undefined},
@@ -44,7 +44,7 @@ suite('Hijack - DB', function() {
       var events = getLastMethodEvents(server, ['type', 'data']);
       assert.deepEqual(events, [
         {type: 'start', data: undefined},
-        {type: 'wait', data: undefined},
+        {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'update', selector: {_id: 'aa'}}},
         {type: 'dbend', data: undefined},
@@ -70,7 +70,7 @@ suite('Hijack - DB', function() {
       var events = getLastMethodEvents(server, ['type', 'data']);
       assert.deepEqual(events, [
         {type: 'start', data: undefined},
-        {type: 'wait', data: undefined},
+        {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'remove', selector: {_id: 'aa'}}},
         {type: 'dbend', data: undefined},
@@ -97,7 +97,7 @@ suite('Hijack - DB', function() {
       var events = getLastMethodEvents(server, ['type', 'data']);
       assert.deepEqual(events, [
         {type: 'start', data: undefined},
-        {type: 'wait', data: undefined},
+        {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'find', selector: {_id: 'aa'}}},
         {type: 'dbend', data: undefined},
@@ -124,7 +124,7 @@ suite('Hijack - DB', function() {
       var events = getLastMethodEvents(server, ['type', 'data']);
       assert.deepEqual(events, [
         {type: 'start', data: undefined},
-        {type: 'wait', data: undefined},
+        {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'upsert', selector: {_id: 'aa'}}},
         {type: 'dbend', data: undefined},
@@ -150,7 +150,7 @@ suite('Hijack - DB', function() {
       var events = getLastMethodEvents(server, ['type', 'data']);
       assert.deepEqual(events, [
         {type: 'start', data: undefined},
-        {type: 'wait', data: undefined},
+        {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: '_ensureIndex', index: {aa: 1, bb: 1}}},
         {type: 'dbend', data: undefined},
@@ -183,7 +183,7 @@ suite('Hijack - DB', function() {
       var events = getLastMethodEvents(server, ['type', 'data']);
       assert.deepEqual(events, [
         {type: 'start', data: undefined},
-        {type: 'wait', data: undefined},
+        {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'find', selector: {}}},
         {type: 'dbend', data: undefined},
@@ -214,7 +214,7 @@ suite('Hijack - DB', function() {
       var events = getLastMethodEvents(server, ['type', 'data']);
       assert.deepEqual(events, [
         {type: 'start', data: undefined},
-        {type: 'wait', data: undefined},
+        {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'find', selector: {_id: {$exists: true}}}},
         {type: 'dbend', data: undefined},
@@ -247,7 +247,7 @@ suite('Hijack - DB', function() {
       var events = getLastMethodEvents(server, ['type', 'data']);
       assert.deepEqual(events, [
         {type: 'start', data: undefined},
-        {type: 'wait', data: undefined},
+        {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'find', selector: {_id: {$exists: true}}}},
         {type: 'dbend', data: undefined},
@@ -282,7 +282,7 @@ suite('Hijack - DB', function() {
       var events = getLastMethodEvents(server, ['type', 'data']);
       assert.deepEqual(events, [
         {type: 'start', data: undefined},
-        {type: 'wait', data: undefined},
+        {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'find', selector: {_id: {$exists: true}}}},
         {type: 'dbend', data: undefined},

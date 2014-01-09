@@ -30,7 +30,7 @@ suite('Hijack - HTTP', function() {
     var events = getLastMethodEvents(server, ['type', 'data']);
     assert.deepEqual(events, [
       {type: 'start', data: undefined},
-      {type: 'wait', data: undefined},
+      {type: 'wait', data: {waitOn: []}},
       {type: 'waitend', data: undefined},
       {type: 'http', data: {url: "http://localhost:4249", method: "GET"}},
       {type: 'httpend', data: {statusCode: 200}},
