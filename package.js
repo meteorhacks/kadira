@@ -7,7 +7,7 @@ Npm.depends({
 });
 
 Package.on_use(function(api) {
-  api.use(['minimongo', 'livedata', 'mongo-livedata', 'ejson', 'underscore', 'http', 'email'], ['server']);
+  api.use(['minimongo', 'livedata', 'mongo-livedata', 'ejson', 'underscore', 'http', 'email', 'random'], ['server']);
   api.add_files([
     'lib/ntp.js',
     'lib/models/methods.js',
@@ -21,6 +21,10 @@ Package.on_use(function(api) {
     'lib/hijack/async.js'
   ], 'server');
 
+  if(isPackageExists('npm')) {
+    api.use('npm', 'server', {weak: true});
+  }
+
   if(process.env.__TEST_APM_EXPORTS) {
     //use for testing
     var exportFields = process.env.__TEST_APM_EXPORTS.split(',').map(function(v) {
@@ -30,5 +34,11 @@ Package.on_use(function(api) {
   } else {
     api.export(['Apm']);
   }
-  
 });
+
+function isPackageExists(name) {
+  var fs = Npm.require('fs');
+  var path = Npm.require('path');
+  var meteorPackages = fs.readFileSync(path.resolve('.meteor/packages'), 'utf8');
+  return !!meteorPackages.match(new RegExp(name));
+}

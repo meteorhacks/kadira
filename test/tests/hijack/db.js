@@ -46,7 +46,7 @@ suite('Hijack - DB', function() {
         {type: 'start', data: undefined},
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
-        {type: 'db', data: {coll: 'posts', func: 'update', selector: {_id: 'aa'}}},
+        {type: 'db', data: {coll: 'posts', func: 'update', selector: JSON.stringify({_id: 'aa'})}},
         {type: 'dbend', data: undefined},
         {type: 'complete', data: undefined}
       ]);
@@ -72,7 +72,7 @@ suite('Hijack - DB', function() {
         {type: 'start', data: undefined},
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
-        {type: 'db', data: {coll: 'posts', func: 'remove', selector: {_id: 'aa'}}},
+        {type: 'db', data: {coll: 'posts', func: 'remove', selector: JSON.stringify({_id: 'aa'})}},
         {type: 'dbend', data: undefined},
         {type: 'complete', data: undefined}
       ]);
@@ -99,9 +99,9 @@ suite('Hijack - DB', function() {
         {type: 'start', data: undefined},
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
-        {type: 'db', data: {coll: 'posts', func: 'find', selector: {_id: 'aa'}}},
+        {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({_id: 'aa'})}},
         {type: 'dbend', data: undefined},
-        {type: 'db', data: {coll: 'posts', func: 'fetch', selector: {_id: 'aa'}}},
+        {type: 'db', data: {coll: 'posts', func: 'fetch', selector: JSON.stringify({_id: 'aa'})}},
         {type: 'dbend', data: undefined},
         {type: 'complete', data: undefined}
       ]);
@@ -126,7 +126,7 @@ suite('Hijack - DB', function() {
         {type: 'start', data: undefined},
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
-        {type: 'db', data: {coll: 'posts', func: 'upsert', selector: {_id: 'aa'}}},
+        {type: 'db', data: {coll: 'posts', func: 'upsert', selector: JSON.stringify({_id: 'aa'})}},
         {type: 'dbend', data: undefined},
         {type: 'complete', data: undefined}
       ]);
@@ -152,9 +152,9 @@ suite('Hijack - DB', function() {
         {type: 'start', data: undefined},
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
-        {type: 'db', data: {coll: 'posts', func: '_ensureIndex', index: {aa: 1, bb: 1}}},
+        {type: 'db', data: {coll: 'posts', func: '_ensureIndex', index: JSON.stringify({aa: 1, bb: 1})}},
         {type: 'dbend', data: undefined},
-        {type: 'db', data: {coll: 'posts', func: '_dropIndex', index: {aa: 1, bb: 1}}},
+        {type: 'db', data: {coll: 'posts', func: '_dropIndex', index: JSON.stringify({aa: 1, bb: 1})}},
         {type: 'dbend', data: undefined},
         {type: 'complete', data: undefined}
       ]);
@@ -185,9 +185,9 @@ suite('Hijack - DB', function() {
         {type: 'start', data: undefined},
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
-        {type: 'db', data: {coll: 'posts', func: 'find', selector: {}}},
+        {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({})}},
         {type: 'dbend', data: undefined},
-        {type: 'db', data: {coll: 'posts', func: 'count', selector: {}}},
+        {type: 'db', data: {coll: 'posts', func: 'count', selector: JSON.stringify({})}},
         {type: 'dbend', data: undefined},
         {type: 'complete', data: undefined}
       ]);
@@ -216,9 +216,9 @@ suite('Hijack - DB', function() {
         {type: 'start', data: undefined},
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
-        {type: 'db', data: {coll: 'posts', func: 'find', selector: {_id: {$exists: true}}}},
+        {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({_id: {$exists: true}})}},
         {type: 'dbend', data: undefined},
-        {type: 'db', data: {coll: 'posts', func: 'fetch', selector: {_id: {$exists: true}}}},
+        {type: 'db', data: {coll: 'posts', func: 'fetch', selector: JSON.stringify({_id: {$exists: true}})}},
         {type: 'dbend', data: undefined},
         {type: 'complete', data: undefined}
       ]);
@@ -249,9 +249,9 @@ suite('Hijack - DB', function() {
         {type: 'start', data: undefined},
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
-        {type: 'db', data: {coll: 'posts', func: 'find', selector: {_id: {$exists: true}}}},
+        {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({_id: {$exists: true}})}},
         {type: 'dbend', data: undefined},
-        {type: 'db', data: {coll: 'posts', func: 'map', selector: {_id: {$exists: true}}}},
+        {type: 'db', data: {coll: 'posts', func: 'map', selector: JSON.stringify({_id: {$exists: true}})}},
         {type: 'dbend', data: undefined},
         {type: 'complete', data: undefined}
       ]);
@@ -284,9 +284,9 @@ suite('Hijack - DB', function() {
         {type: 'start', data: undefined},
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
-        {type: 'db', data: {coll: 'posts', func: 'find', selector: {_id: {$exists: true}}}},
+        {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({_id: {$exists: true}})}},
         {type: 'dbend', data: undefined},
-        {type: 'db', data: {coll: 'posts', func: 'forEach', selector: {_id: {$exists: true}}}},
+        {type: 'db', data: {coll: 'posts', func: 'forEach', selector: JSON.stringify({_id: {$exists: true}})}},
         {type: 'dbend', data: undefined},
         {type: 'complete', data: undefined}
       ]);
