@@ -1,9 +1,9 @@
 Package.describe({
-  "summery": "APM for Meteor"
+  "summery": "Application Performance Monitoring for Meteor"
 });
 
 Npm.depends({
-  
+  "debug": "0.7.4"
 });
 
 Package.on_use(function(api) {
