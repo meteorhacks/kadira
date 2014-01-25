@@ -1,12 +1,25 @@
-getLastMethodEvents = function(server, fields) {
-  var methodsStore = server.evalSync(function() {
-    var methodsStore = Apm.models.methods.methodsStore;
-    emit('return', methodsStore);
+EnableTrackingMethods = function(server) {
+  server.evalSync(function() {
+    if(typeof MethodsStore == 'undefined') {
+      MethodsStore = [];
+    }
+
+    var original = Apm.models.methods.processMethod;
+    Apm.models.methods.processMethod = function(method) {
+      MethodsStore.push(method);
+      original.call(Apm.models.methods, method);
+    };
+
+    emit('return');
+  });
+};
+
+GetLastMethodEvents = function(server, fields) {
+  var method = server.evalSync(function() {
+    emit('return', MethodsStore[0]);
   });
 
-  for(var key in methodsStore) {
-    return getEvents(methodsStore[key], fields);
-  }
+  return getEvents(method, fields);
 };
 
 function getEvents(method, fields) {

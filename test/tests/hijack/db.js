@@ -3,6 +3,7 @@ var assert = require('assert');
 suite('Hijack - DB', function() {
   suite('MongoConnector', function() {
     test('insert', function(done, server, client) {
+      EnableTrackingMethods(server);
       server.evalSync(function() {
         Posts = new Meteor.Collection('posts');
         Meteor.methods({
@@ -15,7 +16,7 @@ suite('Hijack - DB', function() {
 
       callMethod(client, 'doCall');
       
-      var events = getLastMethodEvents(server, ['type', 'data']);
+      var events = GetLastMethodEvents(server, ['type', 'data']);
       assert.deepEqual(events, [
         {type: 'start', data: undefined},
         {type: 'wait', data: {waitOn: []}},
@@ -28,6 +29,7 @@ suite('Hijack - DB', function() {
     });
 
     test('update', function(done, server, client) {
+      EnableTrackingMethods(server);
       server.evalSync(function() {
         Posts = new Meteor.Collection('posts');
         Posts.insert({_id: 'aa', dd: 10});
@@ -41,7 +43,7 @@ suite('Hijack - DB', function() {
 
       callMethod(client, 'doCall');
       
-      var events = getLastMethodEvents(server, ['type', 'data']);
+      var events = GetLastMethodEvents(server, ['type', 'data']);
       assert.deepEqual(events, [
         {type: 'start', data: undefined},
         {type: 'wait', data: {waitOn: []}},
@@ -54,6 +56,7 @@ suite('Hijack - DB', function() {
     });
 
     test('remove', function(done, server, client) {
+      EnableTrackingMethods(server);
       server.evalSync(function() {
         Posts = new Meteor.Collection('posts');
         Posts.insert({_id: 'aa', dd: 10});
@@ -67,7 +70,7 @@ suite('Hijack - DB', function() {
 
       callMethod(client, 'doCall');
       
-      var events = getLastMethodEvents(server, ['type', 'data']);
+      var events = GetLastMethodEvents(server, ['type', 'data']);
       assert.deepEqual(events, [
         {type: 'start', data: undefined},
         {type: 'wait', data: {waitOn: []}},
@@ -80,6 +83,7 @@ suite('Hijack - DB', function() {
     });
 
     test('findOne', function(done, server, client) {
+      EnableTrackingMethods(server);
       server.evalSync(function() {
         Posts = new Meteor.Collection('posts');
         Posts.insert({_id: 'aa', dd: 10});
@@ -94,7 +98,7 @@ suite('Hijack - DB', function() {
       var res = callMethod(client, 'doCall');
       assert.deepEqual(res, {_id: 'aa', dd: 10});
       
-      var events = getLastMethodEvents(server, ['type', 'data']);
+      var events = GetLastMethodEvents(server, ['type', 'data']);
       assert.deepEqual(events, [
         {type: 'start', data: undefined},
         {type: 'wait', data: {waitOn: []}},
@@ -109,6 +113,7 @@ suite('Hijack - DB', function() {
     });
 
     test('upsert', function(done, server, client) {
+      EnableTrackingMethods(server);
       server.evalSync(function() {
         Posts = new Meteor.Collection('posts');
         Meteor.methods({
@@ -121,7 +126,7 @@ suite('Hijack - DB', function() {
 
       callMethod(client, 'doCall');
       
-      var events = getLastMethodEvents(server, ['type', 'data']);
+      var events = GetLastMethodEvents(server, ['type', 'data']);
       assert.deepEqual(events, [
         {type: 'start', data: undefined},
         {type: 'wait', data: {waitOn: []}},
@@ -134,6 +139,7 @@ suite('Hijack - DB', function() {
     });
 
     test('indexes', function(done, server, client) {
+      EnableTrackingMethods(server);
       server.evalSync(function() {
         Posts = new Meteor.Collection('posts');
         Meteor.methods({
@@ -147,7 +153,7 @@ suite('Hijack - DB', function() {
 
       callMethod(client, 'doCall');
       
-      var events = getLastMethodEvents(server, ['type', 'data']);
+      var events = GetLastMethodEvents(server, ['type', 'data']);
       assert.deepEqual(events, [
         {type: 'start', data: undefined},
         {type: 'wait', data: {waitOn: []}},
@@ -164,6 +170,7 @@ suite('Hijack - DB', function() {
 
   suite('Cursor', function() {
     test('count', function(done, server, client) {
+      EnableTrackingMethods(server);
       server.evalSync(function() {
         Posts = new Meteor.Collection('posts');
         Posts.insert({aa: 100});
@@ -180,7 +187,7 @@ suite('Hijack - DB', function() {
       var result = callMethod(client, 'doCall');
       assert.deepEqual(result, 2);
       
-      var events = getLastMethodEvents(server, ['type', 'data']);
+      var events = GetLastMethodEvents(server, ['type', 'data']);
       assert.deepEqual(events, [
         {type: 'start', data: undefined},
         {type: 'wait', data: {waitOn: []}},
@@ -195,6 +202,7 @@ suite('Hijack - DB', function() {
     });
 
     test('fetch', function(done, server, client) {
+      EnableTrackingMethods(server);
       server.evalSync(function() {
         Posts = new Meteor.Collection('posts');
         Posts.insert({_id: 'aa'});
@@ -211,7 +219,7 @@ suite('Hijack - DB', function() {
       var result = callMethod(client, 'doCall');
       assert.deepEqual(result, [{_id: 'aa'}, {_id: 'bb'}]);
       
-      var events = getLastMethodEvents(server, ['type', 'data']);
+      var events = GetLastMethodEvents(server, ['type', 'data']);
       assert.deepEqual(events, [
         {type: 'start', data: undefined},
         {type: 'wait', data: {waitOn: []}},
@@ -226,6 +234,7 @@ suite('Hijack - DB', function() {
     });
 
     test('map', function(done, server, client) {
+      EnableTrackingMethods(server);
       server.evalSync(function() {
         Posts = new Meteor.Collection('posts');
         Posts.insert({_id: 'aa'});
@@ -244,7 +253,7 @@ suite('Hijack - DB', function() {
       var result = callMethod(client, 'doCall');
       assert.deepEqual(result, ['aa', 'bb']);
       
-      var events = getLastMethodEvents(server, ['type', 'data']);
+      var events = GetLastMethodEvents(server, ['type', 'data']);
       assert.deepEqual(events, [
         {type: 'start', data: undefined},
         {type: 'wait', data: {waitOn: []}},
@@ -259,6 +268,7 @@ suite('Hijack - DB', function() {
     });
 
     test('forEach', function(done, server, client) {
+      EnableTrackingMethods(server);
       server.evalSync(function() {
         Posts = new Meteor.Collection('posts');
         Posts.insert({_id: 'aa'});
@@ -279,7 +289,7 @@ suite('Hijack - DB', function() {
       var result = callMethod(client, 'doCall');
       assert.deepEqual(result, ['aa', 'bb']);
       
-      var events = getLastMethodEvents(server, ['type', 'data']);
+      var events = GetLastMethodEvents(server, ['type', 'data']);
       assert.deepEqual(events, [
         {type: 'start', data: undefined},
         {type: 'wait', data: {waitOn: []}},

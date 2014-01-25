@@ -6,7 +6,8 @@ DEST_PATH=./test/packages/meteor-apm
 
 # reset and create the package-folder
 if [[ -d $DEST_PATH ]]; then
-  rm -rf $DEST_PATH
+  rm -rf $DEST_PATH/lib
+  rm -rf $DEST_PATH/package.js
 fi
 mkdir -p $DEST_PATH
 

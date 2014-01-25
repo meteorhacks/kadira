@@ -395,21 +395,26 @@ function createMethodCompleted(sessionName, methodName, methodId, startTime, met
   }
 
   methodDelay = methodDelay || 5;
-  var method = model.getMethod({session: sessionName, method: {name: methodName, id: methodId}});
+  var method = {session: sessionName, name: methodName, id: methodId, events: []};
   method.events.push({type: 'start', at: startTime});
   method.events.push({type: 'complete', at: startTime + methodDelay});
+  model.processMethod(method);
 
   emit('return');
 }
 
 function createMethodWithEvent(sessionName, methodName, methodId, startTime, eventName, eventDelay) {
+  if(typeof model == 'undefined') {
+    model = new MethodsModel();
+  }
   var time = startTime;
 
-  var method = model.getMethod({session: sessionName, method: {name: methodName, id: methodId}});
+  var method = {session: sessionName, name: methodName, id: methodId, events: []};
   method.events.push({type: 'start', at: time});
   method.events.push({type: eventName, at: time += 5});
   method.events.push({type: eventName + 'end', at: time += eventDelay});
   method.events.push({type: 'complete', at: time += 5});
+  model.processMethod(method);
 
   emit('return');
 }
@@ -420,9 +425,10 @@ function createMethodErrored(sessionName, methodName, methodId, errorMessage, st
   }
 
   methodDelay = methodDelay || 5;
-  var method = model.getMethod({session: sessionName, method: {name: methodName, id: methodId}});
+  var method = {session: sessionName, name: methodName, id: methodId, events: []};
   method.events.push({type: 'start', at: startTime});
   method.events.push({type: 'error', at: startTime + methodDelay, data: {error: errorMessage}});
+  model.processMethod(method);
 
   emit('return');
 }
