@@ -3,6 +3,7 @@ var http = require('http');
 
 suite('Hijack - HTTP', function() {
   test('call some server', function(done, server, client) {
+    EnableTrackingMethods(server);
     server.evalSync(function() {
       app = Npm.require('http').createServer(function(req, res) {
         res.writeHead(200);
@@ -27,7 +28,7 @@ suite('Hijack - HTTP', function() {
     var statusCode = callMethod(client, 'http');
     assert.equal(statusCode, 200);
 
-    var events = getLastMethodEvents(server, ['type', 'data']);
+    var events = GetLastMethodEvents(server, ['type', 'data']);
     assert.deepEqual(events, [
       {type: 'start', data: undefined},
       {type: 'wait', data: {waitOn: []}},

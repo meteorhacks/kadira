@@ -2,6 +2,7 @@ var assert = require('assert');
 
 suite('Hijack - Email', function() {
   test('successful send', function(done, server, client) {
+    EnableTrackingMethods(server);
     server.evalSync(function() {
       Meteor.methods({
         'send': function() {
@@ -14,7 +15,7 @@ suite('Hijack - Email', function() {
 
     callMethod(client, 'send');
 
-    var events = getLastMethodEvents(server);
+    var events = GetLastMethodEvents(server);
     assert.deepEqual(events, [
       {type: 'start'},
       {type: 'wait'},
