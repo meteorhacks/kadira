@@ -3,6 +3,6 @@
   "description": "Application Performance Monitoring for Meteor",
   "homepage": "http://support.meteorapm.com/",
   "author": "Arunoda Susiripala <arunoda.susiripala@gmail.com>",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "git": "https://github.com/arunoda/meteor-apm-client.git"
 }
