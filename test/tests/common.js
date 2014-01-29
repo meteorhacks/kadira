@@ -16,7 +16,7 @@ EnableTrackingMethods = function(server) {
 
 GetLastMethodEvents = function(server, fields) {
   var method = server.evalSync(function() {
-    emit('return', MethodsStore[0]);
+    emit('return', MethodsStore[MethodsStore.length - 1]);
   });
 
   return getEvents(method, fields);

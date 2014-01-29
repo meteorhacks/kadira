@@ -9,6 +9,7 @@ suite('Hijack - DB', function() {
         Meteor.methods({
           'doCall': function() {
             Posts.insert({aa: 10});
+            return "insert";
           }
         });
         emit('return');
@@ -18,7 +19,7 @@ suite('Hijack - DB', function() {
       
       var events = GetLastMethodEvents(server, ['type', 'data']);
       assert.deepEqual(events, [
-        {type: 'start', data: undefined},
+        {type: 'start', data: {userId: null}},
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'insert'}},
@@ -37,6 +38,7 @@ suite('Hijack - DB', function() {
             Posts.insert({aa: 10}, function() {
 
             });
+            return "insert";
           }
         });
         emit('return');
@@ -46,7 +48,7 @@ suite('Hijack - DB', function() {
       
       var events = GetLastMethodEvents(server, ['type', 'data']);
       assert.deepEqual(events, [
-        {type: 'start', data: undefined},
+        {type: 'start', data: {userId: null}},
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'insert'}},
@@ -64,6 +66,7 @@ suite('Hijack - DB', function() {
         Meteor.methods({
           'doCall': function() {
             Posts.update({_id: 'aa'}, {$set: {dd: 30}});
+            return "update";
           }
         });
         emit('return');
@@ -73,7 +76,7 @@ suite('Hijack - DB', function() {
       
       var events = GetLastMethodEvents(server, ['type', 'data']);
       assert.deepEqual(events, [
-        {type: 'start', data: undefined},
+        {type: 'start', data: {userId: null}},
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'update', selector: JSON.stringify({_id: 'aa'})}},
@@ -91,6 +94,7 @@ suite('Hijack - DB', function() {
         Meteor.methods({
           'doCall': function() {
             Posts.remove({_id: 'aa'});
+            return "remove";
           }
         });
         emit('return');
@@ -100,7 +104,7 @@ suite('Hijack - DB', function() {
       
       var events = GetLastMethodEvents(server, ['type', 'data']);
       assert.deepEqual(events, [
-        {type: 'start', data: undefined},
+        {type: 'start', data: {userId: null}},
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'remove', selector: JSON.stringify({_id: 'aa'})}},
@@ -118,6 +122,7 @@ suite('Hijack - DB', function() {
         Meteor.methods({
           'doCall': function() {
             return Posts.findOne({_id: 'aa'});
+            return "findOne";
           }
         });
         emit('return');
@@ -128,7 +133,7 @@ suite('Hijack - DB', function() {
       
       var events = GetLastMethodEvents(server, ['type', 'data']);
       assert.deepEqual(events, [
-        {type: 'start', data: undefined},
+        {type: 'start', data: {userId: null}},
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({_id: 'aa'})}},
@@ -147,6 +152,7 @@ suite('Hijack - DB', function() {
         Meteor.methods({
           'doCall': function() {
             Posts.upsert({_id: 'aa'}, {$set: {bb: 20}});
+            return "upsert";
           }
         });
         emit('return');
@@ -156,7 +162,7 @@ suite('Hijack - DB', function() {
       
       var events = GetLastMethodEvents(server, ['type', 'data']);
       assert.deepEqual(events, [
-        {type: 'start', data: undefined},
+        {type: 'start', data: {userId: null}},
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'upsert', selector: JSON.stringify({_id: 'aa'})}},
@@ -174,6 +180,7 @@ suite('Hijack - DB', function() {
           'doCall': function() {
             Posts._ensureIndex({aa: 1, bb: 1});
             Posts._dropIndex({aa: 1, bb: 1});
+            return "indexes";
           }
         });
         emit('return');
@@ -183,7 +190,7 @@ suite('Hijack - DB', function() {
       
       var events = GetLastMethodEvents(server, ['type', 'data']);
       assert.deepEqual(events, [
-        {type: 'start', data: undefined},
+        {type: 'start', data: {userId: null}},
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: '_ensureIndex', index: JSON.stringify({aa: 1, bb: 1})}},
@@ -217,7 +224,7 @@ suite('Hijack - DB', function() {
       
       var events = GetLastMethodEvents(server, ['type', 'data']);
       assert.deepEqual(events, [
-        {type: 'start', data: undefined},
+        {type: 'start', data: {userId: null}},
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({})}},
@@ -249,7 +256,7 @@ suite('Hijack - DB', function() {
       
       var events = GetLastMethodEvents(server, ['type', 'data']);
       assert.deepEqual(events, [
-        {type: 'start', data: undefined},
+        {type: 'start', data: {userId: null}},
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({_id: {$exists: true}})}},
@@ -283,7 +290,7 @@ suite('Hijack - DB', function() {
       
       var events = GetLastMethodEvents(server, ['type', 'data']);
       assert.deepEqual(events, [
-        {type: 'start', data: undefined},
+        {type: 'start', data: {userId: null}},
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({_id: {$exists: true}})}},
@@ -319,7 +326,7 @@ suite('Hijack - DB', function() {
       
       var events = GetLastMethodEvents(server, ['type', 'data']);
       assert.deepEqual(events, [
-        {type: 'start', data: undefined},
+        {type: 'start', data: {userId: null}},
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({_id: {$exists: true}})}},
