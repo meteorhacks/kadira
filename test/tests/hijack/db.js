@@ -28,6 +28,34 @@ suite('Hijack - DB', function() {
       done();
     });
 
+    test('insert: with async callback', function(done, server, client) {
+      EnableTrackingMethods(server);
+      server.evalSync(function() {
+        Posts = new Meteor.Collection('posts');
+        Meteor.methods({
+          'doCall': function() {
+            Posts.insert({aa: 10}, function() {
+
+            });
+          }
+        });
+        emit('return');
+      });
+
+      callMethod(client, 'doCall');
+      
+      var events = GetLastMethodEvents(server, ['type', 'data']);
+      assert.deepEqual(events, [
+        {type: 'start', data: undefined},
+        {type: 'wait', data: {waitOn: []}},
+        {type: 'waitend', data: undefined},
+        {type: 'db', data: {coll: 'posts', func: 'insert'}},
+        {type: 'dbend', data: {async: true}},
+        {type: 'complete', data: undefined}
+      ]);
+      done();
+    });
+
     test('update', function(done, server, client) {
       EnableTrackingMethods(server);
       server.evalSync(function() {
