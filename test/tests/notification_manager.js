@@ -10,11 +10,15 @@ suite('Notification Manager', function() {
           events: []
         };
 
-        Apm.environment.withValue({method: method}, function() {
-          NotificationManager.methodTrackEvent('start', {abc: 100});
-          NotificationManager.methodTrackEvent('end', {abc: 200});
-          emit('return', method);
-        });
+        Npm.require('fibers').current.__apmInfo = {
+          session: 'sid',
+          usertId: 'uid',
+          method: method
+        };
+
+        NotificationManager.methodTrackEvent('start', {abc: 100});
+        NotificationManager.methodTrackEvent('end', {abc: 200});
+        emit('return', method);
       });
 
       assert.deepEqual(method.events[0].type, 'start');
@@ -45,14 +49,12 @@ suite('Notification Manager', function() {
           method: method1
         };
 
-        Apm.environment.withValue({method: method1}, function() {
-          NotificationManager.methodTrackEvent('start', {abc: 100});
-        });
+        NotificationManager.methodTrackEvent('start', {abc: 100});
 
-        Apm.environment.withValue({method: method2}, function() {
-          NotificationManager.methodTrackEvent('end', {abc: 200});
-        });
+        //set as a new method
+        Npm.require('fibers').current.__apmInfo.method = method2;
 
+        NotificationManager.methodTrackEvent('end', {abc: 200});
         emit('return', [method1, method2]);
       });
 
@@ -91,7 +93,7 @@ suite('Notification Manager', function() {
     });
   });
 
-  suite('_doesMatchWithLastEvent', function() {
+  suite('_isLastEventIsStart', function() {
     test('corret', function(done, server) {
       var result = server.evalSync(function() {
         var method = {
@@ -102,7 +104,7 @@ suite('Notification Manager', function() {
           ]
         };
 
-        var result = NotificationManager._doesMatchWithLastEvent(method, 'httpend');
+        var result = NotificationManager._isLastEventIsStart(method);
         emit('return', result);
       });
 
@@ -115,12 +117,11 @@ suite('Notification Manager', function() {
         var method = {
           events: [
             {type: 'db'},
-            {type: 'dbend'},
-            {type: 'http'}
+            {type: 'dbend'}
           ]
         };
 
-        var result = NotificationManager._doesMatchWithLastEvent(method, 'db');
+        var result = NotificationManager._isLastEventIsStart(method);
         emit('return', result);
       });
 
