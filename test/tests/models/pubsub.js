@@ -63,4 +63,131 @@ suite('Pubsub Model', function() {
       done();
     });
   });
+
+  suite('.buildPayload', function() {
+    test('subs', function(done, server) {
+      var data = server.evalSync(function() {
+        var pub = "postsList";
+        var d1 = new Date('2013 Dec 10 20:31:12').getTime();
+
+        var model = new PubsubModel();
+        model._getMetrics(d1, pub).subs++;
+        model._getMetrics(d1, pub).subs++;
+        model._getMetrics(d1, pub).subs++;
+
+        emit('return', [
+          model.buildPayload(),
+          model.metricsByMinute
+        ]);
+      });
+
+      assert.deepEqual(data[0].pubMetrics[0].pubs.postsList.subs, 3);
+      assert.deepEqual(data[1], {});
+      done();
+    });
+
+    test('resTime', function(done, server) {
+      var data = server.evalSync(function() {
+        var pub = "postsList";
+        var d1 = new Date('2013 Dec 10 20:31:12').getTime();
+
+        var model = new PubsubModel();
+        var metrics =  model._getMetrics(d1, pub);
+        metrics.resTime = 3000;
+        metrics.subs = 3;
+
+        emit('return', [
+          model.buildPayload(),
+          model.metricsByMinute
+        ]);
+      });
+
+      assert.deepEqual(data[0].pubMetrics[0].pubs.postsList.resTime, 1000);
+      assert.deepEqual(data[1], {});
+      done();
+    });
+
+    test('lifeTime', function(done, server) {
+      var data = server.evalSync(function() {
+        var pub = "postsList";
+        var d1 = new Date('2013 Dec 10 20:31:12').getTime();
+
+        var model = new PubsubModel();
+        var metrics =  model._getMetrics(d1, pub);
+        metrics.lifeTime = 4000;
+        metrics.unsubs = 2;
+
+        emit('return', [
+          model.buildPayload(),
+          model.metricsByMinute
+        ]);
+      });
+
+      assert.deepEqual(data[0].pubMetrics[0].pubs.postsList.lifeTime, 2000);
+      assert.deepEqual(data[1], {});
+      done();
+    });
+
+    test('multiple publications', function(done, server) {
+      var data = server.evalSync(function() {
+        var d1 = new Date('2013 Dec 10 20:31:12').getTime();
+
+        var model = new PubsubModel();
+        model._getMetrics(d1, 'postsList').subs = 2;
+        model._getMetrics(d1, 'singlePost').subs++;
+
+        emit('return', [
+          model.buildPayload(),
+          model.metricsByMinute
+        ]);
+      });
+
+      assert.deepEqual(data[0].pubMetrics[0].pubs.postsList.subs, 2);
+      assert.deepEqual(data[0].pubMetrics[0].pubs.singlePost.subs, 1);
+      assert.deepEqual(data[1], {});
+      done();
+    });
+
+    test('multiple dates', function(done, server) {
+      var data = server.evalSync(function() {
+        var d1 = new Date('2013 Dec 10 20:31:12').getTime();
+        var d2 = new Date('2013 Dec 11 20:31:12').getTime();
+
+        var model = new PubsubModel();
+        model._getMetrics(d1, 'postsList').subs = 2;
+        model._getMetrics(d2, 'postsList').subs++;
+
+        emit('return', [
+          model.buildPayload(),
+          model.metricsByMinute
+        ]);
+      });
+
+      assert.deepEqual(data[0].pubMetrics[0].pubs.postsList.subs, 2);
+      assert.deepEqual(data[0].pubMetrics[1].pubs.postsList.subs, 1);
+      assert.deepEqual(data[1], {});
+      done();
+    });
+
+    test('multiple dates and multiple publications', function(done, server) {
+      var data = server.evalSync(function() {
+        var d1 = new Date('2013 Dec 10 20:31:12').getTime();
+        var d2 = new Date('2013 Dec 11 20:31:12').getTime();
+
+        var model = new PubsubModel();
+        model._getMetrics(d1, 'postsList').subs = 2;
+        model._getMetrics(d2, 'singlePost').subs++;
+
+        emit('return', [
+          model.buildPayload(),
+          model.metricsByMinute
+        ]);
+      });
+
+      assert.deepEqual(data[0].pubMetrics[0].pubs.postsList.subs, 2);
+      assert.deepEqual(data[0].pubMetrics[1].pubs.singlePost.subs, 1);
+      assert.deepEqual(data[1], {});
+      done();
+    });
+  });
 });
