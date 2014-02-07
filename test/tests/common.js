@@ -22,6 +22,35 @@ GetLastMethodEvents = function(server, fields) {
   return getEvents(method, fields);
 };
 
+GetPubsubMetrics = function(server) {
+  var metrics = server.evalSync(function() {
+    emit('return', Apm.models.pubsub.metricsByMinute);
+  });
+
+  var metricsArr = [];
+  for(var dateId in metrics) {
+    metricsArr.push(metrics[dateId]);
+  }
+
+  return metricsArr;
+};
+
+GetPubsubPayload = function(server, detailInfoNeeded) {
+  var payload = server.evalSync(function(detailInfoNeeded) {
+    emit('return', Apm.models.pubsub.buildPayload(detailInfoNeeded));
+  }, detailInfoNeeded);
+
+  return payload.pubMetrics;
+};
+
+Wait = function(server, time) {
+  server.evalSync(function(time) {
+    setTimeout(function() {
+      emit('return');
+    }, time);
+  }, time); 
+};
+
 function getEvents(method, fields) {
   var events = [];
   var fields = fields || ['type'];
