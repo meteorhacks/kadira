@@ -6,8 +6,8 @@ Test for the sub, unsub count
 Test for resTime
 Test for count
 Test for lifetime
-* Send some data and check the data impact
-  * do both insert and update
+Send some data and check the data impact
+  do both insert and update
 
 ## Test Cases for the Model
 
