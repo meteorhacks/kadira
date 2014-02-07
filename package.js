@@ -11,6 +11,7 @@ Package.on_use(function(api) {
   api.add_files([
     'lib/utils.js',
     'lib/ntp.js',
+    'lib/models/0model.js',
     'lib/models/methods.js',
     'lib/models/pubsub.js',
     'lib/apm.js',
