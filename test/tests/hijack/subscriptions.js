@@ -92,7 +92,7 @@ suite('Hijack - Subscriptions', function() {
       }); 
     });
 
-    Wait(server, 300);
+    Wait(server, 400);
     client.evalSync(function() {
       h1.stop();
       emit('return');
@@ -100,11 +100,12 @@ suite('Hijack - Subscriptions', function() {
 
     Wait(server, 100);
     var metrics = GetPubsubMetrics(server);
+    
     assert.ok(metrics[0].pubs.postsList.lifeTime > 300);
     done();
   });
 
-  test('count', function(done, server, client) {
+  test('activeSubs', function(done, server, client) {
     server.evalSync(function() {
       Posts = new Meteor.Collection('posts');
       Meteor.publish('postsList', function() {
@@ -122,7 +123,7 @@ suite('Hijack - Subscriptions', function() {
     });
 
     var payload = GetPubsubPayload(server);
-    assert.equal(payload[0].pubs.postsList.count, 2);
+    assert.equal(payload[0].pubs.postsList.activeSubs, 2);
     done();
   });
 
