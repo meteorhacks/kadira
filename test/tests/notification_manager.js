@@ -92,41 +92,4 @@ suite('Notification Manager', function() {
       done();
     });
   });
-
-  suite('_isLastEventIsStart', function() {
-    test('corret', function(done, server) {
-      var result = server.evalSync(function() {
-        var method = {
-          events: [
-            {type: 'db'},
-            {type: 'dbend'},
-            {type: 'http'},
-          ]
-        };
-
-        var result = NotificationManager._isLastEventIsStart(method);
-        emit('return', result);
-      });
-
-      assert.equal(result, true);
-      done();
-    });
-
-    test('incorret', function(done, server) {
-      var result = server.evalSync(function() {
-        var method = {
-          events: [
-            {type: 'db'},
-            {type: 'dbend'}
-          ]
-        };
-
-        var result = NotificationManager._isLastEventIsStart(method);
-        emit('return', result);
-      });
-
-      assert.equal(result, false);
-      done();
-    });
-  });
 });

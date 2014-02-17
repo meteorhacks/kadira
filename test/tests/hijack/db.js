@@ -338,6 +338,45 @@ suite('Hijack - DB', function() {
       done();
     });
 
+    test('forEach:findOne inside', function(done, server, client) {
+      EnableTrackingMethods(server);
+      server.evalSync(function() {
+        Posts = new Meteor.Collection('posts');
+        Posts.insert({_id: 'aa'});
+        Posts.insert({_id: 'bb'});
+
+        Meteor.methods({
+          'doCall': function() {
+            var res = [];
+            Posts.find({_id: {$exists: true}}).forEach(function(doc) {
+               res.push(doc._id);
+               Posts.findOne();
+            });
+            return res;
+          }
+        });
+        emit('return');
+      });
+
+      var result = callMethod(client, 'doCall');
+      assert.deepEqual(result, ['aa', 'bb']);
+      
+      var expectedEvents = [
+        {type: 'start', data: {userId: null}},
+        {type: 'wait', data: {waitOn: []}},
+        {type: 'waitend', data: undefined},
+        {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({_id: {$exists: true}})}},
+        {type: 'dbend', data: undefined},
+        {type: 'db', data: {coll: 'posts', func: 'forEach', selector: JSON.stringify({_id: {$exists: true}})}},
+        {type: 'dbend', data: undefined},
+        {type: 'complete', data: undefined}
+      ];
+      var events = GetLastMethodEvents(server, ['type', 'data']);
+
+      assert.deepEqual(events, expectedEvents);
+      done();
+    });
+
   });
 });
 
