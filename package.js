@@ -1,5 +1,5 @@
 Package.describe({
-  "summery": "Application Performance Monitoring for Meteor"
+  "summary": "Application Performance Monitoring for Meteor"
 });
 
 Npm.depends({
@@ -11,10 +11,13 @@ Package.on_use(function(api) {
   api.add_files([
     'lib/utils.js',
     'lib/ntp.js',
+    'lib/models/0model.js',
     'lib/models/methods.js',
+    'lib/models/pubsub.js',
     'lib/apm.js',
     'lib/notification_manager.js',
     'lib/hijack/wrap_session.js',
+    'lib/hijack/wrap_subscription.js',
     'lib/hijack/session.js',
     'lib/hijack/db.js',
     'lib/hijack/http.js',

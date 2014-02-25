@@ -210,18 +210,13 @@ suite('Methods Model', function() {
   test('buildPayload - max min', function(done, server) {
     server.evalSync(function() {
       model = new MethodsModel();
-      model.sendMaxMinInterval = 2;
       emit('return');
     });
 
     server.evalSync(createMethodCompleted, 'aa', 'hello', 1, 100, 5);
     server.evalSync(createMethodCompleted, 'aa', 'hello', 2, 800 , 15);
-
-    var payload1 = server.evalSync(getPayload);
-
-    assert.deepEqual(payload1.methodRequests, []);
-
     server.evalSync(createMethodCompleted, 'aa', 'hello', 3, 900 , 2000);
+
     var lastMethodId = 3;
     var expectedResult = {
       total: {_id: 'aa::3', total: 2000},
@@ -235,7 +230,7 @@ suite('Methods Model', function() {
       server.evalSync(createMethodWithEvent, 'aa', 'hello', ++lastMethodId, 800 , eventType, 10);
     });
 
-    var payload2 = server.evalSync(getPayload);  
+    var payload2 = server.evalSync(getPayload, true);  
 
     assert.equal(payload2.methodRequests.length, 7);
     
@@ -253,18 +248,13 @@ suite('Methods Model', function() {
     server.evalSync(function() {
       //define threshold with 1500
       model = new MethodsModel({total: 1500});
-      model.sendMaxMinInterval = 2;
       emit('return');
     });
 
     server.evalSync(createMethodCompleted, 'aa', 'hello', 1, 100, 5);
     server.evalSync(createMethodCompleted, 'aa', 'hello', 2, 800 , 15);
-
-    var payload1 = server.evalSync(getPayload);
-
-    assert.deepEqual(payload1.methodRequests, []);
-
     server.evalSync(createMethodCompleted, 'aa', 'hello', 3, 900 , 2000);
+
     var lastMethodId = 3;
     var expectedResult = {
       total: {_id: 'aa::3', total: 2000},
@@ -277,7 +267,7 @@ suite('Methods Model', function() {
       server.evalSync(createMethodWithEvent, 'aa', 'hello', ++lastMethodId, 800 , eventType, 10);
     });
 
-    var payload2 = server.evalSync(getPayload);  
+    var payload2 = server.evalSync(getPayload, true);  
 
     assert.equal(payload2.methodRequests.length, 2);
     
@@ -294,12 +284,11 @@ suite('Methods Model', function() {
   test('buildPayload - max min - the response', function(done, server) {
     server.evalSync(function() {
       model = new MethodsModel();
-      model.sendMaxMinInterval = 1;
       emit('return');
     });
 
     server.evalSync(createMethodCompleted, 'aa', 'hello', 1, 100, 120);
-    var payload1 = server.evalSync(getPayload);
+    var payload1 = server.evalSync(getPayload, true);
 
     var expectedResult = {
       "_id": "aa::1",
@@ -338,15 +327,11 @@ suite('Methods Model', function() {
   test('buildPayload - max min - multi-methods', function(done, server) {
     server.evalSync(function() {
       model = new MethodsModel();
-      model.sendMaxMinInterval = 2;
       emit('return');
     });
 
     server.evalSync(createMethodCompleted, 'aa', 'hello', 1, 100, 5);
     server.evalSync(createMethodCompleted, 'aa', 'hello', 2, 800 , 15);
-
-    var payload1 = server.evalSync(getPayload);
-    assert.deepEqual(payload1.methodRequests, []);
 
     server.evalSync(createMethodCompleted, 'aa', 'hello', 3, 900 , 2000);
     server.evalSync(createMethodCompleted, 'aa', 'hi', 200, 900 , 2000);
@@ -370,7 +355,7 @@ suite('Methods Model', function() {
       });
     });
 
-    var payload2 = server.evalSync(getPayload);  
+    var payload2 = server.evalSync(getPayload, true);  
     assert.equal(payload2.methodRequests.length, 14);
     
     var processedResult = {};
@@ -385,8 +370,8 @@ suite('Methods Model', function() {
   });
 });
 
-function getPayload() {
-  emit('return', model.buildPayload());
+function getPayload(buildDetailInfo) {
+  emit('return', model.buildPayload(buildDetailInfo));
 }
 
 function createMethodCompleted(sessionName, methodName, methodId, startTime, methodDelay) {
