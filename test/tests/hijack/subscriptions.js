@@ -123,7 +123,8 @@ suite('Hijack - Subscriptions', function() {
     });
 
     var payload = GetPubsubPayload(server);
-    assert.equal(payload[0].pubs.postsList.activeSubs, 2);
+    var expectedSubs = 3; //meteor_autoupdate_clientVersions + 2
+    assert.equal(payload[0].pubs.postsList.activeSubs, 3);
     done();
   });
 
