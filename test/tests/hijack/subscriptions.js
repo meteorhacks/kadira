@@ -163,6 +163,43 @@ suite('Hijack - Subscriptions', function() {
     done();
   });
 
+  test('networkImpact:added - in async', function(done, server, client) {
+    //_id is not calculated
+    var docs = [
+      {data: 'data1'},
+      {data: 'data2'}
+    ];
+
+    server.evalSync(function(docs) {
+      Posts = new Meteor.Collection('posts');
+      docs.forEach(function(doc) {
+        Posts.insert(doc);
+      });
+
+      Meteor.publish('postsList', function() {
+        var self = this;
+        setTimeout(function() {
+          self.added('posts', 'id1', {data: 'data1'})
+          self.added('posts', 'id2', {data: 'data2'})
+          self.ready();
+        }, 200);
+      });
+      emit('return');
+    }, docs);
+
+    client.evalSync(function() {
+      var h1 = Meteor.subscribe('postsList', function() {
+        emit('return');
+      }); 
+    });
+
+    Wait(server, 200);
+
+    var metrics = GetPubsubMetrics(server);
+    assert.equal(metrics[0].pubs.postsList.networkImpact, getDataSize(docs));
+    done();
+  });
+
   test('networkImpact:added multi-subscriptions', function(done, server, client) {
     //_id is not calculated
     var docs = [
