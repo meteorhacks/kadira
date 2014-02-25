@@ -86,13 +86,16 @@ suite('Hijack - Subscriptions', function() {
       emit('return');
     });
 
+    //wait NTP get synced
+    Wait(server, 600);
+
     client.evalSync(function() {
       h1 = Meteor.subscribe('postsList', function() {
         emit('return');
       }); 
     });
 
-    Wait(server, 400);
+    Wait(server, 600);
     client.evalSync(function() {
       h1.stop();
       emit('return');
@@ -101,7 +104,7 @@ suite('Hijack - Subscriptions', function() {
     Wait(server, 100);
     var metrics = GetPubsubMetrics(server);
     
-    assert.ok(metrics[0].pubs.postsList.lifeTime > 300);
+    assert.ok(metrics[0].pubs.postsList.lifeTime > 600);
     done();
   });
 
