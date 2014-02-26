@@ -77,6 +77,54 @@ suite('Hijack - Subscriptions', function() {
     done();
   });
 
+  test('resTime: multiple .ready()', function(done, server, client) {
+    server.evalSync(function() {
+      Posts = new Meteor.Collection('posts');
+      var doneOnce = false;
+      Meteor.publish('postsList', function() {
+        var pub = this;
+        Meteor._wrapAsync(function(done) {
+          setTimeout(function() {
+            if(!doneOnce) {
+              pub.ready();
+              doneOnce = true;  
+              setTimeout(function() {
+                pub.ready();
+              }, 500);
+            }
+            done();
+          }, 200);
+        })();
+      });
+      emit('return');
+    });
+
+    client.evalSync(function() {
+      Meteor.subscribe('postsList', function() {
+        emit('return');
+      }); 
+    });
+
+    var metrics = GetPubsubPayload(server);
+    var resTimeOne = metrics[0].pubs.postsList.resTime;
+
+    Wait(server, 600);
+
+    client.evalSync(function() {
+      Meteor.subscribe('postsList'); 
+      emit('return');
+    });
+
+    //wait until sub get sent to the server
+    Wait(server, 200);
+    var metrics2 = GetPubsubPayload(server);
+
+    var resTimeTwo = metrics2[0].pubs.postsList.resTime;
+    assert.equal(resTimeTwo, 0);
+
+    done();
+  });
+
   test('lifeTime', function(done, server, client) {
     server.evalSync(function() {
       Posts = new Meteor.Collection('posts');
