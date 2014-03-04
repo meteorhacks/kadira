@@ -54,6 +54,71 @@ suite('Hijack - Subscriptions', function() {
     done();
   });
 
+  test('route subscribe', function(done, server, client){
+    server.evalSync(function(){
+      Posts = new Meteor.Collection('posts');
+      Meteor.publish('postsList', function() {
+        return Posts.find();
+      });
+      emit('return');
+    });
+
+    client.evalSync(function(){
+
+      Router = {};
+      Router.current = function(){
+        return {
+          route: {name: "route1"}
+        }
+      };
+
+      Meteor.subscribe('postsList', function() {
+        Meteor.subscribe('postsList', function() {
+          emit('return');
+        });
+      });
+    });
+
+    var metrics = GetPubsubMetrics(server);
+    assert.equal(metrics.length, 1);
+    assert.equal(metrics[0].pubs.postsList.subRoutes['route1'], 2);
+    done();
+  });
+
+  test('route unsubscribe', function(done, server, client){
+    server.evalSync(function(){
+      Posts = new Meteor.Collection('posts');
+      Meteor.publish('postsList', function() {
+        return Posts.find();
+      });
+      emit('return');
+    });
+
+    client.evalSync(function(){
+
+      Router = {};
+      Router.current = function(){
+        return {
+          route: {name: "route1"}
+        }
+      };
+
+      var h1 = Meteor.subscribe('postsList', function() {
+        var h2 = Meteor.subscribe('postsList', function() {
+          h1.stop();
+          h2.stop();
+          emit('return');
+        });
+      });
+    });
+
+    var metrics = GetPubsubMetrics(server);
+    assert.equal(metrics.length, 1);
+    assert.equal(metrics[0].pubs.postsList.subRoutes['route1'], 2);
+    assert.equal(metrics[0].pubs.postsList.unsubRoutes['route1'], 2);
+    done();
+  });
+
   test('resTime', function(done, server, client) {
     server.evalSync(function() {
       Posts = new Meteor.Collection('posts');

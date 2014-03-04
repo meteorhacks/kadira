@@ -25,6 +25,8 @@ Package.on_use(function(api) {
     'lib/hijack/async.js'
   ], 'server');
 
+  api.add_files(['lib/client/route.js'], 'client')
+
   if(isPackageExists('npm')) {
     api.use('npm', 'server', {weak: true});
   }
