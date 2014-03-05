@@ -58,6 +58,43 @@ suite('Hijack - DB', function() {
       done();
     });
 
+    test('insert:throws error and catch it', function(done, server, client) {
+      EnableTrackingMethods(server);
+      server.evalSync(function() {
+        Posts = new Meteor.Collection('posts');
+        Meteor.methods({
+          'doCall': function() {
+            try {
+              Posts.insert({_id: 'aa'});
+              Posts.insert({_id: 'aa', aa: 10});
+            } catch(ex) {
+              
+            }
+            return "insert";
+          }
+        });
+        emit('return');
+      });
+
+      callMethod(client, 'doCall');
+      
+      var events = GetLastMethodEvents(server, ['type', 'data']);
+      //simplyfy the error for testing
+      events[6].data.err = events[6].data.err.split(' ')[0];
+      
+      assert.deepEqual(events, [
+        {type: 'start', data: {userId: null}},
+        {type: 'wait', data: {waitOn: []}},
+        {type: 'waitend', data: undefined},
+        {type: 'db', data: {coll: 'posts', func: 'insert'}},
+        {type: 'dbend', data: undefined},
+        {type: 'db', data: {coll: 'posts', func: 'insert'}},
+        {type: 'dbend', data: {err: "E11000"}},
+        {type: 'complete', data: undefined}
+      ]);
+      done();
+    });
+
     test('update', function(done, server, client) {
       EnableTrackingMethods(server);
       server.evalSync(function() {
