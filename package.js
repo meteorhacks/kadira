@@ -31,6 +31,10 @@ Package.on_use(function(api) {
     api.use('npm', 'server', {weak: true});
   }
 
+  if(isPackageExists('iron-router')) {
+    api.use('iron-router', 'client', {weak: true});
+  }
+
   if(process.env.__TEST_APM_EXPORTS) {
     //use for testing
     var exportFields = process.env.__TEST_APM_EXPORTS.split(',').map(function(v) {
