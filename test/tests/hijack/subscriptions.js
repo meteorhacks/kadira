@@ -156,6 +156,41 @@ suite('Hijack - Subscriptions', function() {
     done();
   });
 
+  test('lifeTime for null subs', function(done, server, client) {
+    //wait for client to get connected to the server
+    client.evalSync(function() {
+      Deps.autorun(function() {
+        var status = Meteor.status();
+        if(status.connected) {
+          emit('return');
+        }
+      });
+    });
+
+    server.evalSync(function() {
+      Posts = new Meteor.Collection('posts');
+      Meteor.publish(null, function() {
+        return Posts.find();
+      });
+      emit('return');
+    });
+
+    Wait(server, 600);
+
+    //close client sessions
+    server.evalSync(function() {
+      _.each(Meteor.default_server.sessions, function(session) {
+        Meteor.default_server._closeSession(session);
+      });
+      emit('return');
+    });
+
+    var metrics = GetPubsubMetrics(server);
+    
+    assert.ok(metrics[0].pubs['null(autopublish)'].lifeTime > 600);
+    done();
+  });
+
   test('activeSubs', function(done, server, client) {
     server.evalSync(function() {
       Posts = new Meteor.Collection('posts');
