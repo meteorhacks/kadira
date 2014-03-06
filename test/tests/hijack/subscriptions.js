@@ -197,20 +197,26 @@ suite('Hijack - Subscriptions', function() {
       Meteor.publish('postsList', function() {
         return Posts.find();
       });
+
+      Meteor.publish('abc', function() {
+        return Posts.find();
+      });
       emit('return');
     });
 
     client.evalSync(function() {
       var h1 = Meteor.subscribe('postsList', function() {
         var h2 = Meteor.subscribe('postsList', function() {
-          emit('return');
+          var h3 = Meteor.subscribe('abc', function() {
+            emit('return');
+          });
         });
       }); 
     });
 
     var payload = GetPubsubPayload(server);
-    var expectedSubs = 3; //meteor_autoupdate_clientVersions + 2
-    assert.equal(payload[0].pubs.postsList.activeSubs, 3);
+    assert.equal(payload[0].pubs.postsList.activeSubs, 2);
+    assert.equal(payload[0].pubs.abc.activeSubs, 1);
     done();
   });
 
