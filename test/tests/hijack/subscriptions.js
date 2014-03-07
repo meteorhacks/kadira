@@ -141,7 +141,6 @@ suite('Hijack - Subscriptions', function() {
     });
 
     var metrics = GetPubsubMetrics(server);
-    console.log('******',JSON.stringify(metrics, null, 2));
     assert.ok(metrics[0].pubs.postsList.resTime > 200);
     done();
   });
