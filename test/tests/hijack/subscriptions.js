@@ -54,6 +54,74 @@ suite('Hijack - Subscriptions', function() {
     done();
   });
 
+  test('route subscribe', function(done, server, client){
+    server.evalSync(function(){
+      Posts = new Meteor.Collection('posts');
+      Meteor.publish('postsList', function() {
+        return Posts.find();
+      });
+      emit('return');
+    });
+    Wait(server, 1000);
+    client.evalSync(function(){
+        Router.map(function () {
+            this.route('home', {
+              path: '/',
+              template:'home',
+              waitOn: function () { 
+                return [
+                  Meteor.subscribe('postsList')
+                ];
+              }
+            });
+        });
+       emit('return');
+    });
+    client.evalSync(function(){
+       Router.go('home');
+       emit('return');
+    });
+
+    var metrics = GetPubsubMetrics(server);
+    assert.equal(metrics.length, 1);
+    assert.equal(metrics[0].pubs.postsList.subRoutes['home'], 1);
+    done();
+  });
+
+  // test('route unsubscribe', function(done, server, client){
+  //   server.evalSync(function(){
+  //     Posts = new Meteor.Collection('posts');
+  //     Meteor.publish('postsList', function() {
+  //       return Posts.find();
+  //     });
+  //     emit('return');
+  //   });
+  //   Wait(server, 1000);
+  //   client.evalSync(function(){
+  //       Router.map(function () {
+  //           this.route('home', {
+  //             path: '/',
+  //             template:'home',
+  //             waitOn: function () { 
+  //               return [
+  //                 Meteor.subscribe('postsList')
+  //               ];
+  //             }
+  //           });
+  //       });
+  //      emit('return');
+  //   });
+  //   client.evalSync(function(){
+  //      Router.go('home');
+  //      emit('return');
+  //   });
+
+  //   var metrics = GetPubsubMetrics(server);
+  //   assert.equal(metrics.length, 1);
+  //   assert.equal(metrics[0].pubs.postsList.unsubRoutes['home'], 1);
+  //   done();
+  // });
+
   test('resTime', function(done, server, client) {
     server.evalSync(function() {
       Posts = new Meteor.Collection('posts');

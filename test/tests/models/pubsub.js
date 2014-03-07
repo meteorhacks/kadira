@@ -86,6 +86,28 @@ suite('Pubsub Model', function() {
       done();
     });
 
+    test('routes', function(done, server) {
+      var data = server.evalSync(function() {
+        var pub = "postsList";
+        var d1 = new Date('2013 Dec 10 20:31:12').getTime();
+        var route = 'route1';
+        var model = new PubsubModel();
+        model._getMetrics(d1, pub).subRoutes = {}
+        model._getMetrics(d1, pub).subRoutes[route] = 0;
+        model._getMetrics(d1, pub).subRoutes[route]++;
+        model._getMetrics(d1, pub).subRoutes[route]++;
+        model._getMetrics(d1, pub).subRoutes[route]++;
+
+        emit('return', [
+          model.buildPayload(),
+          model.metricsByMinute
+        ]);
+      });
+      assert.deepEqual(data[0].pubMetrics[0].pubs.postsList.subRoutes['route1'], 3);
+      assert.deepEqual(data[1], {});
+      done();
+    });
+
     test('resTime', function(done, server) {
       var data = server.evalSync(function() {
         var pub = "postsList";
