@@ -1,3 +1,6 @@
+var path = Npm.require('path');
+var fs = Npm.require('fs');
+
 Package.describe({
   "summary": "Application Performance Monitoring for Meteor"
 });
@@ -49,6 +52,30 @@ Package.on_use(function(api) {
 function isPackageExists(name) {
   var fs = Npm.require('fs');
   var path = Npm.require('path');
-  var meteorPackages = fs.readFileSync(path.resolve('.meteor/packages'), 'utf8');
+  var meteorPackages = fs.readFileSync(path.join(meteorRoot(), '.meteor', 'packages'), 'utf8');
   return !!meteorPackages.match(new RegExp(name));
+}
+
+function isAppDir(filepath) {
+  try {
+    return fs.statSync(path.join(filepath, '.meteor', 'packages')).isFile();
+  } catch (e) {
+    return false;
+  }
+}
+
+function meteorRoot() {
+  var currentDir = process.cwd();
+  while (currentDir) {
+    var newDir = path.dirname(currentDir);
+    if (isAppDir(currentDir)) {
+      break;
+    } else if (newDir === currentDir) {
+      return null;
+    } else {
+      currentDir = newDir;
+    }
+  }
+
+  return currentDir;
 }
