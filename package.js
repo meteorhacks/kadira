@@ -9,6 +9,7 @@ Npm.depends({
 Package.on_use(function(api) {
   api.use(['minimongo', 'livedata', 'mongo-livedata', 'ejson', 'underscore', 'http', 'email', 'random'], ['server']);
   api.add_files([
+    'lib/retry.js',
     'lib/utils.js',
     'lib/ntp.js',
     'lib/models/0model.js',
