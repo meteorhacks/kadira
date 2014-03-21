@@ -496,6 +496,45 @@ suite('Hijack - DB', function() {
       done();
     });
 
+    test('rewind', function(done, server, client) {
+      EnableTrackingMethods(server);
+      server.evalSync(function() {
+        Posts = new Meteor.Collection('posts');
+        Posts.insert({_id: 'aa'});
+        Posts.insert({_id: 'bb'});
+
+        Meteor.methods({
+          'doCall': function() {
+            var curosr = Posts.find({_id: {$exists: true}});
+            curosr.fetch();
+            curosr.rewind();
+            return curosr.fetch();
+          }
+        });
+        emit('return');
+      });
+
+      var result = callMethod(client, 'doCall');
+      assert.deepEqual(result, [{_id: 'aa'}, {_id: 'bb'}]);
+      
+      var events = GetLastMethodEvents(server, ['type', 'data']);
+      assert.deepEqual(events, [
+        {type: 'start', data: {userId: null}},
+        {type: 'wait', data: {waitOn: []}},
+        {type: 'waitend', data: undefined},
+        {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({_id: {$exists: true}})}},
+        {type: 'dbend', data: undefined},
+        {type: 'db', data: {coll: 'posts', func: 'fetch', selector: JSON.stringify({_id: {$exists: true}})}},
+        {type: 'dbend', data: undefined},
+        {type: 'db', data: {coll: 'posts', func: 'rewind', selector: JSON.stringify({_id: {$exists: true}})}},
+        {type: 'dbend', data: undefined},
+        {type: 'db', data: {coll: 'posts', func: 'fetch', selector: JSON.stringify({_id: {$exists: true}})}},
+        {type: 'dbend', data: undefined},
+        {type: 'complete', data: undefined}
+      ]);
+      done();
+    });
+
   });
 });
 
