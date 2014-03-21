@@ -175,7 +175,7 @@ suite('Hijack - DB', function() {
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({_id: 'aa'})}},
         {type: 'dbend', data: undefined},
-        {type: 'db', data: {coll: 'posts', func: 'fetch', selector: JSON.stringify({_id: 'aa'})}},
+        {type: 'db', data: {coll: 'posts', func: 'fetch', cursor: true, selector: JSON.stringify({_id: 'aa'})}},
         {type: 'dbend', data: undefined},
         {type: 'complete', data: undefined}
       ]);
@@ -266,7 +266,7 @@ suite('Hijack - DB', function() {
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({})}},
         {type: 'dbend', data: undefined},
-        {type: 'db', data: {coll: 'posts', func: 'count', selector: JSON.stringify({})}},
+        {type: 'db', data: {coll: 'posts', cursor: true, func: 'count', selector: JSON.stringify({})}},
         {type: 'dbend', data: undefined},
         {type: 'complete', data: undefined}
       ]);
@@ -298,7 +298,7 @@ suite('Hijack - DB', function() {
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({_id: {$exists: true}})}},
         {type: 'dbend', data: undefined},
-        {type: 'db', data: {coll: 'posts', func: 'fetch', selector: JSON.stringify({_id: {$exists: true}})}},
+        {type: 'db', data: {coll: 'posts', cursor: true, func: 'fetch', selector: JSON.stringify({_id: {$exists: true}})}},
         {type: 'dbend', data: undefined},
         {type: 'complete', data: undefined}
       ]);
@@ -332,7 +332,7 @@ suite('Hijack - DB', function() {
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({_id: {$exists: true}})}},
         {type: 'dbend', data: undefined},
-        {type: 'db', data: {coll: 'posts', func: 'map', selector: JSON.stringify({_id: {$exists: true}})}},
+        {type: 'db', data: {coll: 'posts', cursor: true, func: 'map', selector: JSON.stringify({_id: {$exists: true}})}},
         {type: 'dbend', data: undefined},
         {type: 'complete', data: undefined}
       ]);
@@ -368,7 +368,7 @@ suite('Hijack - DB', function() {
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({_id: {$exists: true}})}},
         {type: 'dbend', data: undefined},
-        {type: 'db', data: {coll: 'posts', func: 'forEach', selector: JSON.stringify({_id: {$exists: true}})}},
+        {type: 'db', data: {coll: 'posts', cursor: true, func: 'forEach', selector: JSON.stringify({_id: {$exists: true}})}},
         {type: 'dbend', data: undefined},
         {type: 'complete', data: undefined}
       ]);
@@ -404,7 +404,7 @@ suite('Hijack - DB', function() {
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({_id: {$exists: true}})}},
         {type: 'dbend', data: undefined},
-        {type: 'db', data: {coll: 'posts', func: 'forEach', selector: JSON.stringify({_id: {$exists: true}})}},
+        {type: 'db', data: {coll: 'posts', cursor: true, func: 'forEach', selector: JSON.stringify({_id: {$exists: true}})}},
         {type: 'dbend', data: undefined},
         {type: 'complete', data: undefined}
       ];
@@ -448,7 +448,7 @@ suite('Hijack - DB', function() {
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({})}},
         {type: 'dbend', data: undefined},
-        {type: 'db', data: {coll: 'posts', func: 'observeChanges', selector: JSON.stringify({})}},
+        {type: 'db', data: {coll: 'posts', cursor: true, func: 'observeChanges', selector: JSON.stringify({})}},
         //oplog is always false since tests do not uses oplog
         {type: 'dbend', data: {oplog: false}},
         {type: 'complete', data: undefined}
@@ -488,7 +488,7 @@ suite('Hijack - DB', function() {
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({})}},
         {type: 'dbend', data: undefined},
-        {type: 'db', data: {coll: 'posts', func: 'observe', selector: JSON.stringify({})}},
+        {type: 'db', data: {coll: 'posts', func: 'observe', cursor: true, selector: JSON.stringify({})}},
         //oplog is always false since tests do not uses oplog
         {type: 'dbend', data: {oplog: false}},
         {type: 'complete', data: undefined}
@@ -524,11 +524,11 @@ suite('Hijack - DB', function() {
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({_id: {$exists: true}})}},
         {type: 'dbend', data: undefined},
-        {type: 'db', data: {coll: 'posts', func: 'fetch', selector: JSON.stringify({_id: {$exists: true}})}},
+        {type: 'db', data: {coll: 'posts', func: 'fetch', cursor: true, selector: JSON.stringify({_id: {$exists: true}})}},
         {type: 'dbend', data: undefined},
-        {type: 'db', data: {coll: 'posts', func: 'rewind', selector: JSON.stringify({_id: {$exists: true}})}},
+        {type: 'db', data: {coll: 'posts', func: 'rewind', cursor: true, selector: JSON.stringify({_id: {$exists: true}})}},
         {type: 'dbend', data: undefined},
-        {type: 'db', data: {coll: 'posts', func: 'fetch', selector: JSON.stringify({_id: {$exists: true}})}},
+        {type: 'db', data: {coll: 'posts', func: 'fetch', cursor: true, selector: JSON.stringify({_id: {$exists: true}})}},
         {type: 'dbend', data: undefined},
         {type: 'complete', data: undefined}
       ]);
