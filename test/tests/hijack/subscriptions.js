@@ -316,7 +316,7 @@ suite('Hijack - Subscriptions', function() {
     Wait(server, 200);
 
     var metrics = GetPubsubMetrics(server);
-    assert.equal(metrics[0].pubs.postsList.networkImpact, getDataSize(docs));
+    assert.equal(metrics[0].pubs.postsList.bytesBeforeReady, getDataSize(docs));
     done();
   });
 
@@ -353,7 +353,7 @@ suite('Hijack - Subscriptions', function() {
     Wait(server, 200);
 
     var metrics = GetPubsubMetrics(server);
-    assert.equal(metrics[0].pubs.postsList.networkImpact, getDataSize(docs));
+    assert.equal(metrics[0].pubs.postsList.bytesBeforeReady, getDataSize(docs));
     done();
   });
 
@@ -387,24 +387,23 @@ suite('Hijack - Subscriptions', function() {
     Wait(server, 200);
 
     var metrics = GetPubsubMetrics(server);
-    assert.equal(metrics[0].pubs.postsList.networkImpact, getDataSize(docs));
+    assert.equal(metrics[0].pubs.postsList.bytesBeforeReady, getDataSize(docs));
     done();
   });
   
-  test('networkImpact:updated', function(done, server, client) {
-    var docs = [
-      {abc: 10},
-      {bbc: 20}
-    ];
-    server.evalSync(function() {
+  test('networkImpact:after-ready', function(done, server, client) {
+    var post1 = {abc: 10};
+    var post2 = {abc: "hello sumba", aa: 200};
+
+    server.evalSync(function(post1) {
       Posts = new Meteor.Collection('posts');
-      Posts.insert({_id: 'aa', abc: 10});
+      Posts.insert(post1);
 
       Meteor.publish('postsList', function() {
         return Posts.find();
       });
       emit('return');
-    }, docs);
+    }, post1);
 
     client.evalSync(function() {
       var h1 = Meteor.subscribe('postsList', function() {
@@ -412,15 +411,16 @@ suite('Hijack - Subscriptions', function() {
       }); 
     });
 
-    server.evalSync(function() {
-      Posts.update({_id: 'aa'}, {$set: {bbc: 10}});
+    server.evalSync(function(post2) {
+      Posts.insert(post2);
       emit('return');
-    });
+    }, post2);
 
     Wait(server, 200);
 
     var metrics = GetPubsubMetrics(server);
-    assert.equal(metrics[0].pubs.postsList.networkImpact, getDataSize(docs));
+    assert.equal(metrics[0].pubs.postsList.bytesBeforeReady, getDataSize(post1));
+    assert.equal(metrics[0].pubs.postsList.bytesAfterReady, getDataSize(post2));
     done();
   });
 
@@ -452,7 +452,8 @@ suite('Hijack - Subscriptions', function() {
     Wait(server, 200);
 
     var metrics = GetPubsubMetrics(server);
-    assert.equal(metrics[0].pubs.postsList.networkImpact, getDataSize(docs));
+    assert.equal(metrics[0].pubs.postsList.bytesBeforeReady, getDataSize(docs));
+    assert.equal(metrics[0].pubs.postsList.bytesAfterReady, 0);
     done();
   });
 
@@ -460,6 +461,10 @@ suite('Hijack - Subscriptions', function() {
 
 
 function getDataSize(docs) {
+  if(!(docs instanceof Array)) {
+    docs = [docs];
+  }
+
   var size = 0;
   docs.forEach(function(doc) {
     size+= Buffer.byteLength(JSON.stringify(doc));
