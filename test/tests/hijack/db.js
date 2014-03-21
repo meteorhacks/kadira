@@ -414,6 +414,88 @@ suite('Hijack - DB', function() {
       done();
     });
 
+    test('observeChanges', function(done, server, client) {
+      EnableTrackingMethods(server);
+      server.evalSync(function() {
+        Posts = new Meteor.Collection('posts');
+        Posts.insert({_id: 'aa'});
+        Posts.insert({_id: 'bb'});
+
+        Meteor.methods({
+          'doCall': function() {
+            var data = [];
+            var handle = Posts.find({}).observeChanges({
+              added: function(id, fields) {
+                fields._id = id;
+                data.push(fields);
+              }
+            });
+            handle.stop();
+            return data;
+          }
+        });
+        emit('return');
+      });
+
+      var result = callMethod(client, 'doCall');
+      assert.deepEqual(result, [{_id: 'aa'}, {_id: 'bb'}]);
+      
+
+      var events = GetLastMethodEvents(server, ['type', 'data']);
+      assert.deepEqual(events, [
+        {type: 'start', data: {userId: null}},
+        {type: 'wait', data: {waitOn: []}},
+        {type: 'waitend', data: undefined},
+        {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({})}},
+        {type: 'dbend', data: undefined},
+        {type: 'db', data: {coll: 'posts', func: 'observeChanges', selector: JSON.stringify({})}},
+        //oplog is always false since tests do not uses oplog
+        {type: 'dbend', data: {oplog: false}},
+        {type: 'complete', data: undefined}
+      ]);
+      done();
+    });
+
+    test('observe', function(done, server, client) {
+      EnableTrackingMethods(server);
+      server.evalSync(function() {
+        Posts = new Meteor.Collection('posts');
+        Posts.insert({_id: 'aa'});
+        Posts.insert({_id: 'bb'});
+
+        Meteor.methods({
+          'doCall': function() {
+            var data = [];
+            var handle = Posts.find({}).observe({
+              added: function(doc) {
+                data.push(doc);
+              }
+            });
+            handle.stop();
+            return data;
+          }
+        });
+        emit('return');
+      });
+
+      var result = callMethod(client, 'doCall');
+      assert.deepEqual(result, [{_id: 'aa'}, {_id: 'bb'}]);
+      
+      var events = GetLastMethodEvents(server, ['type', 'data']);
+      assert.deepEqual(events, [
+        {type: 'start', data: {userId: null}},
+        {type: 'wait', data: {waitOn: []}},
+        {type: 'waitend', data: undefined},
+        {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({})}},
+        {type: 'dbend', data: undefined},
+        {type: 'db', data: {coll: 'posts', func: 'observe', selector: JSON.stringify({})}},
+        //oplog is always false since tests do not uses oplog
+        {type: 'dbend', data: {oplog: false}},
+        {type: 'complete', data: undefined}
+      ]);
+      done();
+    });
+
   });
 });
 
