@@ -19,7 +19,6 @@ Package.on_use(function(api) {
     'lib/models/methods.js',
     'lib/models/pubsub.js',
     'lib/apm.js',
-    'lib/notification_manager.js',
     'lib/tracer.js',
     'lib/hijack/wrap_session.js',
     'lib/hijack/wrap_subscription.js',

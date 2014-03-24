@@ -26,8 +26,7 @@ suite('Methods Model', function() {
               compute: 7.5,
               total: 7.5
             }
-          },
-          endTime: 800
+          }
         }
       ]
     });
@@ -57,8 +56,7 @@ suite('Methods Model', function() {
             compute: 7.5,
             total: 7.5
           }
-        },
-        endTime: 800
+        }
       }
     ]);
 
@@ -95,7 +93,9 @@ suite('Methods Model', function() {
         "email": 0,
         "async": 0
       },
-      errorCount: 1
+      errorCount: 1,
+      at: 800,
+      errored: true
     };
 
     assert.deepEqual(payload.methodRequests[0], expectedResult);
@@ -134,7 +134,9 @@ suite('Methods Model', function() {
         "email": 0,
         "async": 0
       },
-      errorCount: 3
+      errorCount: 3,
+      at: 800,
+      errored: true
     };
 
     assert.deepEqual(payload.methodRequests[0], expectedResult);
@@ -174,7 +176,9 @@ suite('Methods Model', function() {
         "email": 0,
         "async": 0
       },
-      errorCount: 2
+      errorCount: 2,
+      at: 800,
+      errored: true
     };
 
     var expectedResult2 = {
@@ -198,7 +202,9 @@ suite('Methods Model', function() {
         "email": 0,
         "async": 0
       },
-      errorCount: 2
+      errorCount: 2,
+      at: 800,
+      errored: true
     };
 
     assert.deepEqual(payload.methodRequests[0], expectedResult);
@@ -315,6 +321,8 @@ suite('Methods Model', function() {
         "async": 0
       },
       "type": "max",
+      at: 100,
+      errored: false
       // "maxMetric": "total" // this is deleted below
     };
 
@@ -383,6 +391,7 @@ function createMethodCompleted(sessionName, methodName, methodId, startTime, met
   var method = {session: sessionName, name: methodName, id: methodId, events: []};
   method.events.push({type: 'start', at: startTime});
   method.events.push({type: 'complete', at: startTime + methodDelay});
+  method = Apm.tracer.buildTrace(method);
   model.processMethod(method);
 
   emit('return');
@@ -399,6 +408,7 @@ function createMethodWithEvent(sessionName, methodName, methodId, startTime, eve
   method.events.push({type: eventName, at: time += 5});
   method.events.push({type: eventName + 'end', at: time += eventDelay});
   method.events.push({type: 'complete', at: time += 5});
+  method = Apm.tracer.buildTrace(method);
   model.processMethod(method);
 
   emit('return');
@@ -413,6 +423,7 @@ function createMethodErrored(sessionName, methodName, methodId, errorMessage, st
   var method = {session: sessionName, name: methodName, id: methodId, events: []};
   method.events.push({type: 'start', at: startTime});
   method.events.push({type: 'error', at: startTime + methodDelay, data: {error: errorMessage}});
+  method = Apm.tracer.buildTrace(method);
   model.processMethod(method);
 
   emit('return');
