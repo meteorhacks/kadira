@@ -9,7 +9,7 @@ suite('Tracer', function() {
         method: 'method-name'
       };
 
-      var traceInfo = Apm.tracer.start('session-id', ddpMessage);
+      var traceInfo = Apm.tracer.start({id: 'session-id', userId: 'uid'}, ddpMessage);
       Apm.tracer.event(traceInfo, 'start', {abc: 100});
       Apm.tracer.event(traceInfo, 'end', {abc: 200});
       emit('return', traceInfo);
@@ -20,6 +20,7 @@ suite('Tracer', function() {
       _id: 'session-id::the-id',
       id: 'the-id',
       session: 'session-id',
+      userId: "uid",
       type: 'method',
       name: 'method-name',
       events: [
@@ -39,7 +40,7 @@ suite('Tracer', function() {
           name: 'sub-name'
         };
 
-        var traceInfo = Apm.tracer.start('session-id', ddpMessage);
+        var traceInfo = Apm.tracer.start({id: 'session-id'}, ddpMessage);
         Apm.tracer.event(traceInfo, 'start', {abc: 100});
         Apm.tracer.event(traceInfo, 'end', {abc: 200});
         emit('return', traceInfo);
@@ -69,7 +70,7 @@ suite('Tracer', function() {
           name: 'sub-name'
         };
 
-        var traceInfo = Apm.tracer.start('session-id', ddpMessage);
+        var traceInfo = Apm.tracer.start({id: 'session-id'}, ddpMessage);
         emit('return', traceInfo);
       });
 
@@ -85,7 +86,7 @@ suite('Tracer', function() {
           method: 'method-name'
         };
 
-        var traceInfo = Apm.tracer.start('session-id', ddpMessage);
+        var traceInfo = Apm.tracer.start({id: 'session-id'}, ddpMessage);
         Apm.tracer.event(traceInfo, 'start', {abc: 100});
 
         var eventId = Apm.tracer.event(traceInfo, 'db');
@@ -122,7 +123,7 @@ suite('Tracer', function() {
           method: 'method-name'
         };
 
-        var traceInfo = Apm.tracer.start('session-id', ddpMessage);
+        var traceInfo = Apm.tracer.start({id: 'session-id'}, ddpMessage);
         Apm.tracer.event(traceInfo, 'start', {abc: 100});
 
         var eventId = Apm.tracer.event(traceInfo, 'db');
@@ -160,7 +161,7 @@ suite('Tracer', function() {
           method: 'method-name'
         };
 
-        var traceInfo = Apm.tracer.start('session-id', ddpMessage);
+        var traceInfo = Apm.tracer.start({id: 'session-id'}, ddpMessage);
         Apm.tracer.event(traceInfo, 'start', {abc: 100});
 
         var eventId = Apm.tracer.event(traceInfo, 'db');
@@ -198,7 +199,7 @@ suite('Tracer', function() {
           method: 'method-name'
         };
 
-        var traceInfo = Apm.tracer.start('session-id', ddpMessage);
+        var traceInfo = Apm.tracer.start({id: 'session-id'}, ddpMessage);
         Apm.tracer.event(traceInfo, 'start', {abc: 100});
 
         var eventId = Apm.tracer.event(traceInfo, 'db');
