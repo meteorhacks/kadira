@@ -115,6 +115,22 @@ suite('TracerStore', function() {
       done();
     });
 
+    test('no traces', function(done, server) {
+      var ts = server.evalSync(function() {
+        var ts = new TracerStore({maxTotalPoints: 3});
+
+        ts.addTrace('m1', {metrics: {total: 100}});
+        ts._processTraces();
+        ts._processTraces();
+
+        emit('return', ts);
+      });
+
+      assert.deepEqual(ts.maxTotals, {m1: [100, 0]});
+      assert.deepEqual(ts.traceArchive, [{metrics: {total: 100}}]);
+      done();
+    });
+
     test('maxTotalPoints', function(done, server) {
       var ts = server.evalSync(function() {
         var ts = new TracerStore({maxTotalPoints: 3});
