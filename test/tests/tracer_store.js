@@ -12,39 +12,54 @@ suite('TracerStore', function() {
     done();
   });
 
-  suite('._getOutlierLimits', function() {
-    test('4 items', function(done, server) {
-      var uLimit = server.evalSync(function() {
+  test('._getMedian', function(done, server) {
+    var median = server.evalSync(function() {
+      var ts = new TracerStore();
+      var median = ts._getMedian([10, 20, 30, 40, 1, 3]);
+      emit('return', median);
+    });
+
+    assert.equal(median, 15);
+    done();
+  });
+
+  test('._calculateMad', function(done, server) {
+    var mad = server.evalSync(function() {
+      var ts = new TracerStore();
+      var dataSet = [10, 20, 30, 40, 1, 3, 3];
+      var median = ts._getMedian(dataSet);
+      var mad = ts._calculateMad(dataSet, median);
+      emit('return', mad);
+    });
+
+    assert.equal(mad, 9);
+    done();
+  });
+
+  suite('._isOutlier', function() {
+    test('higher outlier', function(done, server) {
+      var isOutlier = server.evalSync(function() {
         var ts = new TracerStore();
-        var uLimit = ts._getOutlierLimits([10, 20, 30, 10]);
-        emit('return', uLimit);
+        var dataSet = [10, 20, 30, 40, 1, 3, 3];
+
+        emit('return', ts._isOutlier(dataSet, 40, 3));
       });
 
-      assert.deepEqual(uLimit, {upper: 47.5, lower: -12.5});
+      assert.equal(isOutlier, true);
       done();
     });
 
-    test('3 items', function(done, server) {
-      var uLimit = server.evalSync(function() {
+    test('lower outlier', function(done, server) {
+      var isOutlier = server.evalSync(function() {
         var ts = new TracerStore();
-        var uLimit = ts._getOutlierLimits([10, 20, 70]);
-        emit('return', uLimit);
+        var dataSet = [10, 20, 30, 40, 20, 30, 30, 1];
+
+        emit('return', ts._isOutlier(dataSet, 1, 3));
       });
 
-      assert.deepEqual(uLimit, {upper: 152.5, lower: -72.5});
+      assert.equal(isOutlier, true);
       done();
     });
-
-    test('7-items', function(done, server) {
-      var uLimit = server.evalSync(function() {
-        var ts = new TracerStore();
-        var uLimit = ts._getOutlierLimits([10, 20, 30, 40, 200, 300, 200]);
-        emit('return', uLimit);
-      });
-
-      assert.deepEqual(uLimit, {upper:512.5,lower:-292.5});
-      done();
-    })
   });
 
   suite('addTrace', function() {
@@ -100,6 +115,28 @@ suite('TracerStore', function() {
       done();
     });
 
+    test('maxTotalPoints', function(done, server) {
+      var ts = server.evalSync(function() {
+        var ts = new TracerStore({maxTotalPoints: 3});
+
+        ts.addTrace('m1', {metrics: {total: 100}});
+        ts._processTraces();
+        ts.addTrace('m1', {metrics: {total: 200}});
+        ts._processTraces();
+        ts.addTrace('m1', {metrics: {total: 400}});
+        ts._processTraces();
+        ts.addTrace('m1', {metrics: {total: 300}});
+        ts._processTraces();
+        ts.addTrace('m1', {metrics: {total: 200}});
+        ts._processTraces();
+
+        emit('return', ts);
+      });
+
+      assert.deepEqual(ts.maxTotals, {m1: [400, 300, 200]});
+      done();
+    });
+
     test('process three times: with no new traces', function(done, server) {
       var ts = server.evalSync(function() {
         var ts = new TracerStore({archiveEvery: 20});
@@ -117,7 +154,7 @@ suite('TracerStore', function() {
       done();
     });
 
-    test('process three times: with no new traces', function(done, server) {
+    test('process three times: with new traces(no outliers)', function(done, server) {
       var ts = server.evalSync(function() {
         var ts = new TracerStore({archiveEvery: 20});
         ts.addTrace('m1', {metrics: {total: 100}});
@@ -165,16 +202,16 @@ suite('TracerStore', function() {
         var ts = new TracerStore({archiveEvery: 20});
         ts.addTrace('m1', {metrics: {total: 100}});
         ts._processTraces();
-        ts.addTrace('m1', {metrics: {total: 1500}});
-        ts._processTraces();
         ts.addTrace('m1', {metrics: {total: 200}});
+        ts._processTraces();
+        ts.addTrace('m1', {metrics: {total: 1500}});
         ts._processTraces();
 
         emit('return', ts);
       });
 
       assert.deepEqual(ts.currentMaxTrace, {m1: null});
-      assert.deepEqual(ts.maxTotals, {m1: [100, 1500, 200]});
+      assert.deepEqual(ts.maxTotals, {m1: [100, 200, 1500]});
       assert.deepEqual(ts.traceArchive, [
         {metrics: {total: 100}},
         {metrics: {total: 1500}}
@@ -182,47 +219,25 @@ suite('TracerStore', function() {
       done();
     });
 
-    test('process three times: with one outlier', function(done, server) {
+    test('process 5 times: two outlier', function(done, server) {
       var ts = server.evalSync(function() {
         var ts = new TracerStore({archiveEvery: 20});
         ts.addTrace('m1', {metrics: {total: 100}});
         ts._processTraces();
-        ts.addTrace('m1', {metrics: {total: 1500}});
+        ts.addTrace('m1', {metrics: {total: 150}});
         ts._processTraces();
         ts.addTrace('m1', {metrics: {total: 200}});
         ts._processTraces();
-
-        emit('return', ts);
-      });
-
-      assert.deepEqual(ts.currentMaxTrace, {m1: null});
-      assert.deepEqual(ts.maxTotals, {m1: [100, 1500, 200]});
-      assert.deepEqual(ts.traceArchive, [
-        {metrics: {total: 100}},
-        {metrics: {total: 1500}}
-      ]);
-      done();
-    });
-
-    test('process three times: with two outlier', function(done, server) {
-      var ts = server.evalSync(function() {
-        var ts = new TracerStore({archiveEvery: 20});
-        ts.addTrace('m1', {metrics: {total: 100}});
-        ts._processTraces();
         ts.addTrace('m1', {metrics: {total: 1500}});
-        ts._processTraces();
-        ts.addTrace('m1', {metrics: {total: 200}});
         ts._processTraces();
         ts.addTrace('m1', {metrics: {total: 1800}});
         ts._processTraces();
-        ts.addTrace('m1', {metrics: {total: 1500}});
-        ts._processTraces();
 
         emit('return', ts);
       });
 
       assert.deepEqual(ts.currentMaxTrace, {m1: null});
-      assert.deepEqual(ts.maxTotals, {m1: [100, 1500, 200, 1800, 1500]});
+      assert.deepEqual(ts.maxTotals, {m1: [100, 150, 200, 1500, 1800]});
       assert.deepEqual(ts.traceArchive, [
         {metrics: {total: 100}},
         {metrics: {total: 1500}},
@@ -230,5 +245,6 @@ suite('TracerStore', function() {
       ]);
       done();
     });
+
   });
 });
