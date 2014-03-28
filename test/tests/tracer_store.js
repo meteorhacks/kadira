@@ -66,52 +66,52 @@ suite('TracerStore', function() {
     test('fresh add', function(done, server) {
       var currentMaxTrace = server.evalSync(function() {
         var ts = new TracerStore();
-        ts.addTrace('m1', {metrics: {total: 100}});
+        ts.addTrace({name:"one", type: 'method', metrics: {total: 100}});
         emit('return', ts.currentMaxTrace);
       });
 
-      assert.deepEqual(currentMaxTrace, {m1: {metrics: {total: 100}}});
+      assert.deepEqual(currentMaxTrace, {"method::one": {name:"one", type: 'method', metrics: {total: 100}}});
       done();
     });
 
     test('second time higher total', function(done, server) {
       var currentMaxTrace = server.evalSync(function() {
         var ts = new TracerStore();
-        ts.addTrace('m1', {metrics: {total: 100}});
-        ts.addTrace('m1', {metrics: {total: 200}});
+        ts.addTrace({name:"one", type: 'method', metrics: {total: 100}});
+        ts.addTrace({name:"one", type: 'method', metrics: {total: 200}});
         emit('return', ts.currentMaxTrace);
       });
 
-      assert.deepEqual(currentMaxTrace, {m1: {metrics: {total: 200}}});
+      assert.deepEqual(currentMaxTrace, {"method::one": {name:"one", type: 'method', metrics: {total: 200}}});
       done();
     });
 
     test('second time lower total', function(done, server) {
       var currentMaxTrace = server.evalSync(function() {
         var ts = new TracerStore();
-        ts.addTrace('m1', {metrics: {total: 100}});
-        ts.addTrace('m1', {metrics: {total: 20}});
+        ts.addTrace({name:"one", type: 'method', metrics: {total: 100}});
+        ts.addTrace({name:"one", type: 'method', metrics: {total: 20}});
         emit('return', ts.currentMaxTrace);
       });
 
-      assert.deepEqual(currentMaxTrace, {m1: {metrics: {total: 100}}});
+      assert.deepEqual(currentMaxTrace, {"method::one": {name:"one", type: 'method', metrics: {total: 100}}});
       done();
     });
   });
 
-  suite('_processTraces', function() {
+  suite('processTraces', function() {
     test('process at first', function(done, server) {
       var ts = server.evalSync(function() {
         var ts = new TracerStore({archiveEvery: 3});
-        ts.addTrace('m1', {metrics: {total: 100}});
-        ts._processTraces();
+        ts.addTrace({name:"one", type: 'method', metrics: {total: 100}});
+        ts.processTraces();
 
         emit('return', ts);
       });
 
-      assert.deepEqual(ts.currentMaxTrace, {m1: null});
-      assert.deepEqual(ts.maxTotals, {m1: [100]});
-      assert.deepEqual(ts.traceArchive, [{metrics: {total: 100}}]);
+      assert.deepEqual(ts.currentMaxTrace, {"method::one": null});
+      assert.deepEqual(ts.maxTotals, {"method::one": [100]});
+      assert.deepEqual(ts.traceArchive, [{name:"one", type: 'method', metrics: {total: 100}}]);
       done();
     });
 
@@ -119,15 +119,15 @@ suite('TracerStore', function() {
       var ts = server.evalSync(function() {
         var ts = new TracerStore({maxTotalPoints: 3});
 
-        ts.addTrace('m1', {metrics: {total: 100}});
-        ts._processTraces();
-        ts._processTraces();
+        ts.addTrace({name:"one", type: 'method', metrics: {total: 100}});
+        ts.processTraces();
+        ts.processTraces();
 
         emit('return', ts);
       });
 
-      assert.deepEqual(ts.maxTotals, {m1: [100, 0]});
-      assert.deepEqual(ts.traceArchive, [{metrics: {total: 100}}]);
+      assert.deepEqual(ts.maxTotals, {"method::one": [100, 0]});
+      assert.deepEqual(ts.traceArchive, [{name:"one", type: 'method', metrics: {total: 100}}]);
       done();
     });
 
@@ -135,80 +135,80 @@ suite('TracerStore', function() {
       var ts = server.evalSync(function() {
         var ts = new TracerStore({maxTotalPoints: 3});
 
-        ts.addTrace('m1', {metrics: {total: 100}});
-        ts._processTraces();
-        ts.addTrace('m1', {metrics: {total: 200}});
-        ts._processTraces();
-        ts.addTrace('m1', {metrics: {total: 400}});
-        ts._processTraces();
-        ts.addTrace('m1', {metrics: {total: 300}});
-        ts._processTraces();
-        ts.addTrace('m1', {metrics: {total: 200}});
-        ts._processTraces();
+        ts.addTrace({name:"one", type: 'method', metrics: {total: 100}});
+        ts.processTraces();
+        ts.addTrace({name:"one", type: 'method', metrics: {total: 200}});
+        ts.processTraces();
+        ts.addTrace({name:"one", type: 'method', metrics: {total: 400}});
+        ts.processTraces();
+        ts.addTrace({name:"one", type: 'method', metrics: {total: 300}});
+        ts.processTraces();
+        ts.addTrace({name:"one", type: 'method', metrics: {total: 200}});
+        ts.processTraces();
 
         emit('return', ts);
       });
 
-      assert.deepEqual(ts.maxTotals, {m1: [400, 300, 200]});
+      assert.deepEqual(ts.maxTotals, {"method::one": [400, 300, 200]});
       done();
     });
 
     test('process three times: with no new traces', function(done, server) {
       var ts = server.evalSync(function() {
         var ts = new TracerStore({archiveEvery: 20});
-        ts.addTrace('m1', {metrics: {total: 100}});
-        ts._processTraces();
-        ts._processTraces();
-        ts._processTraces();
+        ts.addTrace({name:"one", type: 'method', metrics: {total: 100}});
+        ts.processTraces();
+        ts.processTraces();
+        ts.processTraces();
 
         emit('return', ts);
       });
 
-      assert.deepEqual(ts.currentMaxTrace, {m1: null});
-      assert.deepEqual(ts.maxTotals, {m1: [100, 0, 0]});
-      assert.deepEqual(ts.traceArchive, [{metrics: {total: 100}}]);
+      assert.deepEqual(ts.currentMaxTrace, {"method::one": null});
+      assert.deepEqual(ts.maxTotals, {"method::one": [100, 0, 0]});
+      assert.deepEqual(ts.traceArchive, [{name:"one", type: 'method', metrics: {total: 100}}]);
       done();
     });
 
     test('process three times: with new traces(no outliers)', function(done, server) {
       var ts = server.evalSync(function() {
         var ts = new TracerStore({archiveEvery: 20});
-        ts.addTrace('m1', {metrics: {total: 100}});
-        ts._processTraces();
-        ts.addTrace('m1', {metrics: {total: 150}});
-        ts._processTraces();
-        ts.addTrace('m1', {metrics: {total: 200}});
-        ts._processTraces();
+        ts.addTrace({name:"one", type: 'method', metrics: {total: 100}});
+        ts.processTraces();
+        ts.addTrace({name:"one", type: 'method', metrics: {total: 150}});
+        ts.processTraces();
+        ts.addTrace({name:"one", type: 'method', metrics: {total: 200}});
+        ts.processTraces();
 
         emit('return', ts);
       });
 
-      assert.deepEqual(ts.currentMaxTrace, {m1: null});
-      assert.deepEqual(ts.maxTotals, {m1: [100, 150, 200]});
-      assert.deepEqual(ts.traceArchive, [{metrics: {total: 100}}]);
+      assert.deepEqual(ts.currentMaxTrace, {"method::one": null});
+      assert.deepEqual(ts.maxTotals, {"method::one": [100, 150, 200]});
+      assert.deepEqual(ts.traceArchive, [{name:"one", type: 'method', metrics: {total: 100}}]);
       done();
     });
 
     test('process time times: with no new traces: with defaultArchive', function(done, server) {
       var ts = server.evalSync(function() {
         var ts = new TracerStore({archiveEvery: 3});
-        ts.addTrace('m1', {metrics: {total: 100}});
-        ts._processTraces();
-        ts.addTrace('m1', {metrics: {total: 150}});
-        ts._processTraces();
-        ts.addTrace('m1', {metrics: {total: 200}});
-        ts._processTraces();
-        ts.addTrace('m1', {metrics: {total: 180}});
-        ts._processTraces();
+        ts.addTrace({name:"one", type: 'method', metrics: {total: 100}});
+        ts.processTraces();
+        ts.addTrace({name:"one", type: 'method', metrics: {total: 150}});
+        ts.processTraces();
+        ts.addTrace({name:"one", type: 'method', metrics: {total: 200}});
+        ts.processTraces();
+        ts.addTrace({name:"one", type: 'method', metrics: {total: 180}});
+        ts.processTraces();
 
         emit('return', ts);
       });
 
-      assert.deepEqual(ts.currentMaxTrace, {m1: null});
-      assert.deepEqual(ts.maxTotals, {m1: [100, 150, 200, 180]});
+      assert.deepEqual(ts.currentMaxTrace, {"method::one": null});
+      assert.deepEqual(ts.maxTotals, {"method::one": [100, 150, 200, 180]});
       assert.deepEqual(ts.traceArchive, [
-        {metrics: {total: 100}},
-        {metrics: {total: 180}}
+        {name:"one", type: 'method', metrics: {total: 100}},
+        {name:"one", type: 'method', metrics: {total: 180}}
       ]);
       done();
     });
@@ -216,21 +216,21 @@ suite('TracerStore', function() {
     test('process three times: with one outlier', function(done, server) {
       var ts = server.evalSync(function() {
         var ts = new TracerStore({archiveEvery: 20});
-        ts.addTrace('m1', {metrics: {total: 100}});
-        ts._processTraces();
-        ts.addTrace('m1', {metrics: {total: 200}});
-        ts._processTraces();
-        ts.addTrace('m1', {metrics: {total: 1500}});
-        ts._processTraces();
+        ts.addTrace({name:"one", type: 'method', metrics: {total: 100}});
+        ts.processTraces();
+        ts.addTrace({name:"one", type: 'method', metrics: {total: 200}});
+        ts.processTraces();
+        ts.addTrace({name:"one", type: 'method', metrics: {total: 1500}});
+        ts.processTraces();
 
         emit('return', ts);
       });
 
-      assert.deepEqual(ts.currentMaxTrace, {m1: null});
-      assert.deepEqual(ts.maxTotals, {m1: [100, 200, 1500]});
+      assert.deepEqual(ts.currentMaxTrace, {"method::one": null});
+      assert.deepEqual(ts.maxTotals, {"method::one": [100, 200, 1500]});
       assert.deepEqual(ts.traceArchive, [
-        {metrics: {total: 100}},
-        {metrics: {total: 1500}}
+        {name:"one", type: 'method', metrics: {total: 100}},
+        {name:"one", type: 'method', metrics: {total: 1500}}
       ]);
       done();
     });
@@ -238,29 +238,113 @@ suite('TracerStore', function() {
     test('process 5 times: two outlier', function(done, server) {
       var ts = server.evalSync(function() {
         var ts = new TracerStore({archiveEvery: 20});
-        ts.addTrace('m1', {metrics: {total: 100}});
-        ts._processTraces();
-        ts.addTrace('m1', {metrics: {total: 150}});
-        ts._processTraces();
-        ts.addTrace('m1', {metrics: {total: 200}});
-        ts._processTraces();
-        ts.addTrace('m1', {metrics: {total: 1500}});
-        ts._processTraces();
-        ts.addTrace('m1', {metrics: {total: 1800}});
-        ts._processTraces();
+        ts.addTrace({name:"one", type: 'method', metrics: {total: 100}});
+        ts.processTraces();
+        ts.addTrace({name:"one", type: 'method', metrics: {total: 150}});
+        ts.processTraces();
+        ts.addTrace({name:"one", type: 'method', metrics: {total: 200}});
+        ts.processTraces();
+        ts.addTrace({name:"one", type: 'method', metrics: {total: 1500}});
+        ts.processTraces();
+        ts.addTrace({name:"one", type: 'method', metrics: {total: 1800}});
+        ts.processTraces();
 
         emit('return', ts);
       });
 
-      assert.deepEqual(ts.currentMaxTrace, {m1: null});
-      assert.deepEqual(ts.maxTotals, {m1: [100, 150, 200, 1500, 1800]});
+      assert.deepEqual(ts.currentMaxTrace, {"method::one": null});
+      assert.deepEqual(ts.maxTotals, {"method::one": [100, 150, 200, 1500, 1800]});
       assert.deepEqual(ts.traceArchive, [
-        {metrics: {total: 100}},
-        {metrics: {total: 1500}},
-        {metrics: {total: 1800}}
+        {name:"one", type: 'method', metrics: {total: 100}},
+        {name:"one", type: 'method', metrics: {total: 1500}},
+        {name:"one", type: 'method', metrics: {total: 1800}}
       ]);
       done();
     });
 
+  });
+
+  suite('_handleErrors', function() {
+    test('single error', function(done, server) {
+      var trace = {name: 'one', type: 'method', events: [
+        {type: 'start'},
+        {type: 'end', data: {error: {message: "ERROR_MESSAGE"}}}
+      ]};
+
+      var ts = server.evalSync(function(trace) {
+        var ts = new TracerStore();
+
+        ts._handleErrors(trace);
+        emit('return', ts);
+      }, trace);
+
+      assert.deepEqual(ts.traceArchive, [trace]);
+      done();
+    });
+
+    test('multiple errors', function(done, server) {
+      var trace = {name: 'one', type: 'method', events: [
+        {type: 'start'},
+        {type: 'end', data: {error: {message: "ERROR_MESSAGE"}}}
+      ]};
+
+      var ts = server.evalSync(function(trace) {
+        var ts = new TracerStore();
+
+        ts._handleErrors(trace);
+        ts._handleErrors(trace);
+        ts._handleErrors(trace);
+        emit('return', ts);
+      }, trace);
+
+      assert.deepEqual(ts.traceArchive, [trace]);
+      done();
+    });
+
+    test('multiple different errors', function(done, server) {
+      var trace = {name: 'one', type: 'method', events: [
+        {type: 'start'},
+        {type: 'end', data: {error: {message: "ERROR_MESSAGE"}}}
+      ]};
+
+      var trace2 = {name: 'two', type: 'method', events: [
+        {type: 'start'},
+        {type: 'end', data: {error: {message: "ERROR_MESSAGE"}}}
+      ]};
+
+      var ts = server.evalSync(function(trace, trace2) {
+        var ts = new TracerStore();
+
+        ts._handleErrors(trace);
+        ts._handleErrors(trace);
+        ts._handleErrors(trace2);
+        emit('return', ts);
+      }, trace, trace2);
+
+      assert.deepEqual(ts.traceArchive, [trace, trace2]);
+      done();
+    });
+
+    test('multiple errors after rest', function(done, server) {
+      var trace = {name: 'one', type: 'method', events: [
+        {type: 'start'},
+        {type: 'end', data: {error: {message: "ERROR_MESSAGE"}}}
+      ]};
+
+      var ts = server.evalSync(function(trace) {
+        var ts = new TracerStore();
+
+        ts._handleErrors(trace);
+        ts._handleErrors(trace);
+        ts._handleErrors(trace);
+        ts.processTraces();
+        ts._handleErrors(trace);
+        ts._handleErrors(trace);
+        emit('return', ts);
+      }, trace);
+
+      assert.deepEqual(ts.traceArchive, [trace, trace]);
+      done();
+    });
   });
 });
