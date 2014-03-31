@@ -20,6 +20,7 @@ Package.on_use(function(api) {
     'lib/models/pubsub.js',
     'lib/apm.js',
     'lib/tracer.js',
+    'lib/tracer_store.js',
     'lib/hijack/wrap_session.js',
     'lib/hijack/wrap_subscription.js',
     'lib/hijack/session.js',
