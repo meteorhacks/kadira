@@ -21,7 +21,7 @@ suite('Hijack - User Context', function() {
       {type: 'wait', data: {waitOn: []}},
       {type: 'waitend', data: undefined},
       {type: 'db', data: {coll: 'posts', func: 'insert'}},
-      {type: 'dbend', data: undefined},
+      {type: 'dbend', data: {}},
       {type: 'complete', data: undefined}
     ]);
     done();

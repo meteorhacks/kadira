@@ -23,7 +23,7 @@ suite('Hijack - DB', function() {
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'insert'}},
-        {type: 'dbend', data: undefined},
+        {type: 'dbend', data: {}},
         {type: 'complete', data: undefined}
       ]);
       done();
@@ -87,7 +87,7 @@ suite('Hijack - DB', function() {
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'insert'}},
-        {type: 'dbend', data: undefined},
+        {type: 'dbend', data: {}},
         {type: 'db', data: {coll: 'posts', func: 'insert'}},
         {type: 'dbend', data: {err: "E11000"}},
         {type: 'complete', data: undefined}
@@ -117,7 +117,7 @@ suite('Hijack - DB', function() {
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'update', selector: JSON.stringify({_id: 'aa'})}},
-        {type: 'dbend', data: undefined},
+        {type: 'dbend', data: {updatedDocs: 1}},
         {type: 'complete', data: undefined}
       ]);
       done();
@@ -145,7 +145,7 @@ suite('Hijack - DB', function() {
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'remove', selector: JSON.stringify({_id: 'aa'})}},
-        {type: 'dbend', data: undefined},
+        {type: 'dbend', data: {removedDocs: 1}},
         {type: 'complete', data: undefined}
       ]);
       done();
@@ -174,9 +174,9 @@ suite('Hijack - DB', function() {
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({_id: 'aa'})}},
-        {type: 'dbend', data: undefined},
+        {type: 'dbend', data: {}},
         {type: 'db', data: {coll: 'posts', func: 'fetch', cursor: true, selector: JSON.stringify({_id: 'aa'})}},
-        {type: 'dbend', data: undefined},
+        {type: 'dbend', data: {docsFetched: 1}},
         {type: 'complete', data: undefined}
       ]);
       done();
@@ -189,6 +189,7 @@ suite('Hijack - DB', function() {
         Meteor.methods({
           'doCall': function() {
             Posts.upsert({_id: 'aa'}, {$set: {bb: 20}});
+            Posts.upsert({_id: 'aa'}, {$set: {bb: 30}});
             return "upsert";
           }
         });
@@ -203,7 +204,9 @@ suite('Hijack - DB', function() {
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'upsert', selector: JSON.stringify({_id: 'aa'})}},
-        {type: 'dbend', data: undefined},
+        {type: 'dbend', data: {updatedDocs: 1, insertedId: 'aa'}},
+        {type: 'db', data: {coll: 'posts', func: 'upsert', selector: JSON.stringify({_id: 'aa'})}},
+        {type: 'dbend', data: {updatedDocs: 1}},
         {type: 'complete', data: undefined}
       ]);
       done();
@@ -231,9 +234,9 @@ suite('Hijack - DB', function() {
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: '_ensureIndex', index: JSON.stringify({aa: 1, bb: 1})}},
-        {type: 'dbend', data: undefined},
+        {type: 'dbend', data: {}},
         {type: 'db', data: {coll: 'posts', func: '_dropIndex', index: JSON.stringify({aa: 1, bb: 1})}},
-        {type: 'dbend', data: undefined},
+        {type: 'dbend', data: {}},
         {type: 'complete', data: undefined}
       ]);
       done();
@@ -265,9 +268,9 @@ suite('Hijack - DB', function() {
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({})}},
-        {type: 'dbend', data: undefined},
+        {type: 'dbend', data: {}},
         {type: 'db', data: {coll: 'posts', cursor: true, func: 'count', selector: JSON.stringify({})}},
-        {type: 'dbend', data: undefined},
+        {type: 'dbend', data: {docsFetched: 0}},
         {type: 'complete', data: undefined}
       ]);
       done();
@@ -297,9 +300,9 @@ suite('Hijack - DB', function() {
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({_id: {$exists: true}})}},
-        {type: 'dbend', data: undefined},
+        {type: 'dbend', data: {}},
         {type: 'db', data: {coll: 'posts', cursor: true, func: 'fetch', selector: JSON.stringify({_id: {$exists: true}})}},
-        {type: 'dbend', data: undefined},
+        {type: 'dbend', data: {docsFetched: 2}},
         {type: 'complete', data: undefined}
       ]);
       done();
@@ -331,9 +334,9 @@ suite('Hijack - DB', function() {
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({_id: {$exists: true}})}},
-        {type: 'dbend', data: undefined},
+        {type: 'dbend', data: {}},
         {type: 'db', data: {coll: 'posts', cursor: true, func: 'map', selector: JSON.stringify({_id: {$exists: true}})}},
-        {type: 'dbend', data: undefined},
+        {type: 'dbend', data: {docsFetched: 2}},
         {type: 'complete', data: undefined}
       ]);
       done();
@@ -367,9 +370,9 @@ suite('Hijack - DB', function() {
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({_id: {$exists: true}})}},
-        {type: 'dbend', data: undefined},
+        {type: 'dbend', data: {}},
         {type: 'db', data: {coll: 'posts', cursor: true, func: 'forEach', selector: JSON.stringify({_id: {$exists: true}})}},
-        {type: 'dbend', data: undefined},
+        {type: 'dbend', data: {docsFetched: 2}},
         {type: 'complete', data: undefined}
       ]);
       done();
@@ -403,9 +406,9 @@ suite('Hijack - DB', function() {
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({_id: {$exists: true}})}},
-        {type: 'dbend', data: undefined},
+        {type: 'dbend', data: {}},
         {type: 'db', data: {coll: 'posts', cursor: true, func: 'forEach', selector: JSON.stringify({_id: {$exists: true}})}},
-        {type: 'dbend', data: undefined},
+        {type: 'dbend', data: {docsFetched: 2}},
         {type: 'complete', data: undefined}
       ];
       var events = GetLastMethodEvents(server, ['type', 'data']);
@@ -447,7 +450,7 @@ suite('Hijack - DB', function() {
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({})}},
-        {type: 'dbend', data: undefined},
+        {type: 'dbend', data: {}},
         {type: 'db', data: {coll: 'posts', cursor: true, func: 'observeChanges', selector: JSON.stringify({})}},
         //oplog is always false since tests do not uses oplog
         {type: 'dbend', data: {oplog: false}},
@@ -487,7 +490,7 @@ suite('Hijack - DB', function() {
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({})}},
-        {type: 'dbend', data: undefined},
+        {type: 'dbend', data: {}},
         {type: 'db', data: {coll: 'posts', func: 'observe', cursor: true, selector: JSON.stringify({})}},
         //oplog is always false since tests do not uses oplog
         {type: 'dbend', data: {oplog: false}},
@@ -523,13 +526,13 @@ suite('Hijack - DB', function() {
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
         {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({_id: {$exists: true}})}},
-        {type: 'dbend', data: undefined},
+        {type: 'dbend', data: {}},
         {type: 'db', data: {coll: 'posts', func: 'fetch', cursor: true, selector: JSON.stringify({_id: {$exists: true}})}},
-        {type: 'dbend', data: undefined},
+        {type: 'dbend', data: {docsFetched: 2}},
         {type: 'db', data: {coll: 'posts', func: 'rewind', cursor: true, selector: JSON.stringify({_id: {$exists: true}})}},
-        {type: 'dbend', data: undefined},
+        {type: 'dbend', data: {docsFetched: 0}},
         {type: 'db', data: {coll: 'posts', func: 'fetch', cursor: true, selector: JSON.stringify({_id: {$exists: true}})}},
-        {type: 'dbend', data: undefined},
+        {type: 'dbend', data: {docsFetched: 2}},
         {type: 'complete', data: undefined}
       ]);
       done();
