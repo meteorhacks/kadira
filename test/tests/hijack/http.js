@@ -88,6 +88,8 @@ suite('Hijack - HTTP', function() {
       {type: 'waitend', data: undefined},
       {type: 'http', data: {url: "http://localhost:4249", method: "GET"}},
       {type: 'httpend', data: {async: true}},
+      {type: 'async', data: undefined},
+      {type: 'asyncend', data: undefined},
       {type: 'complete', data: undefined},
     ]);
 

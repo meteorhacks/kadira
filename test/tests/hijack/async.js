@@ -97,7 +97,7 @@ suite('Hijack - Async', function() {
       {type: 'wait', data: {waitOn: []}},
       {type: 'waitend', data: undefined},
       {type: 'async', data: undefined},
-      {type: 'asyncend', data: {err: 'hello-error'}},
+      {type: 'asyncend', data: undefined},
       {type: 'complete', data: undefined},
     ]);
     done();
