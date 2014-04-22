@@ -457,6 +457,37 @@ suite('Hijack - Subscriptions', function() {
     done();
   });
 
+  test('avoiding multiple-ready', function(done, server, client) {
+    server.evalSync(function() {
+      ReadyCounts = 0;
+      Apm.models.pubsub._trackReady = function(session, sub) {
+        if(sub._name == 'postsList') {
+          ReadyCounts++;
+        }
+      };
+
+      Posts = new Meteor.Collection('posts');
+      Meteor.publish('postsList', function() {
+        this.ready();
+        this.ready();
+      });
+      emit('return');
+    });
+
+    client.evalSync(function() {
+      Meteor.subscribe('postsList', function() {
+        emit('return');
+      }); 
+    });
+
+    var readyCounts = server.evalSync(function() {
+      emit('return', ReadyCounts);
+    });
+
+    assert.equal(readyCounts, 1);
+    done();
+  });
+
 });
 
 
