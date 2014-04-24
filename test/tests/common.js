@@ -72,7 +72,7 @@ callMethod = function(client, method, args) {
     console.log(Meteor)
     Meteor.apply(method, args, function(err, rtn) {
       if(err) {
-        throw err;
+        emit('return', err);
       } else {
         emit('return', rtn);
       }
