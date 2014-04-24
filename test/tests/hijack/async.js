@@ -78,8 +78,8 @@ suite('Hijack - Async', function() {
 
       Meteor.methods({
         'wait': function() {
+          wait(100);
           try {
-            wait(100);
           } catch(ex) {
             
           }
@@ -91,6 +91,44 @@ suite('Hijack - Async', function() {
 
     callMethod(client, 'wait');
 
+    var events = GetLastMethodEvents(server, ['type']);
+    assert.deepEqual(events, [
+      {type: 'start'},
+      {type: 'wait'},
+      {type: 'waitend'},
+      {type: 'async'},
+      {type: 'asyncend'},
+      {type: 'error'},
+    ]);
+    done();
+  });
+
+  test('track with Async.wrap: error and continue', function(done, server, client) {
+    EnableTrackingMethods(server);
+    server.evalSync(function() {
+      var wait = Async.wrap(function(waitTime, callback) {
+        setTimeout(function() {
+          callback(new Error('hello-error'));
+        }, waitTime);
+      });
+
+      Meteor.methods({
+        'wait': function() {
+          var Posts = new Meteor.Collection('posts');
+          try {
+            wait(100);
+          } catch(ex) {
+            
+          }
+          Posts.find({}).fetch();
+        }
+      });
+      
+      emit('return');
+    });
+
+    var err = callMethod(client, 'wait');
+
     var events = GetLastMethodEvents(server, ['type', 'data']);
     assert.deepEqual(events, [
       {type: 'start', data: {userId: null}},
@@ -98,7 +136,13 @@ suite('Hijack - Async', function() {
       {type: 'waitend', data: undefined},
       {type: 'async', data: undefined},
       {type: 'asyncend', data: undefined},
-      {type: 'complete', data: undefined},
+
+      {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({})}},
+      {type: 'dbend', data: {}},
+      {type: 'db', data: {coll: 'posts', func: 'fetch', cursor: true, selector: JSON.stringify({})}},
+      {type: 'dbend', data: {docsFetched: 0}},
+
+      {type: 'complete', data: undefined}
     ]);
     done();
   });
