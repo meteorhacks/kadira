@@ -93,7 +93,7 @@ suite('Hijack - Async', function() {
 
     var events = GetLastMethodEvents(server, ['type', 'data']);
     assert.deepEqual(events, [
-      {type: 'start', data: {userId: null}},
+      {type: 'start', data: {userId: null, params: '[]'}},
       {type: 'wait', data: {waitOn: []}},
       {type: 'waitend', data: undefined},
       {type: 'async', data: undefined},
