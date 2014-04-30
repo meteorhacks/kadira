@@ -32,6 +32,38 @@ suite('Tracer', function() {
     done();
   });
 
+    test('trace-method complete after errored', function(done, server) {
+    var traceInfo = server.evalSync(function() {
+      var ddpMessage = {
+        id: 'the-id',
+        msg: 'method',
+        method: 'method-name'
+      };
+
+      var traceInfo = Apm.tracer.start({id: 'session-id', userId: 'uid'}, ddpMessage);
+      Apm.tracer.event(traceInfo, 'start');
+      Apm.tracer.event(traceInfo, 'error');
+      Apm.tracer.event(traceInfo, 'complete');
+      emit('return', traceInfo);
+    });
+
+    removeDate(traceInfo);
+    assert.deepEqual(traceInfo, {
+      _id: 'session-id::the-id',
+      id: 'the-id',
+      session: 'session-id',
+      userId: "uid",
+      type: 'method',
+      name: 'method-name',
+      events: [
+        {type: 'start'},
+        {type: 'error'}
+      ],
+    });
+
+    done();
+  });
+
   test('trace-sub', function(done, server) {
       var traceInfo = server.evalSync(function() {
         var ddpMessage = {
