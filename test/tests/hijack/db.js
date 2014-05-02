@@ -372,7 +372,7 @@ suite('Hijack - DB', function() {
         {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({_id: {$exists: true}})}},
         {type: 'dbend', data: {}},
         {type: 'db', data: {coll: 'posts', cursor: true, func: 'forEach', selector: JSON.stringify({_id: {$exists: true}})}},
-        {type: 'dbend', data: {docsFetched: 2}},
+        {type: 'dbend', data: {}},
         {type: 'complete', data: undefined}
       ]);
       done();
@@ -408,7 +408,7 @@ suite('Hijack - DB', function() {
         {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({_id: {$exists: true}})}},
         {type: 'dbend', data: {}},
         {type: 'db', data: {coll: 'posts', cursor: true, func: 'forEach', selector: JSON.stringify({_id: {$exists: true}})}},
-        {type: 'dbend', data: {docsFetched: 2}},
+        {type: 'dbend', data: {}},
         {type: 'complete', data: undefined}
       ];
       var events = GetLastMethodEvents(server, ['type', 'data']);
@@ -550,7 +550,7 @@ suite('Hijack - DB', function() {
         {type: 'dbend', data: {}},
         {type: 'db', data: {coll: 'posts', func: 'observe', cursor: true, selector: JSON.stringify({})}},
         //oplog is always false since tests do not uses oplog
-        {type: 'dbend', data: {oplog: false, noOfHandles: 1, noOfCachedDocs: 1}},
+        {type: 'dbend', data: {oplog: false, noOfHandles: 1, noOfCachedDocs: 2}},
         {type: 'complete', data: undefined}
       ]);
       done();
