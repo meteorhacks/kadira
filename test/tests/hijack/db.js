@@ -270,7 +270,7 @@ suite('Hijack - DB', function() {
         {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({})}},
         {type: 'dbend', data: {}},
         {type: 'db', data: {coll: 'posts', cursor: true, func: 'count', selector: JSON.stringify({})}},
-        {type: 'dbend', data: {docsFetched: 0}},
+        {type: 'dbend', data: {}},
         {type: 'complete', data: undefined}
       ]);
       done();
@@ -443,9 +443,7 @@ suite('Hijack - DB', function() {
       var result = callMethod(client, 'doCall');
       assert.deepEqual(result, [{_id: 'aa'}, {_id: 'bb'}]);
       
-
-      var events = GetLastMethodEvents(server, ['type', 'data']);
-      assert.deepEqual(events, [
+      var expectedDocs = [
         {type: 'start', data: {userId: null, params: '[]'}},
         {type: 'wait', data: {waitOn: []}},
         {type: 'waitend', data: undefined},
@@ -453,9 +451,12 @@ suite('Hijack - DB', function() {
         {type: 'dbend', data: {}},
         {type: 'db', data: {coll: 'posts', cursor: true, func: 'observeChanges', selector: JSON.stringify({})}},
         //oplog is always false since tests do not uses oplog
-        {type: 'dbend', data: {oplog: false, noOfHandles: 1, noOfCachedDocs: 1}},
+        {type: 'dbend', data: {oplog: false, noOfHandles: 1, noOfCachedDocs: 2}},
         {type: 'complete', data: undefined}
-      ]);
+      ];
+
+      var events = GetLastMethodEvents(server, ['type', 'data']);
+      assert.deepEqual(events, expectedDocs);
       done();
     });
 
@@ -503,13 +504,13 @@ suite('Hijack - DB', function() {
         {type: 'dbend', data: {}},
         {type: 'db', data: {coll: 'posts', cursor: true, func: 'observeChanges', selector: JSON.stringify({})}},
         //oplog is always false since tests do not uses oplog
-        {type: 'dbend', data: {oplog: false, noOfHandles: 1, noOfCachedDocs: 1}},
+        {type: 'dbend', data: {oplog: false, noOfHandles: 1, noOfCachedDocs: 2}},
 
         {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({})}},
         {type: 'dbend', data: {}},
         {type: 'db', data: {coll: 'posts', cursor: true, func: 'observeChanges', selector: JSON.stringify({})}},
         //oplog is always false since tests do not uses oplog
-        {type: 'dbend', data: {oplog: false, noOfHandles: 2, noOfCachedDocs: 1}},
+        {type: 'dbend', data: {oplog: false, noOfHandles: 2, noOfCachedDocs: 2}},
         {type: 'complete', data: undefined}
       ]);
       done();
