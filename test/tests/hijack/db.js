@@ -587,7 +587,7 @@ suite('Hijack - DB', function() {
         {type: 'db', data: {coll: 'posts', func: 'fetch', cursor: true, selector: JSON.stringify({_id: {$exists: true}})}},
         {type: 'dbend', data: {docsFetched: 2}},
         {type: 'db', data: {coll: 'posts', func: 'rewind', cursor: true, selector: JSON.stringify({_id: {$exists: true}})}},
-        {type: 'dbend', data: {docsFetched: 0}},
+        {type: 'dbend', data: {}},
         {type: 'db', data: {coll: 'posts', func: 'fetch', cursor: true, selector: JSON.stringify({_id: {$exists: true}})}},
         {type: 'dbend', data: {docsFetched: 2}},
         {type: 'complete', data: undefined}
