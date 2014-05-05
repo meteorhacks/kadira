@@ -24,9 +24,13 @@ suite('Tracer', function() {
       type: 'method',
       name: 'method-name',
       events: [
-        {type: 'start', data: {abc: 100}},
-        {type: 'end', data: {abc: 200}}
+        ['start', 0, {abc: 100}],
+        ['end', 0, {abc: 200}]
       ]
+      // events: [
+      //   {type: 'start', data: {abc: 100}},
+      //   {type: 'end', data: {abc: 200}}
+      // ]
     });
 
     done();
@@ -56,9 +60,13 @@ suite('Tracer', function() {
       type: 'method',
       name: 'method-name',
       events: [
-        {type: 'start'},
-        {type: 'error'}
-      ],
+        ['start'],
+        ['error']
+      ]
+      // events: [
+      //   {type: 'start'},
+      //   {type: 'error'}
+      // ],
     });
 
     done();
@@ -86,9 +94,13 @@ suite('Tracer', function() {
         type: 'sub',
         name: 'sub-name',
         events: [
-          {type: 'start', data: {abc: 100}},
-          {type: 'end', data: {abc: 200}}
+          ['start', 0, {abc: 100}],
+          ['end', 0, {abc: 200}]
         ]
+        // events: [
+        //   {type: 'start', data: {abc: 100}},
+        //   {type: 'end', data: {abc: 200}}
+        // ]
       });
 
       done();
@@ -136,11 +148,16 @@ suite('Tracer', function() {
         type: 'method',
         name: 'method-name',
         events: [
-          {type: 'start', data: {abc: 100}},
-          {type: 'db'},
-          {type: 'dbend'},
-          {type: 'end', data: {abc: 200}}
+          ['start', 0, {abc: 100}],
+          ['db', 0],
+          ['end', 0, {abc: 200}]
         ],
+        // events: [
+        //   {type: 'start', data: {abc: 100}},
+        //   {type: 'db'},
+        //   {type: 'dbend'},
+        //   {type: 'end', data: {abc: 200}}
+        // ],
         _lastEventId: null
       });
 
@@ -174,11 +191,16 @@ suite('Tracer', function() {
         type: 'method',
         name: 'method-name',
         events: [
-          {type: 'start', data: {abc: 100}},
-          {type: 'db'},
-          {type: 'dbend'},
-          {type: 'end', data: {abc: 200}}
+          ['start', 0, {abc: 100}],
+          ['db', 0],
+          ['end', 0, {abc: 200}]
         ],
+        // events: [
+        //   {type: 'start', data: {abc: 100}},
+        //   {type: 'db'},
+        //   {type: 'dbend'},
+        //   {type: 'end', data: {abc: 200}}
+        // ],
         _lastEventId: null
       });
 
@@ -206,7 +228,7 @@ suite('Tracer', function() {
 
       delete traceInfo._lastEventId;
       removeDate(traceInfo);
-      
+
       assert.deepEqual(traceInfo, {
         _id: 'session-id::the-id',
         id: 'the-id',
@@ -214,10 +236,15 @@ suite('Tracer', function() {
         type: 'method',
         name: 'method-name',
         events: [
-          {type: 'start', data: {abc: 100}},
-          {type: 'db'},
-          {type: 'end', data: {abc: 200}}
+          ['start', 0, {abc: 100}],
+          ['db', 0],
+          ['end', 0, {abc: 200}]
         ]
+        // events: [
+        //   {type: 'start', data: {abc: 100}},
+        //   {type: 'db'},
+        //   {type: 'end', data: {abc: 200}}
+        // ]
       });
 
       done();
@@ -244,7 +271,7 @@ suite('Tracer', function() {
 
       delete traceInfo._lastEventId;
       removeDate(traceInfo);
-      
+
       assert.deepEqual(traceInfo, {
         _id: 'session-id::the-id',
         id: 'the-id',
@@ -252,11 +279,16 @@ suite('Tracer', function() {
         type: 'method',
         name: 'method-name',
         events: [
-          {type: 'start', data: {abc: 100}},
-          {type: 'db'},
-          {type: 'dbend'},
-          {type: 'end', data: {abc: 200}}
+          ['start', 0, {abc: 100}],
+          ['db', 0],
+          ['end', 0, {abc: 200}]
         ]
+        // events: [
+        //   {type: 'start', data: {abc: 100}},
+        //   {type: 'db'},
+        //   {type: 'dbend'},
+        //   {type: 'end', data: {abc: 200}}
+        // ]
       });
 
       done();
@@ -268,13 +300,20 @@ suite('Tracer', function() {
         var now = Date.now();
         var traceInfo = {
           events: [
-            {type: 'start', at: now},
-            {type: 'wait', at: now},
-            {type: 'waitend', at: now + 1000},
-            {type: 'db', at: now + 2000},
-            {type: 'dbend', at: now + 2500},
-            {type: 'complete', at: now + 2500}
+            ['start', 0],
+            ['wait', 1000],
+            ['compute', 1000],
+            ['db', 500],
+            ['complete', 0]
           ]
+          // events: [
+          //   {type: 'start', at: now},
+          //   {type: 'wait', at: now},
+          //   {type: 'waitend', at: now + 1000},
+          //   {type: 'db', at: now + 2000},
+          //   {type: 'dbend', at: now + 2500},
+          //   {type: 'complete', at: now + 2500}
+          // ]
         };
 
         Apm.tracer.buildTrace(traceInfo);
@@ -296,13 +335,20 @@ suite('Tracer', function() {
         var now = Date.now();
         var traceInfo = {
           events: [
-            {type: 'start', at: now},
-            {type: 'wait', at: now},
-            {type: 'waitend', at: now + 1000},
-            {type: 'db', at: now + 2000},
-            {type: 'dbend', at: now + 2500},
-            {type: 'error', at: now + 2500}
+            ['start', 0],
+            ['wait', 1000],
+            ['compute', 1000],
+            ['db', 500],
+            ['error', 0]
           ]
+          // events: [
+          //   {type: 'start', at: now},
+          //   {type: 'wait', at: now},
+          //   {type: 'waitend', at: now + 1000},
+          //   {type: 'db', at: now + 2000},
+          //   {type: 'dbend', at: now + 2500},
+          //   {type: 'error', at: now + 2500}
+          // ]
         };
 
         Apm.tracer.buildTrace(traceInfo);
@@ -324,12 +370,18 @@ suite('Tracer', function() {
         var now = Date.now();
         var traceInfo = {
           events: [
-            {type: 'wait', at: now},
-            {type: 'waitend', at: now + 1000},
-            {type: 'db', at: now + 2000},
-            {type: 'dbend', at: now + 2500},
-            {type: 'complete', at: now + 2500}
+            ['wait', 1000],
+            ['compute', 1000],
+            ['db', 500],
+            ['complete', 0]
           ]
+          // events: [
+          //   {type: 'wait', at: now},
+          //   {type: 'waitend', at: now + 1000},
+          //   {type: 'db', at: now + 2000},
+          //   {type: 'dbend', at: now + 2500},
+          //   {type: 'complete', at: now + 2500}
+          // ]
         };
 
         Apm.tracer.buildTrace(traceInfo);
@@ -345,12 +397,18 @@ suite('Tracer', function() {
         var now = Date.now();
         var traceInfo = {
           events: [
-            {type: 'start', at: now},
-            {type: 'wait', at: now},
-            {type: 'waitend', at: now + 1000},
-            {type: 'db', at: now + 2000},
-            {type: 'dbend', at: now + 2500}
+            ['start', 0],
+            ['wait', 1000],
+            ['compute', 1000],
+            ['db', 500]
           ]
+          // events: [
+          //   {type: 'start', at: now},
+          //   {type: 'wait', at: now},
+          //   {type: 'waitend', at: now + 1000},
+          //   {type: 'db', at: now + 2000},
+          //   {type: 'dbend', at: now + 2500}
+          // ]
         };
 
         Apm.tracer.buildTrace(traceInfo);
@@ -362,30 +420,39 @@ suite('Tracer', function() {
     });
 
     test('event-not-ended', function(done, server) {
-      var traceInfo = server.evalSync(function() {
-        var now = Date.now();
-        var traceInfo = {
-          events: [
-            {type: 'start', at: now},
-            {type: 'wait', at: now},
-            {type: 'db', at: now + 2000},
-            {type: 'dbend', at: now + 2500},
-            {type: 'complete', at: now + 2500}
-          ]
-        };
+      assert.equal(1, 2);
+      // var traceInfo = server.evalSync(function() {
+      //   var now = Date.now();
+      //   var traceInfo = {
+      //     events: [
+      //       ['start', 0],
+      //       ['wait', 0],
+      //       ['db', 2000],
+      //       ['dbend', 500],
+      //       ['complete', 0]
+      //     ]
+      //     // events: [
+      //     //   {type: 'start', at: now},
+      //     //   {type: 'wait', at: now},
+      //     //   {type: 'db', at: now + 2000},
+      //     //   {type: 'dbend', at: now + 2500},
+      //     //   {type: 'complete', at: now + 2500}
+      //     // ]
+      //   };
 
-        Apm.tracer.buildTrace(traceInfo);
-        emit('return', traceInfo);
-      });
+      //   Apm.tracer.buildTrace(traceInfo);
+      //   emit('return', traceInfo);
+      // });
 
-      assert.deepEqual(traceInfo.metrics, undefined);
-      done();
+      // assert.deepEqual(traceInfo.metrics, undefined);
+      // done();
     });
   });
 });
 
 function removeDate(traceInfo) {
   traceInfo.events.forEach(function(event) {
-    delete event.at;
+    event[1] = 0;
+    // delete event.at;
   });
 }
