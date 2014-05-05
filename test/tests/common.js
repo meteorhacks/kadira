@@ -14,12 +14,12 @@ EnableTrackingMethods = function(server) {
   });
 };
 
-GetLastMethodEvents = function(server, fields) {
+GetLastMethodEvents = function(server, indices) {
   var method = server.evalSync(function() {
     emit('return', MethodsStore[MethodsStore.length - 1]);
   });
 
-  return getEvents(method, fields);
+  return getEvents(method, indices);
 };
 
 GetPubsubMetrics = function(server) {
@@ -48,17 +48,25 @@ Wait = function(server, time) {
     setTimeout(function() {
       emit('return');
     }, time);
-  }, time); 
+  }, time);
 };
 
-function getEvents(method, fields) {
+CleanComputes = function (events) {
+  var clean = [];
+  events.forEach(function (e) {
+    if (e[0] != 'compute') clean.push(e);
+  });
+  return clean;
+}
+
+function getEvents(method, indices) {
   var events = [];
-  var fields = fields || ['type'];
+  var indices = indices || [0];
 
   method.events.forEach(function(e) {
-    var data = {};
-    fields.forEach(function(field) {
-      data[field] = e[field];
+    var data = [];
+    indices.forEach(function(index) {
+      if (e[index]) data[index] = e[index];
     });
     events.push(data);
   });

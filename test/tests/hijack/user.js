@@ -14,15 +14,14 @@ suite('Hijack - User Context', function() {
     });
 
     callMethod(client, 'doCall');
-    
-    var events = GetLastMethodEvents(server, ['type', 'data']);
+
+    var events = GetLastMethodEvents(server, [0, 2]);
+    events = CleanComputes(events);
     assert.deepEqual(events, [
-      {type: 'start', data: {userId: null, params: '[]'}},
-      {type: 'wait', data: {waitOn: []}},
-      {type: 'waitend', data: undefined},
-      {type: 'db', data: {coll: 'posts', func: 'insert'}},
-      {type: 'dbend', data: {}},
-      {type: 'complete', data: undefined}
+      ['start',,{userId: null, params: '[]'}],
+      ['wait',,{waitOn: []}],
+      ['db',,{coll: 'posts', func: 'insert'}],
+      ['complete']
     ]);
     done();
   });
@@ -43,13 +42,13 @@ suite('Hijack - User Context', function() {
   //   });
 
   //   callMethod(client, 'doCall');
-    
+
   //   var events = GetLastMethodEvents(server, ['type', 'data']);
   //   assert.deepEqual(events, [
-  //     {type: 'start', data: {userId: user._id}},
-  //     {type: 'wait', data: {waitOn: []}},
+  //     ['start',,{userId: user._id}],
+  //     ['wait',,{waitOn: []}],
   //     {type: 'waitend', data: undefined},
-  //     {type: 'db', data: {coll: 'posts', func: 'insert'}},
+  //     ['db',,{coll: 'posts', func: 'insert'}],
   //     {type: 'dbend', data: undefined},
   //     {type: 'complete', data: undefined}
   //   ]);

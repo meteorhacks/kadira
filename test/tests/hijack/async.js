@@ -13,20 +13,19 @@ suite('Hijack - Async', function() {
           wait(100);
         }
       });
-      
+
       emit('return');
     });
 
     callMethod(client, 'wait');
 
     var events = GetLastMethodEvents(server);
+    events = CleanComputes(events);
     assert.deepEqual(events, [
-      {type: 'start'},
-      {type: 'wait'},
-      {type: 'waitend'},
-      {type: 'async'},
-      {type: 'asyncend'},
-      {type: 'complete'},
+      ['start'],
+      ['wait'],
+      ['async'],
+      ['complete']
     ]);
     done();
   });
@@ -36,7 +35,7 @@ suite('Hijack - Async', function() {
     server.evalSync(function() {
       var wait = Meteor._wrapAsync(function(waitTime, callback) {
         setTimeout(function() {
-          callback(new Error('abc'));
+          callback(new Error('hello'));
         }, waitTime);
       });
 
@@ -45,24 +44,23 @@ suite('Hijack - Async', function() {
           try {
             wait(100);
           } catch(ex) {
-            
+
           }
         }
       });
-      
+
       emit('return');
     });
 
     callMethod(client, 'wait');
 
     var events = GetLastMethodEvents(server);
+    events = CleanComputes(events);
     assert.deepEqual(events, [
-      {type: 'start'},
-      {type: 'wait'},
-      {type: 'waitend'},
-      {type: 'async'},
-      {type: 'asyncend'},
-      {type: 'complete'},
+      ['start'],
+      ['wait'],
+      ['async'],
+      ['complete']
     ]);
     done();
   });
@@ -72,33 +70,32 @@ suite('Hijack - Async', function() {
     server.evalSync(function() {
       var wait = Async.wrap(function(waitTime, callback) {
         setTimeout(function() {
-          callback(new Error('hello-error'));
+          callback(new Error('hello'));
         }, waitTime);
       });
 
       Meteor.methods({
         'wait': function() {
-          wait(100);
           try {
+            wait(100);
           } catch(ex) {
-            
+
           }
         }
       });
-      
+
       emit('return');
     });
 
     callMethod(client, 'wait');
 
-    var events = GetLastMethodEvents(server, ['type']);
+    var events = GetLastMethodEvents(server, [0]);
+    events = CleanComputes(events);
     assert.deepEqual(events, [
-      {type: 'start'},
-      {type: 'wait'},
-      {type: 'waitend'},
-      {type: 'async'},
-      {type: 'asyncend'},
-      {type: 'error'},
+      ['start'],
+      ['wait'],
+      ['async'],
+      ['complete']
     ]);
     done();
   });
@@ -108,7 +105,7 @@ suite('Hijack - Async', function() {
     server.evalSync(function() {
       var wait = Async.wrap(function(waitTime, callback) {
         setTimeout(function() {
-          callback(new Error('hello-error'));
+          callback(new Error('hello'));
         }, waitTime);
       });
 
@@ -118,31 +115,26 @@ suite('Hijack - Async', function() {
           try {
             wait(100);
           } catch(ex) {
-            
+
           }
           Posts.find({}).fetch();
         }
       });
-      
+
       emit('return');
     });
 
     var err = callMethod(client, 'wait');
 
-    var events = GetLastMethodEvents(server, ['type', 'data']);
+    var events = GetLastMethodEvents(server, [0, 2]);
+    events = CleanComputes(events);
     assert.deepEqual(events, [
-      {type: 'start', data: {userId: null, params: '[]'}},
-      {type: 'wait', data: {waitOn: []}},
-      {type: 'waitend', data: undefined},
-      {type: 'async', data: undefined},
-      {type: 'asyncend', data: undefined},
-
-      {type: 'db', data: {coll: 'posts', func: 'find', selector: JSON.stringify({})}},
-      {type: 'dbend', data: {}},
-      {type: 'db', data: {coll: 'posts', func: 'fetch', cursor: true, selector: JSON.stringify({})}},
-      {type: 'dbend', data: {docsFetched: 0}},
-
-      {type: 'complete', data: undefined}
+      ['start',, {userId: null, params: '[]'}],
+      ['wait',, {waitOn: []}],
+      ['async',, {}],
+      ['db',, {coll: 'posts', func: 'find', selector: JSON.stringify({})}],
+      ['db',, {coll: 'posts', func: 'fetch', cursor: true, selector: JSON.stringify({}), docsFetched: 0}],
+      ['complete']
     ]);
     done();
   });

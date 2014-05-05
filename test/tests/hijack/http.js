@@ -21,21 +21,20 @@ suite('Hijack - HTTP', function() {
           return result.statusCode;
         }
       });
-      
+
       emit('return');
     });
 
     var statusCode = callMethod(client, 'http');
     assert.equal(statusCode, 200);
 
-    var events = GetLastMethodEvents(server, ['type', 'data']);
+    var events = GetLastMethodEvents(server, [0, 2]);
+    events = CleanComputes(events);
     assert.deepEqual(events, [
-      {type: 'start', data: {userId: null, params: '[]'}},
-      {type: 'wait', data: {waitOn: []}},
-      {type: 'waitend', data: undefined},
-      {type: 'http', data: {url: "http://localhost:4249", method: "GET"}},
-      {type: 'httpend', data: {statusCode: 200}},
-      {type: 'complete', data: undefined},
+      ['start',,{userId: null, params: '[]'}],
+      ['wait',,{waitOn: []}],
+      ['http',,{url: "http://localhost:4249", method: "GET", statusCode: 200}],
+      ['complete']
     ]);
 
     server.evalSync(function() {
@@ -43,7 +42,7 @@ suite('Hijack - HTTP', function() {
         emit('return');
       });
     });
-    
+
     done();
 
   });
@@ -74,23 +73,22 @@ suite('Hijack - HTTP', function() {
           return result.statusCode;
         }
       });
-      
+
       emit('return');
     });
 
     var statusCode = callMethod(client, 'http');
     assert.equal(statusCode, 200);
 
-    var events = GetLastMethodEvents(server, ['type', 'data']);
+    var events = GetLastMethodEvents(server, [0, 2]);
+    events = CleanComputes(events);
+    console.log(events);
     assert.deepEqual(events, [
-      {type: 'start', data: {userId: null, params: '[]'}},
-      {type: 'wait', data: {waitOn: []}},
-      {type: 'waitend', data: undefined},
-      {type: 'http', data: {url: "http://localhost:4249", method: "GET"}},
-      {type: 'httpend', data: {async: true}},
-      {type: 'async', data: undefined},
-      {type: 'asyncend', data: undefined},
-      {type: 'complete', data: undefined},
+      ['start',,{userId: null, params: '[]'}],
+      ['wait',,{waitOn: []}],
+      ['http',,{url: "http://localhost:4249", method: "GET", async: true}],
+      ['async',, {}],
+      ['complete']
     ]);
 
     server.evalSync(function() {
@@ -98,7 +96,7 @@ suite('Hijack - HTTP', function() {
         emit('return');
       });
     });
-    
+
     done();
 
   });
