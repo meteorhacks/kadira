@@ -57,6 +57,7 @@ Package.on_test(function(api) {
     'random',
     'email',
     // 'npm',
+    'http',
     'tinytest',
     'test-helpers'
   ], 'server');
@@ -69,6 +70,7 @@ Package.on_test(function(api) {
     'tests/hijack/email.js',
     'tests/hijack/base.js',
     'tests/hijack/async.js',
+    'tests/hijack/http.js',
   ], 'server');
 });
 
