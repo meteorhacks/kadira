@@ -24,16 +24,21 @@ GetLastMethodEvents = function (_indices) {
   var indices = _indices || [0];
   var events = MethodStore[MethodStore.length - 1].events;
   events = Array.prototype.slice.call(events, 0);
-  events = events.filter(function (event) {
+  events = events.filter(isNotCompute);
+  events = events.map(filterFields);
+  return events;
+
+  function isNotCompute (event) {
     return event[0] !== 'compute';
-  });
-  return events.map(function (event) {
+  }
+
+  function filterFields (event) {
     var filteredEvent = [];
     indices.forEach(function (index) {
       if (event[index]) filteredEvent[index] = event[index];
     });
     return filteredEvent;
-  });
+  }
 }
 
 CleanTestData = function () {
