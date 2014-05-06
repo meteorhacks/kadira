@@ -66,6 +66,7 @@ Package.on_test(function(api) {
     'tests/ping.js',
     'tests/hijack/user.js',
     'tests/hijack/email.js',
+    'tests/hijack/base.js',
   ], 'server');
 });
 
