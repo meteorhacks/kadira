@@ -1,5 +1,5 @@
 Tinytest.add(
-  'DDP Server Connection',
+  'Helpers - ddp server connection',
   function (test) {
     var methodId = RegisterMethod(function () {
       return 'pong';

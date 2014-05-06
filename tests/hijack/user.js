@@ -1,6 +1,6 @@
 
 Tinytest.add(
-  'User (not logged in)',
+  'User - not logged in',
   function (test) {
     EnableTrackingMethods();
     var methodId = RegisterMethod(function () {
