@@ -8,10 +8,14 @@ Tinytest.add(
     });
     var client = GetMeteorClient();
     var result = client.call(methodId);
-    var events = GetLastMethodEvents();
-    console.log(events);
-    // test.equal(result, [
-    // ]);
+    var events = GetLastMethodEvents([0, 2]);
+    var expected = [
+      ['start',,{userId: null, params: '[]'}],
+      ['wait',,{waitOn: []}],
+      ['db',,{coll: 'tinytest-data', func: 'insert'}],
+      ['complete']
+    ];
+    test.equal(events, expected);
     CleanTestData('methodstore', 'testdata');
   }
 );
