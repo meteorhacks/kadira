@@ -1,0 +1,1 @@
+Apm.connect('foo', 'bar');

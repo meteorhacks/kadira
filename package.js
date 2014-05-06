@@ -51,11 +51,30 @@ Package.on_use(function(api) {
   }
 });
 
+Package.on_test(function(api) {
+  api.use([
+    'random',
+    'meteor-apm-client',
+    'tinytest',
+    'test-helpers'
+  ], 'server');
+  api.add_files([
+    'tests/_helpers/globals.js',
+    'tests/_helpers/helpers.js',
+    'tests/_helpers/init.js',
+    'tests/ping.js',
+    'tests/hijack/user.js'
+  ], 'server');
+});
+
 function isPackageExists(name) {
   var fs = Npm.require('fs');
   var path = Npm.require('path');
-  var meteorPackages = fs.readFileSync(path.join(meteorRoot(), '.meteor', 'packages'), 'utf8');
-  return !!meteorPackages.match(new RegExp(name));
+  var meteorRootPath = meteorRoot();
+  if (meteorRootPath) {
+    var meteorPackages = fs.readFileSync(path.join(meteorRoot(), '.meteor', 'packages'), 'utf8');
+    return !!meteorPackages.match(new RegExp(name));
+  };
 }
 
 function isAppDir(filepath) {
