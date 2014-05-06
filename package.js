@@ -54,6 +54,7 @@ Package.on_use(function(api) {
 Package.on_test(function(api) {
   api.use([
     'random',
+    'email',
     'meteor-apm-client',
     'tinytest',
     'test-helpers'
@@ -63,7 +64,8 @@ Package.on_test(function(api) {
     'tests/_helpers/helpers.js',
     'tests/_helpers/init.js',
     'tests/ping.js',
-    'tests/hijack/user.js'
+    'tests/hijack/user.js',
+    'tests/hijack/email.js',
   ], 'server');
 });
 
