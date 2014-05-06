@@ -25,12 +25,11 @@ GetLastMethodEvents = function (_indices) {
   var events = MethodStore[MethodStore.length - 1].events;
   events = Array.prototype.slice.call(events, 0);
   return events.map(function (event) {
-    console.log(event);
-    // var filteredEvent = [];
-    // indices.forEach(function (index) {
-    //   if (event[index] !) filteredEvent[index] = event[index];
-    // });
-    // return filteredEvent;
+    var filteredEvent = [];
+    indices.forEach(function (index) {
+      if (event[index]) filteredEvent[index] = event[index];
+    });
+    return filteredEvent;
   });
 }
 
