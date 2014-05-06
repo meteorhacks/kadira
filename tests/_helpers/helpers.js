@@ -24,6 +24,9 @@ GetLastMethodEvents = function (_indices) {
   var indices = _indices || [0];
   var events = MethodStore[MethodStore.length - 1].events;
   events = Array.prototype.slice.call(events, 0);
+  events = events.filter(function (event) {
+    return event[0] !== 'compute';
+  });
   return events.map(function (event) {
     var filteredEvent = [];
     indices.forEach(function (index) {
