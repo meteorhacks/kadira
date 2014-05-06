@@ -79,7 +79,7 @@ suite('Hijack - DB', function() {
       var events = GetLastMethodEvents(server, [0, 2]);
       events = CleanComputes(events);
       //simplyfy the error for testing
-      events[3][2].err = events[3][2].err.split(' ')[0];
+      events[3][2].err = events[3][2].err.match(/E11000/g)? "E11000": null;
 
       assert.deepEqual(events, [
         ['start',, {userId: null, params: '[]'}],

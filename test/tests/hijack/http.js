@@ -82,7 +82,6 @@ suite('Hijack - HTTP', function() {
 
     var events = GetLastMethodEvents(server, [0, 2]);
     events = CleanComputes(events);
-    console.log(events);
     assert.deepEqual(events, [
       ['start',,{userId: null, params: '[]'}],
       ['wait',,{waitOn: []}],

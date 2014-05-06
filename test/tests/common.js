@@ -77,7 +77,6 @@ function getEvents(method, indices) {
 callMethod = function(client, method, args) {
   args = args || [];
   var result = client.evalSync(function(method, args) {
-    console.log(Meteor)
     Meteor.apply(method, args, function(err, rtn) {
       if(err) {
         emit('return', err);
