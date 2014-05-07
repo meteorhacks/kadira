@@ -42,18 +42,6 @@ GetLastMethodEvents = function (_indices) {
 }
 
 CleanTestData = function () {
-  var list = Array.prototype.slice.call(arguments, 0);
-  var cleaners = {
-    methodstore: function () {
-      MethodStore = [];
-    },
-
-    testdata: function () {
-      TestData.remove({});
-    }
-  };
-  list.forEach(function (key) {
-    var item = arguments[key];
-    cleaners[item] && cleaners[item]();
-  });
+  MethodStore = [];
+  TestData.remove({});
 }
