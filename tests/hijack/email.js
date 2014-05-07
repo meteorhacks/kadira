@@ -16,6 +16,6 @@ Tinytest.add(
       ['complete']
     ];
     test.equal(events, expected);
-    CleanTestData('methodstore', 'testdata');
+    CleanTestData();
   }
 );

@@ -18,7 +18,7 @@ Tinytest.add(
     ];
     test.equal(events, expected);
     test.equal(result, 200);
-    CleanTestData('methodstore');
+    CleanTestData();
   }
 );
 
@@ -49,6 +49,6 @@ Tinytest.add(
     ];
     test.equal(events, expected);
     test.equal(result, 200);
-    CleanTestData('methodstore');
+    CleanTestData();
   }
 );
