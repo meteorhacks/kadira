@@ -159,7 +159,7 @@ Tinytest.add(
       ['start',,{userId: null, params: '[]'}],
       ['wait',,{waitOn: []}],
       ['db',,{coll: 'tinytest-data', func: 'upsert', selector: JSON.stringify({_id: 'aa'}), updatedDocs: 1, insertedId: 'aa'}],
-      ['db',,{coll: 'tinytest-data', func: 'upsert', selector: JSON.stringify({_id: 'aa'}), updatedDocs: 1}],
+      ['db',,{coll: 'tinytest-data', func: 'upsert', selector: JSON.stringify({_id: 'aa'}), updatedDocs: 1, insertedId: undefined}],
       ['complete']
     ];
     test.equal(events, expected);

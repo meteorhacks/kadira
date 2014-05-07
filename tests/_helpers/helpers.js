@@ -12,11 +12,11 @@ RegisterMethod = function (F) {
 }
 
 EnableTrackingMethods = function () {
-  var original = Apm.models.methods.processMethod;
-  Apm.models.methods.processMethod = function(method) {
-    MethodStore.push(method);
-    original.call(Apm.models.methods, method);
-  };
+  // var original = Apm.models.methods.processMethod;
+  // Apm.models.methods.processMethod = function(method) {
+  //   MethodStore.push(method);
+  //   original.call(Apm.models.methods, method);
+  // };
 }
 
 GetLastMethodEvents = function (_indices) {
@@ -41,7 +41,30 @@ GetLastMethodEvents = function (_indices) {
   }
 }
 
+GetPubSubMetrics = function () {
+  var metricsArr = [];
+  for(var dateId in Apm.models.pubsub.metricsByMinute) {
+    metricsArr.push(Apm.models.pubsub.metricsByMinute[dateId]);
+  }
+  return metricsArr;
+}
+
+GetPubSubPayload = function (detailInfoNeeded) {
+  return Apm.models.pubsub.buildPayload(detailInfoNeeded).pubMetrics;
+}
+
+Wait = function (time) {
+  var Future = Npm.require('fibers/future');
+  var f = new Future();
+  Meteor.setTimeout(function () {
+    f.return();
+  }, time);
+  f.wait();
+  return;
+}
+
 CleanTestData = function () {
   MethodStore = [];
   TestData.remove({});
+  Apm.models.pubsub.metricsByMinute = [];
 }
