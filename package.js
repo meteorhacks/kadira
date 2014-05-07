@@ -58,6 +58,8 @@ Package.on_test(function(api) {
     'email',
     // 'npm',
     'http',
+    'livedata',
+    'mongo-livedata',
     'tinytest',
     'test-helpers'
   ], 'server');
@@ -71,6 +73,7 @@ Package.on_test(function(api) {
     'tests/hijack/base.js',
     'tests/hijack/async.js',
     'tests/hijack/http.js',
+    'tests/hijack/db.js',
   ], 'server');
 });
 
