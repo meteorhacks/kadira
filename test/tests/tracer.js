@@ -206,7 +206,7 @@ suite('Tracer', function() {
 
       delete traceInfo._lastEventId;
       removeDate(traceInfo);
-      
+
       assert.deepEqual(traceInfo, {
         _id: 'session-id::the-id',
         id: 'the-id',
@@ -244,7 +244,7 @@ suite('Tracer', function() {
 
       delete traceInfo._lastEventId;
       removeDate(traceInfo);
-      
+
       assert.deepEqual(traceInfo, {
         _id: 'session-id::the-id',
         id: 'the-id',

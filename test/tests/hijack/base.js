@@ -14,15 +14,14 @@ suite('Hijack - Base Tracking', function() {
     });
 
     callMethod(client, 'doCall', [10, "abc"]);
-    
-    var events = GetLastMethodEvents(server, ['type', 'data']);
+
+    var events = GetLastMethodEvents(server, [0, 2]);
+    events = CleanComputes(events);
     assert.deepEqual(events, [
-      {type: 'start', data: {userId: null, params: '[10,"abc"]'}},
-      {type: 'wait', data: {waitOn: []}},
-      {type: 'waitend', data: undefined},
-      {type: 'db', data: {coll: 'posts', func: 'insert'}},
-      {type: 'dbend', data: {}},
-      {type: 'complete', data: undefined}
+      ['start',, {userId: null, params: '[10,"abc"]'}],
+      ['wait',, {waitOn: []}],
+      ['db',, {coll: 'posts', func: 'insert'}],
+      ['complete']
     ]);
     done();
   });

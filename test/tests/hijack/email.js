@@ -9,20 +9,19 @@ suite('Hijack - Email', function() {
           Email.send({from: 'arunoda@meteorhacks.com', from: 'hello@meteor.com'});
         }
       });
-      
+
       emit('return');
     });
 
     callMethod(client, 'send');
 
-    var events = GetLastMethodEvents(server);
+    var events = GetLastMethodEvents(server, [0]);
+    events = CleanComputes(events);
     assert.deepEqual(events, [
-      {type: 'start'},
-      {type: 'wait'},
-      {type: 'waitend'},
-      {type: 'email'},
-      {type: 'emailend'},
-      {type: 'complete'},
+      ['start'],
+      ['wait'],
+      ['email'],
+      ['complete'],
     ]);
     done();
   });
