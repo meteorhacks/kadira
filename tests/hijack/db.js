@@ -61,11 +61,14 @@ Tinytest.add(
     var client = GetMeteorClient();
     var result = client.call(methodId);
     var events = GetLastMethodEvents([0, 2]);
+    if (events && events[3] && events[3][2] && events[3][2].err) {
+      events[3][2].err = events[3][2].err.indexOf('E11000') >= 0 ? 'E11000' : null;
+    };
     var expected = [
       ['start',,{userId: null, params: '[]'}],
       ['wait',,{waitOn: []}],
       ['db',,{coll: 'tinytest-data', func: 'insert'}],
-      ['db',,{coll: 'tinytest-data', func: 'insert', err: 'E11000 duplicate key error index: meteor.tinytest-data.$_id_ dup key: { : "aa" }'}],
+      ['db',,{coll: 'tinytest-data', func: 'insert', err: 'E11000'}],
       ['complete']
     ];
     test.equal(events, expected);
