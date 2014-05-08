@@ -73,6 +73,7 @@ Package.on_test(function(api) {
     'tests/hijack/subscriptions.js',
     'tests/models/methods.js',
     'tests/models/pubsub.js',
+    'tests/tracer_store.js',
   ], 'server');
 });
 
