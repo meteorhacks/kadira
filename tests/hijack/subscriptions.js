@@ -305,7 +305,6 @@ Tinytest.add(
       this.ready();
     });
     Apm.models.pubsub._trackReady = function(session, sub) {
-      console.log(arguments);
       if(sub._name == pubId) {
         ReadyCounts++;
       }
