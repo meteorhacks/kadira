@@ -74,6 +74,7 @@ Package.on_test(function(api) {
     'tests/models/methods.js',
     'tests/models/pubsub.js',
     'tests/tracer_store.js',
+    'tests/tracer.js'
   ], 'server');
 });
 
