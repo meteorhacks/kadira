@@ -72,6 +72,7 @@ Package.on_test(function(api) {
     'tests/hijack/db.js',
     'tests/hijack/subscriptions.js',
     'tests/models/methods.js',
+    'tests/models/pubsub.js',
   ], 'server');
 });
 
