@@ -11,6 +11,12 @@ RegisterMethod = function (F) {
   return id;
 }
 
+RegisterPublication = function (F) {
+  var id = 'test_' + Random.id();
+  Meteor.publish(id, F);
+  return id;
+}
+
 EnableTrackingMethods = function () {
   // var original = Apm.models.methods.processMethod;
   // Apm.models.methods.processMethod = function(method) {
@@ -63,8 +69,20 @@ Wait = function (time) {
   return;
 }
 
+GetDataSize = function (docs) {
+  if(!(docs instanceof Array)) {
+    docs = [docs];
+  }
+  var size = 0;
+  docs.forEach(function(doc) {
+    size+= Buffer.byteLength(JSON.stringify(doc));
+  });
+  return size;
+}
+
 CleanTestData = function () {
   MethodStore = [];
   TestData.remove({});
-  Apm.models.pubsub.metricsByMinute = [];
+  Apm.models.pubsub.metricsByMinute = {};
+  Apm.models.pubsub.subscriptions = {};
 }

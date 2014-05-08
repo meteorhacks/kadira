@@ -5,7 +5,13 @@ Npm.require('http').createServer(function(req, res) {
   res.end('hello');
 }).listen(3301);
 
+// TODO use RegisterPublication instead of these
+
 Meteor.publish('tinytest-data', function() {
+  return TestData.find();
+});
+
+Meteor.publish('tinytest-data-2', function() {
   return TestData.find();
 });
 
@@ -29,7 +35,7 @@ Meteor.publish('tinytest-data-delayed', function() {
             pub.ready();
           }, 500);
         }
-      }, 200);
+      }, 400);
     })();
   });
 })();
