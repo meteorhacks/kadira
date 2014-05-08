@@ -40,12 +40,8 @@ Package.on_use(function(api) {
     api.use('iron-router', 'client', {weak: true});
   }
 
-  if(process.env.__TEST_APM_EXPORTS) {
-    //use for testing
-    var exportFields = process.env.__TEST_APM_EXPORTS.split(',').map(function(v) {
-      return v.trim();
-    });
-    api.export(exportFields);
+  if(process.env.__METEOR_ENV) {
+    api.export(['Apm', 'NotificationManager', 'MethodsModel', 'PubsubModel', 'TracerStore']);
   } else {
     api.export(['Apm']);
   }
@@ -75,6 +71,7 @@ Package.on_test(function(api) {
     'tests/hijack/http.js',
     'tests/hijack/db.js',
     'tests/hijack/subscriptions.js',
+    'tests/models/methods.js',
   ], 'server');
 });
 
