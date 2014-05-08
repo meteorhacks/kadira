@@ -40,7 +40,7 @@ Package.on_use(function(api) {
     api.use('iron-router', 'client', {weak: true});
   }
 
-  if(process.env.__METEOR_ENV) {
+  if(process.env.METEOR_ENV == 'dev') {
     api.export(['Apm', 'NotificationManager', 'MethodsModel', 'PubsubModel', 'TracerStore']);
   } else {
     api.export(['Apm']);
