@@ -116,7 +116,7 @@ Tinytest.add(
     h1.stop();
     Wait(100);
     var metrics = GetPubSubMetrics();
-    test.isTrue(metrics[0].pubs['tinytest-data'].lifeTime > 100);
+    test.isTrue(metrics[0].pubs['tinytest-data'].lifeTime >= 100);
     CleanTestData();
   }
 );
