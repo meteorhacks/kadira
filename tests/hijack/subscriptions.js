@@ -308,3 +308,74 @@ Tinytest.add(
     CleanTestData();
   }
 );
+
+Tinytest.add(
+  'Subscriptions - Observer Cache - single publication and single subscription',
+  function (test) {
+    EnableTrackingMethods();
+    var client = GetMeteorClient();
+    var Future = Npm.require('fibers/future');
+    var f = new Future();
+    var h1;
+    h1 = client.subscribe('tinytest-data', function() {
+      f.return();
+    });
+    f.wait();
+    Wait(100);
+    var metrics = GetPubSubMetrics();
+    test.equal(metrics[0].pubs['tinytest-data'].totalObservers, 1);
+    test.equal(metrics[0].pubs['tinytest-data'].cachedObservers, 0);
+    h1.stop();
+    CleanTestData();
+  }
+);
+
+Tinytest.add(
+  'Subscriptions - Observer Cache - single publication and multiple subscriptions',
+  function (test) {
+    EnableTrackingMethods();
+    var client = GetMeteorClient();
+    var Future = Npm.require('fibers/future');
+    var f = new Future();
+    var h1, h2;
+    h1 = client.subscribe('tinytest-data', function() {
+      h2 = client.subscribe('tinytest-data', function() {
+        f.return();
+      });
+    });
+    f.wait();
+    Wait(100);
+    var metrics = GetPubSubMetrics();
+    test.equal(metrics[0].pubs['tinytest-data'].totalObservers, 2);
+    test.equal(metrics[0].pubs['tinytest-data'].cachedObservers, 1);
+    h1.stop();
+    h2.stop();
+    CleanTestData();
+  }
+);
+
+Tinytest.add(
+  'Subscriptions - Observer Cache - multiple publication and multiple subscriptions',
+  function (test) {
+    EnableTrackingMethods();
+    var client = GetMeteorClient();
+    var Future = Npm.require('fibers/future');
+    var f = new Future();
+    var h1, h2;
+    h1 = client.subscribe('tinytest-data', function() {
+      h2 = client.subscribe('tinytest-data-2', function() {
+        f.return();
+      });
+    });
+    f.wait();
+    Wait(100);
+    var metrics = GetPubSubMetrics();
+    test.equal(metrics[0].pubs['tinytest-data'].totalObservers, 1);
+    test.equal(metrics[0].pubs['tinytest-data'].cachedObservers, 0);
+    test.equal(metrics[0].pubs['tinytest-data-2'].totalObservers, 1);
+    test.equal(metrics[0].pubs['tinytest-data-2'].cachedObservers, 1);
+    h1.stop();
+    h2.stop();
+    CleanTestData();
+  }
+);
