@@ -97,6 +97,7 @@ GetDataSize = function (docs) {
 CleanTestData = function () {
   MethodStore = [];
   TestData.remove({});
+  Apm.models.pubsub.metricsByMinute
   Apm.models.pubsub.metricsByMinute = {};
   Apm.models.pubsub.subscriptions = {};
 }
@@ -127,4 +128,22 @@ CompareNear = function(v1, v2, maxDifference) {
   maxDifference = maxDifference || 30;
   var diff = Math.abs(v1 - v2);
   return diff < maxDifference;
+};
+
+CloseClient = function(client) {
+  var sessionId = client._lastSessionId;
+  client.disconnect();
+  var f = new Future();
+  function checkClientExtence(sessionId) {
+    var sessionExists = Meteor.default_server.sessions[sessionId];
+    if(sessionExists) {
+      setTimeout(function() {
+        checkClientExtence(sessionId);
+      }, 20);
+    } else {
+      f.return();
+    }
+  }
+  checkClientExtence(sessionId);
+  return f.wait();
 };

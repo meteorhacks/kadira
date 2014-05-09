@@ -177,3 +177,77 @@ Tinytest.add(
     test.equal(metrics[1], {});
   }
 );
+
+Tinytest.add(
+  'Models - PubSub - Observer Cache - no cache',
+  function (test) {
+    var original = Apm.syncedDate.getTime;
+    var dates = [
+      new Date('2013 Dec 10 20:31:12').getTime(),
+      new Date('2013 Dec 10 20:31:22').getTime()
+    ];
+    Apm.syncedDate.getTime = function () {
+      return dates.pop();
+    }
+    var model = new PubsubModel();
+    model.incrementHandleCount('postsList', false);
+    model.incrementHandleCount('postsList', false);
+    var metrics = [
+      model.buildPayload(),
+      model.metricsByMinute
+    ];
+    test.equal(metrics[0].pubMetrics[0].pubs.postsList.totalObservers, 2);
+    test.equal(metrics[0].pubMetrics[0].pubs.postsList.cachedObservers, 0);
+    Apm.syncedDate.getTime = original;
+  }
+);
+
+Tinytest.add(
+  'Models - PubSub - Observer Cache - single cache',
+  function (test) {
+    var original = Apm.syncedDate.getTime;
+    var dates = [
+      new Date('2013 Dec 10 20:31:12').getTime(),
+      new Date('2013 Dec 10 20:31:22').getTime()
+    ];
+    Apm.syncedDate.getTime = function () {
+      return dates.pop();
+    }
+    var model = new PubsubModel();
+    model.incrementHandleCount('postsList', false);
+    model.incrementHandleCount('postsList', true);
+    var metrics = [
+      model.buildPayload(),
+      model.metricsByMinute
+    ];
+    test.equal(metrics[0].pubMetrics[0].pubs.postsList.totalObservers, 2);
+    test.equal(metrics[0].pubMetrics[0].pubs.postsList.cachedObservers, 1);
+    Apm.syncedDate.getTime = original;
+  }
+);
+
+Tinytest.add(
+  'Models - PubSub - Observer Cache - multiple dates',
+  function (test) {
+    var original = Apm.syncedDate.getTime;
+    var dates = [
+      new Date('2013 Dec 10 20:31:12').getTime(),
+      new Date('2013 Dec 12 20:31:22').getTime()
+    ];
+    Apm.syncedDate.getTime = function () {
+      return dates.pop();
+    }
+    var model = new PubsubModel();
+    model.incrementHandleCount('postsList', false);
+    model.incrementHandleCount('postsList', true);
+    var metrics = [
+      model.buildPayload(),
+      model.metricsByMinute
+    ];
+    test.equal(metrics[0].pubMetrics[0].pubs.postsList.totalObservers, 1);
+    test.equal(metrics[0].pubMetrics[0].pubs.postsList.cachedObservers, 0);
+    test.equal(metrics[0].pubMetrics[1].pubs.postsList.totalObservers, 1);
+    test.equal(metrics[0].pubMetrics[1].pubs.postsList.cachedObservers, 1);
+    Apm.syncedDate.getTime = original;
+  }
+);
