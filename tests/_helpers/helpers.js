@@ -1,3 +1,5 @@
+var Future = Npm.require('fibers/future');
+
 GetMeteorClient = function (_url) {
   var url = _url || Meteor.absoluteUrl();
   return DDP.connect(url, {retry: false});
@@ -55,12 +57,24 @@ GetPubSubMetrics = function () {
   return metricsArr;
 }
 
+FindMetricsForPub = function (pubname) {
+  var metrics = GetPubSubMetrics();
+  var candidates = [];
+  for(var lc=0; lc < metrics.length; lc++) {
+    var pm = metrics[lc].pubs[pubname];
+    if(pm) {
+      candidates.push(pm);
+    }
+  }
+
+  return candidates[candidates.length - 1];
+}
+
 GetPubSubPayload = function (detailInfoNeeded) {
   return Apm.models.pubsub.buildPayload(detailInfoNeeded).pubMetrics;
 }
 
 Wait = function (time) {
-  var Future = Npm.require('fibers/future');
   var f = new Future();
   Meteor.setTimeout(function () {
     f.return();
@@ -86,3 +100,31 @@ CleanTestData = function () {
   Apm.models.pubsub.metricsByMinute = {};
   Apm.models.pubsub.subscriptions = {};
 }
+
+SubscribeAndWait = function(client, name, args) {
+  var f = new Future();
+  var args = Array.prototype.splice.call(arguments, 1);
+  args.push({
+    onError: function(err) {
+      f.return(err);
+    },
+    onReady: function() {
+      f.return();
+    }
+  });
+
+  var handler = client.subscribe.apply(client, args);
+  var error = f.wait();
+
+  if(error) {
+    throw error;
+  } else {
+    return handler;
+  }
+};
+
+CompareNear = function(v1, v2, maxDifference) {
+  maxDifference = maxDifference || 30;
+  var diff = Math.abs(v1 - v2);
+  return diff < maxDifference;
+};

@@ -10,28 +10,7 @@ Npm.depends({
 });
 
 Package.on_use(function(api) {
-  api.use(['minimongo', 'livedata', 'mongo-livedata', 'ejson', 'underscore', 'http', 'email', 'random'], ['server']);
-  api.add_files([
-    'lib/retry.js',
-    'lib/utils.js',
-    'lib/ntp.js',
-    'lib/models/0model.js',
-    'lib/models/methods.js',
-    'lib/models/pubsub.js',
-    'lib/apm.js',
-    'lib/tracer.js',
-    'lib/tracer_store.js',
-    'lib/hijack/wrap_session.js',
-    'lib/hijack/wrap_subscription.js',
-    'lib/hijack/session.js',
-    'lib/hijack/db.js',
-    'lib/hijack/http.js',
-    'lib/hijack/email.js',
-    'lib/hijack/async.js'
-  ], 'server');
-
-  api.add_files(['lib/client/route.js'], 'client')
-
+  configurePackage(api);
   if(isPackageExists('npm')) {
     api.use('npm', 'server', {weak: true});
   }
@@ -40,25 +19,16 @@ Package.on_use(function(api) {
     api.use('iron-router', 'client', {weak: true});
   }
 
-  if(process.env.METEOR_ENV == 'dev') {
-    api.export(['Apm', 'NotificationManager', 'MethodsModel', 'PubsubModel', 'TracerStore']);
-  } else {
-    api.export(['Apm']);
-  }
+  api.export(['Apm']);
 });
 
 Package.on_test(function(api) {
+  configurePackage(api);
   api.use([
-    'meteor-apm-client',
-    'random',
-    'email',
-    // 'npm',
-    'http',
-    'livedata',
-    'mongo-livedata',
     'tinytest',
     'test-helpers'
   ], 'server');
+  
   api.add_files([
     'tests/_helpers/globals.js',
     'tests/_helpers/helpers.js',
@@ -110,4 +80,28 @@ function meteorRoot() {
   }
 
   return currentDir;
+}
+
+function configurePackage(api) {
+  api.use(['minimongo', 'livedata', 'mongo-livedata', 'ejson', 'underscore', 'http', 'email', 'random'], ['server']);
+  api.add_files([
+    'lib/retry.js',
+    'lib/utils.js',
+    'lib/ntp.js',
+    'lib/models/0model.js',
+    'lib/models/methods.js',
+    'lib/models/pubsub.js',
+    'lib/apm.js',
+    'lib/tracer.js',
+    'lib/tracer_store.js',
+    'lib/hijack/wrap_session.js',
+    'lib/hijack/wrap_subscription.js',
+    'lib/hijack/session.js',
+    'lib/hijack/db.js',
+    'lib/hijack/http.js',
+    'lib/hijack/email.js',
+    'lib/hijack/async.js'
+  ], 'server');
+
+  api.add_files(['lib/client/route.js'], 'client')
 }

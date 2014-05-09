@@ -53,20 +53,17 @@ Tinytest.add(
 Tinytest.add(
   'Subscriptions - Response Time - single',
   function (test) {
-    EnableTrackingMethods();
     var client = GetMeteorClient();
     var Future = Npm.require('fibers/future');
-    var f = new Future();
-    var h1;
-    h1 = client.subscribe('tinytest-data-delayed', function() {
-      f.return();
+    var pubName = "pub-" + Random.id();
+    Meteor.publish(pubName, function() {
+      Wait(200);
+      this.ready();
     });
-    f.wait();
-    var metrics = GetPubSubMetrics();
-    test.equal(metrics.length, 1);
-    test.equal(metrics[0].pubs['tinytest-data-delayed'].resTime >= 200, true);
+    var h1 = SubscribeAndWait(client, pubName);
+    var metrics = FindMetricsForPub(pubName);
+    test.isTrue(CompareNear(metrics.resTime, 200, 100));
     h1.stop();
-    CleanTestData();
   }
 );
 
@@ -106,17 +103,13 @@ Tinytest.add(
     var client = GetMeteorClient();
     var Future = Npm.require('fibers/future');
     var f = new Future();
-    var h1;
-    // Wait(600);
-    h1 = client.subscribe('tinytest-data', function() {
-      f.return();
-    });
-    f.wait();
+    var h1 = SubscribeAndWait(client, 'tinytest-data');
     Wait(100);
     h1.stop();
     Wait(100);
-    var metrics = GetPubSubMetrics();
-    test.isTrue(metrics[0].pubs['tinytest-data'].lifeTime >= 100);
+    var metrics = FindMetricsForPub('tinytest-data');
+    console.log(metrics);
+    test.isTrue(CompareNear(metrics.lifeTime, 100));
     CleanTestData();
   }
 );
@@ -151,15 +144,10 @@ Tinytest.add(
     var client = GetMeteorClient();
     var Future = Npm.require('fibers/future');
     var f = new Future();
-    var h1, h2, h3;
-    h1 = client.subscribe('tinytest-data', function() {
-      h2 = client.subscribe('tinytest-data', function() {
-        h3 = client.subscribe('tinytest-data-2', function() {
-          f.return();
-        });
-      });
-    });
-    f.wait();
+    var h1 = SubscribeAndWait(client, 'tinytest-data');
+    var h2 = SubscribeAndWait(client, 'tinytest-data');
+    var h3 = SubscribeAndWait(client, 'tinytest-data-2');
+
     var payload = GetPubSubPayload();
     test.equal(payload[0].pubs['tinytest-data'].activeSubs == 2, true);
     test.equal(payload[0].pubs['tinytest-data-2'].activeSubs == 1, true);
