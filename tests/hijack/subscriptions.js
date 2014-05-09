@@ -108,7 +108,6 @@ Tinytest.add(
     h1.stop();
     Wait(100);
     var metrics = FindMetricsForPub('tinytest-data');
-    console.log(metrics);
     test.isTrue(CompareNear(metrics.lifeTime, 100));
     CleanTestData();
   }
