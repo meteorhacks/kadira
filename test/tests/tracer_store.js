@@ -282,6 +282,23 @@ suite('TracerStore', function() {
       done();
     });
 
+    test('single error: without data', function(done, server) {
+      var trace = {name: 'one', type: 'method', events: [
+        {type: 'start'},
+        {type: 'end'}
+      ]};
+
+      var ts = server.evalSync(function(trace) {
+        var ts = new TracerStore();
+
+        ts._handleErrors(trace);
+        emit('return', ts);
+      }, trace);
+
+      assert.deepEqual(ts.traceArchive, []);
+      done();
+    });
+
     test('multiple errors', function(done, server) {
       var trace = {name: 'one', type: 'method', events: [
         {type: 'start'},

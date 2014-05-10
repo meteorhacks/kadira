@@ -216,6 +216,20 @@ Tinytest.add(
 );
 
 Tinytest.add(
+  'TracerStore - _handleErrors - single error no data',
+  function (test) {
+    var ts = new TracerStore({archiveEvery: 20});
+    var trace = {name: 'one', type: 'method', events: [
+      ['start'],
+      ['end', 0]
+    ]};
+    var ts = new TracerStore();
+    ts._handleErrors(trace);
+    test.equal(ts.traceArchive, []);
+  }
+);
+
+Tinytest.add(
   'TracerStore - _handleErrors - multiple error',
   function (test) {
     var trace = {name: 'one', type: 'method', events: [
