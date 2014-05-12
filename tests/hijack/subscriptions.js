@@ -26,7 +26,7 @@ Tinytest.add(
     CleanTestData();
     EnableTrackingMethods();
     var client = GetMeteorClient();
-    
+
     var h1 = SubscribeAndWait(client, 'tinytest-data');
     var h2 = SubscribeAndWait(client, 'tinytest-data');
     h1.stop();
@@ -203,7 +203,7 @@ Tinytest.add(
     var docs = [{data: 'data1'}, {data: 'data2'}];
     docs.forEach(function(doc) {TestData.insert(doc)});
     var client = GetMeteorClient();
-    
+
     var h1 = SubscribeAndWait(client, 'tinytest-data');
     var h2 = SubscribeAndWait(client, 'tinytest-data');
 
@@ -217,7 +217,7 @@ Tinytest.add(
 );
 
 Tinytest.add(
-  'Network Impact - after ready',
+  'Network Impact - after ready - added',
   function (test) {
     CleanTestData();
     EnableTrackingMethods();
@@ -226,12 +226,59 @@ Tinytest.add(
     TestData.insert(post1);
     var client = GetMeteorClient();
     var h1 = SubscribeAndWait(client, 'tinytest-data');
-
     TestData.insert(post2);
+
     Wait(200);
     var metrics = GetPubSubMetrics();
     test.equal(metrics[0].pubs['tinytest-data'].bytesBeforeReady, GetDataSize(post1));
-    test.equal(metrics[0].pubs['tinytest-data'].bytesAfterReady, GetDataSize(post2));
+    test.equal(metrics[0].pubs['tinytest-data'].bytesAddedAfterReady, GetDataSize(post2));
+    test.equal(metrics[0].pubs['tinytest-data'].bytesChangedAfterReady, 0);
+    h1.stop();
+    CloseClient(client);
+  }
+);
+
+Tinytest.add(
+  'Network Impact - after ready - changed',
+  function (test) {
+    CleanTestData();
+    EnableTrackingMethods();
+    var post1 = {abc: 10};
+    var post2 = {abc: 200};
+    TestData.insert(post1);
+    var client = GetMeteorClient();
+    var h1 = SubscribeAndWait(client, 'tinytest-data');
+    TestData.update({abc: 10}, {$set: post2});
+
+    Wait(200);
+    var metrics = GetPubSubMetrics();
+    test.equal(metrics[0].pubs['tinytest-data'].bytesBeforeReady, GetDataSize(post1));
+    test.equal(metrics[0].pubs['tinytest-data'].bytesAddedAfterReady, 0);
+    test.equal(metrics[0].pubs['tinytest-data'].bytesChangedAfterReady, GetDataSize(post2));
+    h1.stop();
+    CloseClient(client);
+  }
+);
+
+Tinytest.add(
+  'Network Impact - after ready - added and changed',
+  function (test) {
+    CleanTestData();
+    EnableTrackingMethods();
+    var post1 = {abc: 10};
+    var post2 = {abc: 200};
+    var post3 = {abc: 200};
+    TestData.insert(post1);
+    var client = GetMeteorClient();
+    var h1 = SubscribeAndWait(client, 'tinytest-data');
+    TestData.update({abc: 10}, {$set: post2});
+    TestData.insert(post3);
+
+    Wait(200);
+    var metrics = GetPubSubMetrics();
+    test.equal(metrics[0].pubs['tinytest-data'].bytesBeforeReady, GetDataSize(post1));
+    test.equal(metrics[0].pubs['tinytest-data'].bytesAddedAfterReady, GetDataSize(post3));
+    test.equal(metrics[0].pubs['tinytest-data'].bytesChangedAfterReady, GetDataSize(post2));
     h1.stop();
     CloseClient(client);
   }
@@ -246,12 +293,13 @@ Tinytest.add(
     TestData.insert({_id: 'aa', abc: 10});
     var client = GetMeteorClient();
     var h1 = SubscribeAndWait(client, 'tinytest-data');
-
     TestData.remove({_id: 'aa'});
+
     Wait(200);
     var metrics = GetPubSubMetrics();
     test.equal(metrics[0].pubs['tinytest-data'].bytesBeforeReady, GetDataSize(docs));
-    test.equal(metrics[0].pubs['tinytest-data'].bytesAfterReady, 0);
+    test.equal(metrics[0].pubs['tinytest-data'].bytesAddedAfterReady, 0);
+    test.equal(metrics[0].pubs['tinytest-data'].bytesChangedAfterReady, 0);
     h1.stop();
     CloseClient(client);
   }
@@ -303,10 +351,10 @@ Tinytest.add(
     CleanTestData();
     EnableTrackingMethods();
     var client = GetMeteorClient();
-    
+
     var h1 = SubscribeAndWait(client, 'tinytest-data');
     var h2 = SubscribeAndWait(client, 'tinytest-data');
-    
+
     Wait(100);
     var metrics = GetPubSubMetrics();
     test.equal(metrics[0].pubs['tinytest-data'].totalObservers, 2);
@@ -325,7 +373,7 @@ Tinytest.add(
     var client = GetMeteorClient();
     var h1 = SubscribeAndWait(client, 'tinytest-data');
     var h2 = SubscribeAndWait(client, 'tinytest-data-2');
-    
+
     Wait(100);
     var metrics = GetPubSubMetrics();
     test.equal(metrics[0].pubs['tinytest-data'].totalObservers, 1);
