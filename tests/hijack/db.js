@@ -137,9 +137,54 @@ Tinytest.add(
       ['start',,{userId: null, params: '[]'}],
       ['wait',,{waitOn: []}],
       ['db',,{coll: 'tinytest-data', func: 'find', selector: JSON.stringify({_id: 'aa'})}],
-      ['db',,{coll: 'tinytest-data', func: 'fetch', cursor: true, selector: JSON.stringify({_id: 'aa'}), docsFetched: 1}],
+      ['db',,{
+        coll: 'tinytest-data', 
+        func: 'fetch', 
+        cursor: true, 
+        selector: JSON.stringify({_id: 'aa'}), 
+        docsFetched: 1,
+        limit: 1
+      }],
       ['complete']
     ];
+  
+    test.equal(result, {_id: 'aa', dd: 10});
+    test.equal(events, expected);
+    CleanTestData();
+  }
+);
+
+Tinytest.add(
+  'Database - findOne with sort and fields',
+  function (test) {
+    EnableTrackingMethods();
+    TestData.insert({_id: 'aa', dd: 10});
+    var methodId = RegisterMethod(function () {
+      return TestData.findOne({_id: 'aa'}, {
+        sort: {dd: -1},
+        fields: {dd: 1}
+      });
+    });
+    var client = GetMeteorClient();
+    var result = client.call(methodId);
+    var events = GetLastMethodEvents([0, 2]);
+    var expected = [
+      ['start',,{userId: null, params: '[]'}],
+      ['wait',,{waitOn: []}],
+      ['db',,{coll: 'tinytest-data', func: 'find', selector: JSON.stringify({_id: 'aa'})}],
+      ['db',,{
+        coll: 'tinytest-data', 
+        func: 'fetch', 
+        cursor: true, 
+        selector: JSON.stringify({_id: 'aa'}), 
+        sort: JSON.stringify({dd: -1}), 
+        fields: JSON.stringify({dd: 1}), 
+        docsFetched: 1,
+        limit: 1
+      }],
+      ['complete']
+    ];
+  
     test.equal(result, {_id: 'aa', dd: 10});
     test.equal(events, expected);
     CleanTestData();
