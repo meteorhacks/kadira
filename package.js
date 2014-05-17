@@ -28,7 +28,7 @@ Package.on_test(function(api) {
     'tinytest',
     'test-helpers'
   ], 'server');
-  
+
   api.add_files([
     'tests/_helpers/globals.js',
     'tests/_helpers/helpers.js',
@@ -91,6 +91,7 @@ function configurePackage(api) {
     'lib/models/0model.js',
     'lib/models/methods.js',
     'lib/models/pubsub.js',
+    'lib/models/system.js',
     'lib/apm.js',
     'lib/tracer.js',
     'lib/tracer_store.js',
