@@ -6,7 +6,8 @@ Package.describe({
 });
 
 Npm.depends({
-  "debug": "0.7.4"
+  "debug": "0.7.4",
+  "nodefly-uvmon": "0.0.7"
 });
 
 Package.on_use(function(api) {
