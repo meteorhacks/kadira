@@ -13,6 +13,7 @@ Tinytest.add(
     test.isTrue(payload.eventLoopCount > 0);
     test.isTrue(payload.sessions >= 0);
     test.isTrue(payload.startTime >= beforeTime);
+    test.isTrue(payload.endTime >= payload.startTime + 1000);
     test.isTrue(payload.totalTime >= 1000);
     test.isTrue(payload.eventLoopTime <= 1000);
   }
