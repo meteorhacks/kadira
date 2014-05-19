@@ -6,7 +6,8 @@ Package.describe({
 });
 
 Npm.depends({
-  "debug": "0.7.4"
+  "debug": "0.7.4",
+  "nodefly-uvmon": "0.0.7"
 });
 
 Package.on_use(function(api) {
@@ -28,7 +29,7 @@ Package.on_test(function(api) {
     'tinytest',
     'test-helpers'
   ], 'server');
-  
+
   api.add_files([
     'tests/_helpers/globals.js',
     'tests/_helpers/helpers.js',
@@ -43,6 +44,7 @@ Package.on_test(function(api) {
     'tests/hijack/subscriptions.js',
     'tests/models/methods.js',
     'tests/models/pubsub.js',
+    'tests/models/system.js',
     'tests/tracer_store.js',
     'tests/tracer.js'
   ], 'server');
@@ -91,6 +93,7 @@ function configurePackage(api) {
     'lib/models/0model.js',
     'lib/models/methods.js',
     'lib/models/pubsub.js',
+    'lib/models/system.js',
     'lib/apm.js',
     'lib/tracer.js',
     'lib/tracer_store.js',
