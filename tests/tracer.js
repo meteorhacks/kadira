@@ -233,7 +233,7 @@ Tinytest.add(
 Tinytest.add(
   'Tracer - Build Trace - simple',
   function (test) {
-    var now = Date.now();
+    var now = (new Date).getTime();
     var traceInfo = {
       events: [
         {type: 'start', at: now},
@@ -258,7 +258,7 @@ Tinytest.add(
 Tinytest.add(
   'Tracer - Build Trace - errored',
   function (test) {
-    var now = Date.now();
+    var now = (new Date).getTime();
     var traceInfo = {
       events: [
         {type: 'start', at: now},
@@ -283,7 +283,7 @@ Tinytest.add(
 Tinytest.add(
   'Tracer - Build Trace - no start',
   function (test) {
-    var now = Date.now();
+    var now = (new Date).getTime();
     var traceInfo = {
       events: [
         {type: 'wait', at: now},
@@ -301,7 +301,7 @@ Tinytest.add(
 Tinytest.add(
   'Tracer - Build Trace - no complete',
   function (test) {
-    var now = Date.now();
+    var now = (new Date).getTime();
     var traceInfo = {
       events: [
         {type: 'start', at: now},
@@ -319,7 +319,7 @@ Tinytest.add(
 Tinytest.add(
   'Tracer - Build Trace - event not ended',
   function (test) {
-    var now = Date.now();
+    var now = (new Date).getTime();
     var traceInfo = {
       events: [
         {type: 'start', at: now},

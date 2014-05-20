@@ -2,7 +2,7 @@
 Tinytest.add(
   'Models - System - buildPayload',
   function (test) {
-    var beforeTime = Date.now();
+    var beforeTime = (new Date).getTime();
     var model = new SystemModel();
     Meteor._wrapAsync(function(callback) {
       setTimeout(callback, 1000);
