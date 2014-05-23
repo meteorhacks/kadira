@@ -8,7 +8,7 @@ Tinytest.add(
       setTimeout(callback, 1000);
     })();
     var payload = model.buildPayload().systemMetrics[0];
-    test.isTrue(payload.rssBytes > 0);
+    test.isTrue(payload.memory > 0);
     test.isTrue(payload.loadAverage > 0);
     test.isTrue(payload.eventLoopCount > 0);
     test.isTrue(payload.sessions >= 0);
