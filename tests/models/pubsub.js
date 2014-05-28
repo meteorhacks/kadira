@@ -305,8 +305,6 @@ Tinytest.add(
 Tinytest.add(
   'Models - PubSub - ActiveDocs - Single Sub - unsub before payload',
   function (test) {
-    // Test should fail with current implementation (count at buildPayload).
-    // Find a way to track docs counts of subs closed before buildPayload().
     CleanTestData();
     var docs = [{data: 'data1'}, {data: 'data2'}, {data: 'data3'}];
     docs.forEach(function(doc) {TestData.insert(doc)});
@@ -315,7 +313,7 @@ Tinytest.add(
     h1.stop();
     Wait(200);
     var payload = GetPubSubPayload();
-    test.equal(payload[0].pubs['tinytest-data'].activeDocs, 3);
+    test.equal(payload[0].pubs['tinytest-data'].activeDocs, 0);
     CloseClient(client);
   }
 );
@@ -323,8 +321,6 @@ Tinytest.add(
 Tinytest.add(
   'Models - PubSub - ActiveDocs - Single Sub - close before payload',
   function (test) {
-    // Test should fail with current implementation (count at buildPayload).
-    // Find a way to track docs counts of subs closed before buildPayload().
     CleanTestData();
     var docs = [{data: 'data1'}, {data: 'data2'}, {data: 'data3'}];
     docs.forEach(function(doc) {TestData.insert(doc)});
@@ -333,7 +329,7 @@ Tinytest.add(
     CloseClient(client);
     Wait(200);
     var payload = GetPubSubPayload();
-    test.equal(payload[0].pubs['tinytest-data'].activeDocs, 3);
+    test.equal(payload[0].pubs['tinytest-data'].activeDocs, 0);
     h1.stop();
   }
 );
@@ -361,8 +357,6 @@ Tinytest.add(
 Tinytest.add(
   'Models - PubSub - ActiveDocs - Multiple Subs - sub and unsub',
   function (test) {
-    // Test should fail with current implementation (count at buildPayload).
-    // Find a way to track docs counts of subs closed before buildPayload().
     CleanTestData();
     var docs = [{data: 'data1'}, {data: 'data2'}, {data: 'data3'}];
     docs.forEach(function(doc) {TestData.insert(doc)});
@@ -373,9 +367,162 @@ Tinytest.add(
     h1.stop();
     Wait(200);
     var payload = GetPubSubPayload();
-    test.equal(payload[0].pubs['tinytest-data'].activeDocs, 9);
+    test.equal(payload[0].pubs['tinytest-data'].activeDocs, 6);
     h2.stop();
     h3.stop();
     CloseClient(client);
   }
 );
+
+Tinytest.add(
+  'Models - PubSub - TotalDocs - Single - simple',
+  function (test) {
+    CleanTestData();
+    var docs = [{data: 'data1'}, {data: 'data2'}, {data: 'data3'}];
+    docs.forEach(function(doc) {TestData.insert(doc)});
+    var client = GetMeteorClient();
+    var h1 = SubscribeAndWait(client, 'tinytest-data');
+    Wait(200);
+    var payload = GetPubSubPayload();
+    console.log('* payload', payload[0].pubs['tinytest-data']);
+    test.equal(payload[0].pubs['tinytest-data'].totalDocsSent, 3);
+    h1.stop();
+    CloseClient(client);
+  }
+);
+
+Tinytest.add(
+  'Models - PubSub - TotalDocs - Single - sub and unsub',
+  function (test) {
+    CleanTestData();
+    var docs = [{data: 'data1'}, {data: 'data2'}, {data: 'data3'}];
+    docs.forEach(function(doc) {TestData.insert(doc)});
+    var client = GetMeteorClient();
+    var h1 = SubscribeAndWait(client, 'tinytest-data');
+    h1.stop();
+    Wait(200);
+    var payload = GetPubSubPayload();
+    test.equal(payload[0].pubs['tinytest-data'].totalDocsSent, 3);
+    CloseClient(client);
+  }
+);
+
+Tinytest.add(
+  'Models - PubSub - TotalDocs - Multiple - simple',
+  function (test) {
+    CleanTestData();
+    var docs = [{data: 'data1'}, {data: 'data2'}, {data: 'data3'}];
+    docs.forEach(function(doc) {TestData.insert(doc)});
+    var client = GetMeteorClient();
+    var h1 = SubscribeAndWait(client, 'tinytest-data');
+    var h2 = SubscribeAndWait(client, 'tinytest-data');
+    var h3 = SubscribeAndWait(client, 'tinytest-data');
+    Wait(200);
+    var payload = GetPubSubPayload();
+    test.equal(payload[0].pubs['tinytest-data'].totalDocsSent, 9);
+    h1.stop();
+    h2.stop();
+    h3.stop();
+    CloseClient(client);
+  }
+);
+
+Tinytest.add(
+  'Models - PubSub - TotalDocs - Multiple - sub and unsub',
+  function (test) {
+    CleanTestData();
+    var docs = [{data: 'data1'}, {data: 'data2'}, {data: 'data3'}];
+    docs.forEach(function(doc) {TestData.insert(doc)});
+    var client = GetMeteorClient();
+    var h1 = SubscribeAndWait(client, 'tinytest-data');
+    var h2 = SubscribeAndWait(client, 'tinytest-data');
+    var h3 = SubscribeAndWait(client, 'tinytest-data');
+    h1.stop();
+    Wait(200);
+    var payload = GetPubSubPayload();
+    test.equal(payload[0].pubs['tinytest-data'].totalDocsSent, 9);
+    h2.stop();
+    h3.stop();
+    CloseClient(client);
+  }
+);
+
+Tinytest.add(
+  'Models - PubSub - TotalData - Single - simple',
+  function (test) {
+    CleanTestData();
+    var docs = [{data: 'data1'}, {data: 'data2'}, {data: 'data3'}];
+    var size = docs.reduce(reduceDocsSize, 0);
+    docs.forEach(function(doc) {TestData.insert(doc)});
+    var client = GetMeteorClient();
+    var h1 = SubscribeAndWait(client, 'tinytest-data');
+    Wait(200);
+    var payload = GetPubSubPayload();
+    test.equal(payload[0].pubs['tinytest-data'].totalDataSent, size);
+    h1.stop();
+    CloseClient(client);
+  }
+);
+
+Tinytest.add(
+  'Models - PubSub - TotalData - Single - sub and unsub',
+  function (test) {
+    CleanTestData();
+    var docs = [{data: 'data1'}, {data: 'data2'}, {data: 'data3'}];
+    var size = docs.reduce(reduceDocsSize, 0);
+    docs.forEach(function(doc) {TestData.insert(doc)});
+    var client = GetMeteorClient();
+    var h1 = SubscribeAndWait(client, 'tinytest-data');
+    h1.stop();
+    Wait(200);
+    var payload = GetPubSubPayload();
+    test.equal(payload[0].pubs['tinytest-data'].totalDataSent, size);
+    CloseClient(client);
+  }
+);
+
+Tinytest.add(
+  'Models - PubSub - TotalData - Multiple - simple',
+  function (test) {
+    CleanTestData();
+    var docs = [{data: 'data1'}, {data: 'data2'}, {data: 'data3'}];
+    var size = docs.reduce(reduceDocsSize, 0);
+    docs.forEach(function(doc) {TestData.insert(doc)});
+    var client = GetMeteorClient();
+    var h1 = SubscribeAndWait(client, 'tinytest-data');
+    var h2 = SubscribeAndWait(client, 'tinytest-data');
+    var h3 = SubscribeAndWait(client, 'tinytest-data');
+    Wait(200);
+    var payload = GetPubSubPayload();
+    test.equal(payload[0].pubs['tinytest-data'].totalDataSent, size);
+    h1.stop();
+    h2.stop();
+    h3.stop();
+    CloseClient(client);
+  }
+);
+
+Tinytest.add(
+  'Models - PubSub - TotalData - Multiple - sub and unsub',
+  function (test) {
+    CleanTestData();
+    var docs = [{data: 'data1'}, {data: 'data2'}, {data: 'data3'}];
+    var size = docs.reduce(reduceDocsSize, 0);
+    docs.forEach(function(doc) {TestData.insert(doc)});
+    var client = GetMeteorClient();
+    var h1 = SubscribeAndWait(client, 'tinytest-data');
+    var h2 = SubscribeAndWait(client, 'tinytest-data');
+    var h3 = SubscribeAndWait(client, 'tinytest-data');
+    h1.stop();
+    Wait(200);
+    var payload = GetPubSubPayload();
+    test.equal(payload[0].pubs['tinytest-data'].totalDataSent, size);
+    h2.stop();
+    h3.stop();
+    CloseClient(client);
+  }
+);
+
+function reduceDocsSize (total, current) {
+  return total + Buffer.byteLength(JSON.stringify(current));
+}
