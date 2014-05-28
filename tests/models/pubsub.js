@@ -251,3 +251,131 @@ Tinytest.add(
     Apm.syncedDate.getTime = original;
   }
 );
+
+Tinytest.add(
+  'Models - PubSub - ActiveDocs - Single Sub - simple',
+  function (test) {
+    CleanTestData();
+    var docs = [{data: 'data1'}, {data: 'data2'}, {data: 'data3'}];
+    docs.forEach(function(doc) {TestData.insert(doc)});
+    var client = GetMeteorClient();
+    var h1 = SubscribeAndWait(client, 'tinytest-data');
+    Wait(200);
+    var payload = GetPubSubPayload();
+    test.equal(payload[0].pubs['tinytest-data'].activeDocs, 3);
+    h1.stop();
+    CloseClient(client);
+  }
+);
+
+Tinytest.add(
+  'Models - PubSub - ActiveDocs - Single Sub - docs added',
+  function (test) {
+    CleanTestData();
+    var docs = [{data: 'data1'}, {data: 'data2'}, {data: 'data3'}];
+    docs.forEach(function(doc) {TestData.insert(doc)});
+    var client = GetMeteorClient();
+    var h1 = SubscribeAndWait(client, 'tinytest-data');
+    TestData.insert({data: 'data4'});
+    Wait(200);
+    var payload = GetPubSubPayload();
+    test.equal(payload[0].pubs['tinytest-data'].activeDocs, 4);
+    h1.stop();
+    CloseClient(client);
+  }
+);
+
+Tinytest.add(
+  'Models - PubSub - ActiveDocs - Single Sub - docs removed',
+  function (test) {
+    CleanTestData();
+    var docs = [{data: 'data1'}, {data: 'data2'}, {data: 'data3'}];
+    docs.forEach(function(doc) {TestData.insert(doc)});
+    var client = GetMeteorClient();
+    var h1 = SubscribeAndWait(client, 'tinytest-data');
+    TestData.remove({data: 'data3'});
+    Wait(200);
+    var payload = GetPubSubPayload();
+    test.equal(payload[0].pubs['tinytest-data'].activeDocs, 2);
+    h1.stop();
+    CloseClient(client);
+  }
+);
+
+Tinytest.add(
+  'Models - PubSub - ActiveDocs - Single Sub - unsub before payload',
+  function (test) {
+    // Test should fail with current implementation (count at buildPayload).
+    // Find a way to track docs counts of subs closed before buildPayload().
+    CleanTestData();
+    var docs = [{data: 'data1'}, {data: 'data2'}, {data: 'data3'}];
+    docs.forEach(function(doc) {TestData.insert(doc)});
+    var client = GetMeteorClient();
+    var h1 = SubscribeAndWait(client, 'tinytest-data');
+    h1.stop();
+    Wait(200);
+    var payload = GetPubSubPayload();
+    test.equal(payload[0].pubs['tinytest-data'].activeDocs, 3);
+    CloseClient(client);
+  }
+);
+
+Tinytest.add(
+  'Models - PubSub - ActiveDocs - Single Sub - close before payload',
+  function (test) {
+    // Test should fail with current implementation (count at buildPayload).
+    // Find a way to track docs counts of subs closed before buildPayload().
+    CleanTestData();
+    var docs = [{data: 'data1'}, {data: 'data2'}, {data: 'data3'}];
+    docs.forEach(function(doc) {TestData.insert(doc)});
+    var client = GetMeteorClient();
+    var h1 = SubscribeAndWait(client, 'tinytest-data');
+    CloseClient(client);
+    Wait(200);
+    var payload = GetPubSubPayload();
+    test.equal(payload[0].pubs['tinytest-data'].activeDocs, 3);
+    h1.stop();
+  }
+);
+
+Tinytest.add(
+  'Models - PubSub - ActiveDocs - Multiple Subs - simple',
+  function (test) {
+    CleanTestData();
+    var docs = [{data: 'data1'}, {data: 'data2'}, {data: 'data3'}];
+    docs.forEach(function(doc) {TestData.insert(doc)});
+    var client = GetMeteorClient();
+    var h1 = SubscribeAndWait(client, 'tinytest-data');
+    var h2 = SubscribeAndWait(client, 'tinytest-data');
+    var h3 = SubscribeAndWait(client, 'tinytest-data');
+    Wait(200);
+    var payload = GetPubSubPayload();
+    test.equal(payload[0].pubs['tinytest-data'].activeDocs, 9);
+    h1.stop();
+    h2.stop();
+    h3.stop();
+    CloseClient(client);
+  }
+);
+
+Tinytest.add(
+  'Models - PubSub - ActiveDocs - Multiple Subs - sub and unsub',
+  function (test) {
+    // Test should fail with current implementation (count at buildPayload).
+    // Find a way to track docs counts of subs closed before buildPayload().
+    CleanTestData();
+    var docs = [{data: 'data1'}, {data: 'data2'}, {data: 'data3'}];
+    docs.forEach(function(doc) {TestData.insert(doc)});
+    var client = GetMeteorClient();
+    var h1 = SubscribeAndWait(client, 'tinytest-data');
+    var h2 = SubscribeAndWait(client, 'tinytest-data');
+    var h3 = SubscribeAndWait(client, 'tinytest-data');
+    h1.stop();
+    Wait(200);
+    var payload = GetPubSubPayload();
+    test.equal(payload[0].pubs['tinytest-data'].activeDocs, 9);
+    h2.stop();
+    h3.stop();
+    CloseClient(client);
+  }
+);
