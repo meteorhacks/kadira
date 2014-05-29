@@ -421,7 +421,7 @@ Tinytest.add(
     var docs = [{data: 'data1'}, {data: 'data2'}, {data: 'data3'}];
     var size = docs.reduce(function (total, doc) {
       var valuesArray = _.values(doc);
-      return total + Buffer.byteLength(JSON.stringify(_.values(doc)));
+      return total + Buffer.byteLength(JSON.stringify(doc));
     }, 0);
     docs.forEach(function(doc) {TestData.insert(doc)});
     var client = GetMeteorClient();
@@ -441,7 +441,7 @@ Tinytest.add(
     var docs = [{data: 'data1'}, {data: 'data2'}, {data: 'data3'}];
     var size = docs.reduce(function (total, doc) {
       var valuesArray = _.values(doc);
-      return total + Buffer.byteLength(JSON.stringify(_.values(doc)));
+      return total + Buffer.byteLength(JSON.stringify(doc));
     }, 0);
     docs.forEach(function(doc) {TestData.insert(doc)});
     var client1 = GetMeteorClient();
