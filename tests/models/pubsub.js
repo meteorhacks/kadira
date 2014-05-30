@@ -190,8 +190,8 @@ Tinytest.add(
       return dates.pop();
     }
     var model = new PubsubModel();
-    model.incrementHandleCount('postsList', false);
-    model.incrementHandleCount('postsList', false);
+    model.incrementHandleCount({name: 'postsList'}, false);
+    model.incrementHandleCount({name: 'postsList'}, false);
     var metrics = [
       model.buildPayload(),
       model.metricsByMinute
@@ -214,8 +214,8 @@ Tinytest.add(
       return dates.pop();
     }
     var model = new PubsubModel();
-    model.incrementHandleCount('postsList', false);
-    model.incrementHandleCount('postsList', true);
+    model.incrementHandleCount({name: 'postsList'}, false);
+    model.incrementHandleCount({name: 'postsList'}, true);
     var metrics = [
       model.buildPayload(),
       model.metricsByMinute
@@ -238,8 +238,8 @@ Tinytest.add(
       return dates.pop();
     }
     var model = new PubsubModel();
-    model.incrementHandleCount('postsList', false);
-    model.incrementHandleCount('postsList', true);
+    model.incrementHandleCount({name: 'postsList'}, false);
+    model.incrementHandleCount({name: 'postsList'}, true);
     var metrics = [
       model.buildPayload(),
       model.metricsByMinute
