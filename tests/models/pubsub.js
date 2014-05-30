@@ -375,47 +375,7 @@ Tinytest.add(
 );
 
 Tinytest.add(
-  'Models - PubSub - TotalDocs - single',
-  function (test) {
-    CleanTestData();
-    var docs = [{data: 'data1'}, {data: 'data2'}, {data: 'data3'}];
-    docs.forEach(function(doc) {TestData.insert(doc)});
-    var client = GetMeteorClient();
-    var h1 = SubscribeAndWait(client, 'tinytest-data');
-    Wait(200);
-    var payload = GetPubSubPayload();
-    test.equal(payload[0].pubs['tinytest-data'].totalDocsSent, 3);
-    h1.stop();
-    CloseClient(client);
-  }
-);
-
-Tinytest.add(
-  'Models - PubSub - TotalDocs - multiple',
-  function (test) {
-    CleanTestData();
-    var docs = [{data: 'data1'}, {data: 'data2'}, {data: 'data3'}];
-    docs.forEach(function(doc) {TestData.insert(doc)});
-    var client1 = GetMeteorClient();
-    var h1 = SubscribeAndWait(client1, 'tinytest-data');
-    var client2 = GetMeteorClient();
-    var h2 = SubscribeAndWait(client2, 'tinytest-data');
-    var client3 = GetMeteorClient();
-    var h3 = SubscribeAndWait(client3, 'tinytest-data');
-    Wait(200);
-    var payload = GetPubSubPayload();
-    test.equal(payload[0].pubs['tinytest-data'].totalDocsSent, 9);
-    h1.stop();
-    h2.stop();
-    h3.stop();
-    CloseClient(client1);
-    CloseClient(client2);
-    CloseClient(client3);
-  }
-);
-
-Tinytest.add(
-  'Models - PubSub - TotalData - single',
+  'Models - PubSub - avgDocSize - single',
   function (test) {
     CleanTestData();
     var docs = [{data: 'data1'}, {data: 'data2'}, {data: 'data3'}];
@@ -428,14 +388,14 @@ Tinytest.add(
     var h1 = SubscribeAndWait(client, 'tinytest-data');
     Wait(200);
     var payload = GetPubSubPayload();
-    test.equal(payload[0].pubs['tinytest-data'].totalDataSent, size);
+    test.equal(payload[0].pubs['tinytest-data'].avgDocSize, size/3);
     h1.stop();
     CloseClient(client);
   }
 );
 
 Tinytest.add(
-  'Models - PubSub - TotalData - multiple',
+  'Models - PubSub - avgDocSize - multiple',
   function (test) {
     CleanTestData();
     var docs = [{data: 'data1'}, {data: 'data2'}, {data: 'data3'}];
@@ -452,7 +412,7 @@ Tinytest.add(
     var h3 = SubscribeAndWait(client3, 'tinytest-data');
     Wait(200);
     var payload = GetPubSubPayload();
-    test.equal(payload[0].pubs['tinytest-data'].totalDataSent, 3*size);
+    test.equal(payload[0].pubs['tinytest-data'].avgDocSize, 3*size/9);
     h1.stop();
     h2.stop();
     h3.stop();
