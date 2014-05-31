@@ -1,6 +1,6 @@
-## [Kadira - Performance Monitoring for Meteor](https://kadira.io)
+[![](https://api.travis-ci.org/meteorhacks/kadira.svg)](https://travis-ci.org/meteorhacks/kadira)
 
-
+## [Kadira - Performance Monitoring for Meteor](https://kadira.io) 
 
 [![Kadira - Performance Monitoring for Meteor](https://i.cloudup.com/LwrCCa_RRE.png)](https://kadira.io)
 
