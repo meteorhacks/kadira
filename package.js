@@ -103,7 +103,8 @@ function configurePackage(api) {
     'lib/hijack/db.js',
     'lib/hijack/http.js',
     'lib/hijack/email.js',
-    'lib/hijack/async.js'
+    'lib/hijack/async.js',
+    'lib/auto_connect.js'
   ], 'server');
 
   api.add_files(['lib/client/route.js'], 'client')
