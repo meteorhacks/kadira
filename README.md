@@ -21,4 +21,4 @@ Getting started
 More information
 ----------------
 
-Check out the [Kadira Academy](https://kadira.io/academy) for more information.
+Check out [Kadira Academy](https://kadira.io/academy) for more information.
