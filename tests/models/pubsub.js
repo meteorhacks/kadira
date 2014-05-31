@@ -181,65 +181,65 @@ Tinytest.add(
 Tinytest.add(
   'Models - PubSub - Observer Cache - no cache',
   function (test) {
-    var original = Apm.syncedDate.getTime;
+    var original = Kadira.syncedDate.getTime;
     var dates = [
       new Date('2013 Dec 10 20:31:12').getTime(),
       new Date('2013 Dec 10 20:31:22').getTime()
     ];
-    Apm.syncedDate.getTime = function () {
+    Kadira.syncedDate.getTime = function () {
       return dates.pop();
     }
     var model = new PubsubModel();
-    model.incrementHandleCount('postsList', false);
-    model.incrementHandleCount('postsList', false);
+    model.incrementHandleCount({name: 'postsList'}, false);
+    model.incrementHandleCount({name: 'postsList'}, false);
     var metrics = [
       model.buildPayload(),
       model.metricsByMinute
     ];
     test.equal(metrics[0].pubMetrics[0].pubs.postsList.totalObservers, 2);
     test.equal(metrics[0].pubMetrics[0].pubs.postsList.cachedObservers, 0);
-    Apm.syncedDate.getTime = original;
+    Kadira.syncedDate.getTime = original;
   }
 );
 
 Tinytest.add(
   'Models - PubSub - Observer Cache - single cache',
   function (test) {
-    var original = Apm.syncedDate.getTime;
+    var original = Kadira.syncedDate.getTime;
     var dates = [
       new Date('2013 Dec 10 20:31:12').getTime(),
       new Date('2013 Dec 10 20:31:22').getTime()
     ];
-    Apm.syncedDate.getTime = function () {
+    Kadira.syncedDate.getTime = function () {
       return dates.pop();
     }
     var model = new PubsubModel();
-    model.incrementHandleCount('postsList', false);
-    model.incrementHandleCount('postsList', true);
+    model.incrementHandleCount({name: 'postsList'}, false);
+    model.incrementHandleCount({name: 'postsList'}, true);
     var metrics = [
       model.buildPayload(),
       model.metricsByMinute
     ];
     test.equal(metrics[0].pubMetrics[0].pubs.postsList.totalObservers, 2);
     test.equal(metrics[0].pubMetrics[0].pubs.postsList.cachedObservers, 1);
-    Apm.syncedDate.getTime = original;
+    Kadira.syncedDate.getTime = original;
   }
 );
 
 Tinytest.add(
   'Models - PubSub - Observer Cache - multiple dates',
   function (test) {
-    var original = Apm.syncedDate.getTime;
+    var original = Kadira.syncedDate.getTime;
     var dates = [
       new Date('2013 Dec 10 20:31:12').getTime(),
       new Date('2013 Dec 12 20:31:22').getTime()
     ];
-    Apm.syncedDate.getTime = function () {
+    Kadira.syncedDate.getTime = function () {
       return dates.pop();
     }
     var model = new PubsubModel();
-    model.incrementHandleCount('postsList', false);
-    model.incrementHandleCount('postsList', true);
+    model.incrementHandleCount({name: 'postsList'}, false);
+    model.incrementHandleCount({name: 'postsList'}, true);
     var metrics = [
       model.buildPayload(),
       model.metricsByMinute
@@ -248,7 +248,7 @@ Tinytest.add(
     test.equal(metrics[0].pubMetrics[0].pubs.postsList.cachedObservers, 0);
     test.equal(metrics[0].pubMetrics[1].pubs.postsList.totalObservers, 1);
     test.equal(metrics[0].pubMetrics[1].pubs.postsList.cachedObservers, 1);
-    Apm.syncedDate.getTime = original;
+    Kadira.syncedDate.getTime = original;
   }
 );
 
@@ -375,47 +375,7 @@ Tinytest.add(
 );
 
 Tinytest.add(
-  'Models - PubSub - TotalDocs - single',
-  function (test) {
-    CleanTestData();
-    var docs = [{data: 'data1'}, {data: 'data2'}, {data: 'data3'}];
-    docs.forEach(function(doc) {TestData.insert(doc)});
-    var client = GetMeteorClient();
-    var h1 = SubscribeAndWait(client, 'tinytest-data');
-    Wait(200);
-    var payload = GetPubSubPayload();
-    test.equal(payload[0].pubs['tinytest-data'].totalDocsSent, 3);
-    h1.stop();
-    CloseClient(client);
-  }
-);
-
-Tinytest.add(
-  'Models - PubSub - TotalDocs - multiple',
-  function (test) {
-    CleanTestData();
-    var docs = [{data: 'data1'}, {data: 'data2'}, {data: 'data3'}];
-    docs.forEach(function(doc) {TestData.insert(doc)});
-    var client1 = GetMeteorClient();
-    var h1 = SubscribeAndWait(client1, 'tinytest-data');
-    var client2 = GetMeteorClient();
-    var h2 = SubscribeAndWait(client2, 'tinytest-data');
-    var client3 = GetMeteorClient();
-    var h3 = SubscribeAndWait(client3, 'tinytest-data');
-    Wait(200);
-    var payload = GetPubSubPayload();
-    test.equal(payload[0].pubs['tinytest-data'].totalDocsSent, 9);
-    h1.stop();
-    h2.stop();
-    h3.stop();
-    CloseClient(client1);
-    CloseClient(client2);
-    CloseClient(client3);
-  }
-);
-
-Tinytest.add(
-  'Models - PubSub - TotalData - single',
+  'Models - PubSub - avgDocSize - single',
   function (test) {
     CleanTestData();
     var docs = [{data: 'data1'}, {data: 'data2'}, {data: 'data3'}];
@@ -428,14 +388,14 @@ Tinytest.add(
     var h1 = SubscribeAndWait(client, 'tinytest-data');
     Wait(200);
     var payload = GetPubSubPayload();
-    test.equal(payload[0].pubs['tinytest-data'].totalDataSent, size);
+    test.equal(payload[0].pubs['tinytest-data'].avgDocSize, size/3);
     h1.stop();
     CloseClient(client);
   }
 );
 
 Tinytest.add(
-  'Models - PubSub - TotalData - multiple',
+  'Models - PubSub - avgDocSize - multiple',
   function (test) {
     CleanTestData();
     var docs = [{data: 'data1'}, {data: 'data2'}, {data: 'data3'}];
@@ -452,7 +412,7 @@ Tinytest.add(
     var h3 = SubscribeAndWait(client3, 'tinytest-data');
     Wait(200);
     var payload = GetPubSubPayload();
-    test.equal(payload[0].pubs['tinytest-data'].totalDataSent, 3*size);
+    test.equal(payload[0].pubs['tinytest-data'].avgDocSize, 3*size/9);
     h1.stop();
     h2.stop();
     h3.stop();

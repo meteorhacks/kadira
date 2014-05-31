@@ -6,9 +6,9 @@ Tinytest.add(
       msg: 'method',
       method: 'method-name'
     };
-    var traceInfo = Apm.tracer.start({id: 'session-id', userId: 'uid'}, ddpMessage);
-    Apm.tracer.event(traceInfo, 'start', {abc: 100});
-    Apm.tracer.event(traceInfo, 'end', {abc: 200});
+    var traceInfo = Kadira.tracer.start({id: 'session-id', userId: 'uid'}, ddpMessage);
+    Kadira.tracer.event(traceInfo, 'start', {abc: 100});
+    Kadira.tracer.event(traceInfo, 'end', {abc: 200});
     removeDate(traceInfo);
     var expected = {
       _id: 'session-id::the-id',
@@ -34,10 +34,10 @@ Tinytest.add(
       msg: 'method',
       method: 'method-name'
     };
-    var traceInfo = Apm.tracer.start({id: 'session-id', userId: 'uid'}, ddpMessage);
-    Apm.tracer.event(traceInfo, 'start');
-    Apm.tracer.event(traceInfo, 'error');
-    Apm.tracer.event(traceInfo, 'complete');
+    var traceInfo = Kadira.tracer.start({id: 'session-id', userId: 'uid'}, ddpMessage);
+    Kadira.tracer.event(traceInfo, 'start');
+    Kadira.tracer.event(traceInfo, 'error');
+    Kadira.tracer.event(traceInfo, 'complete');
     removeDate(traceInfo);
     var expected = {
       _id: 'session-id::the-id',
@@ -63,9 +63,9 @@ Tinytest.add(
       msg: 'sub',
       name: 'sub-name'
     };
-    var traceInfo = Apm.tracer.start({id: 'session-id'}, ddpMessage);
-    Apm.tracer.event(traceInfo, 'start', {abc: 100});
-    Apm.tracer.event(traceInfo, 'end', {abc: 200});
+    var traceInfo = Kadira.tracer.start({id: 'session-id'}, ddpMessage);
+    Kadira.tracer.event(traceInfo, 'start', {abc: 100});
+    Kadira.tracer.event(traceInfo, 'end', {abc: 200});
     removeDate(traceInfo);
     var expected = {
       _id: 'session-id::the-id',
@@ -91,7 +91,7 @@ Tinytest.add(
       msg: 'unsub',
       name: 'sub-name'
     };
-    var traceInfo = Apm.tracer.start({id: 'session-id'}, ddpMessage);
+    var traceInfo = Kadira.tracer.start({id: 'session-id'}, ddpMessage);
     test.equal(traceInfo, null);
   }
 );
@@ -104,11 +104,11 @@ Tinytest.add(
       msg: 'method',
       method: 'method-name'
     };
-    var traceInfo = Apm.tracer.start({id: 'session-id'}, ddpMessage);
-    Apm.tracer.event(traceInfo, 'start', {abc: 100});
-    var eventId = Apm.tracer.event(traceInfo, 'db');
-    Apm.tracer.eventEnd(traceInfo, eventId);
-    Apm.tracer.event(traceInfo, 'end', {abc: 200});
+    var traceInfo = Kadira.tracer.start({id: 'session-id'}, ddpMessage);
+    Kadira.tracer.event(traceInfo, 'start', {abc: 100});
+    var eventId = Kadira.tracer.event(traceInfo, 'db');
+    Kadira.tracer.eventEnd(traceInfo, eventId);
+    Kadira.tracer.event(traceInfo, 'end', {abc: 200});
     removeDate(traceInfo);
     var expected = {
       _id: 'session-id::the-id',
@@ -137,12 +137,12 @@ Tinytest.add(
       msg: 'method',
       method: 'method-name'
     };
-    var traceInfo = Apm.tracer.start({id: 'session-id'}, ddpMessage);
-    Apm.tracer.event(traceInfo, 'start', {abc: 100});
-    var eventId = Apm.tracer.event(traceInfo, 'db');
-    Apm.tracer.event(traceInfo, 'db');
-    Apm.tracer.eventEnd(traceInfo, 'invalid-eventId');
-    Apm.tracer.event(traceInfo, 'end', {abc: 200});
+    var traceInfo = Kadira.tracer.start({id: 'session-id'}, ddpMessage);
+    Kadira.tracer.event(traceInfo, 'start', {abc: 100});
+    var eventId = Kadira.tracer.event(traceInfo, 'db');
+    Kadira.tracer.event(traceInfo, 'db');
+    Kadira.tracer.eventEnd(traceInfo, 'invalid-eventId');
+    Kadira.tracer.event(traceInfo, 'end', {abc: 200});
     delete traceInfo._lastEventId;
     removeDate(traceInfo);
     var expected = {
@@ -170,12 +170,12 @@ Tinytest.add(
       msg: 'method',
       method: 'method-name'
     };
-    var traceInfo = Apm.tracer.start({id: 'session-id'}, ddpMessage);
-    Apm.tracer.event(traceInfo, 'start', {abc: 100});
-    var eventId = Apm.tracer.event(traceInfo, 'db');
-    Apm.tracer.event(traceInfo, 'db');
-    Apm.tracer.endLastEvent(traceInfo);
-    Apm.tracer.event(traceInfo, 'end', {abc: 200});
+    var traceInfo = Kadira.tracer.start({id: 'session-id'}, ddpMessage);
+    Kadira.tracer.event(traceInfo, 'start', {abc: 100});
+    var eventId = Kadira.tracer.event(traceInfo, 'db');
+    Kadira.tracer.event(traceInfo, 'db');
+    Kadira.tracer.endLastEvent(traceInfo);
+    Kadira.tracer.event(traceInfo, 'end', {abc: 200});
     delete traceInfo._lastEventId;
     removeDate(traceInfo);
     var expected = {
@@ -204,12 +204,12 @@ Tinytest.add(
       msg: 'method',
       method: 'method-name'
     };
-    var traceInfo = Apm.tracer.start({id: 'session-id'}, ddpMessage);
-    Apm.tracer.event(traceInfo, 'start', {abc: 100});
-    var eventId = Apm.tracer.event(traceInfo, 'db');
-    Apm.tracer.event(traceInfo, 'db');
-    Apm.tracer.eventEnd(traceInfo, eventId);
-    Apm.tracer.event(traceInfo, 'end', {abc: 200});
+    var traceInfo = Kadira.tracer.start({id: 'session-id'}, ddpMessage);
+    Kadira.tracer.event(traceInfo, 'start', {abc: 100});
+    var eventId = Kadira.tracer.event(traceInfo, 'db');
+    Kadira.tracer.event(traceInfo, 'db');
+    Kadira.tracer.eventEnd(traceInfo, eventId);
+    Kadira.tracer.event(traceInfo, 'end', {abc: 200});
     removeDate(traceInfo);
     var expected = {
       _id: 'session-id::the-id',
@@ -244,7 +244,7 @@ Tinytest.add(
         {type: 'complete', at: now + 2500}
       ]
     };
-    Apm.tracer.buildTrace(traceInfo);
+    Kadira.tracer.buildTrace(traceInfo);
     test.equal(traceInfo.metrics, {
       total: 2500,
       wait: 1000,
@@ -269,7 +269,7 @@ Tinytest.add(
         {type: 'error', at: now + 2500}
       ]
     };
-    Apm.tracer.buildTrace(traceInfo);
+    Kadira.tracer.buildTrace(traceInfo);
     test.equal(traceInfo.metrics, {
       total: 2500,
       wait: 1000,
@@ -293,7 +293,7 @@ Tinytest.add(
         {type: 'complete', at: now + 2500}
       ]
     };
-    Apm.tracer.buildTrace(traceInfo);
+    Kadira.tracer.buildTrace(traceInfo);
     test.equal(traceInfo.metrics, undefined);
   }
 );
@@ -311,7 +311,7 @@ Tinytest.add(
         {type: 'dbend', at: now + 2500}
       ]
     };
-    Apm.tracer.buildTrace(traceInfo);
+    Kadira.tracer.buildTrace(traceInfo);
     test.equal(traceInfo.metrics, undefined);
   }
 );
@@ -329,7 +329,7 @@ Tinytest.add(
         {type: 'complete', at: now + 2500}
       ]
     };
-    Apm.tracer.buildTrace(traceInfo);
+    Kadira.tracer.buildTrace(traceInfo);
     test.equal(traceInfo.metrics, undefined);
   }
 );

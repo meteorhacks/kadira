@@ -20,10 +20,10 @@ RegisterPublication = function (F) {
 }
 
 EnableTrackingMethods = function () {
-  // var original = Apm.models.methods.processMethod;
-  // Apm.models.methods.processMethod = function(method) {
+  // var original = Kadira.models.methods.processMethod;
+  // Kadira.models.methods.processMethod = function(method) {
   //   MethodStore.push(method);
-  //   original.call(Apm.models.methods, method);
+  //   original.call(Kadira.models.methods, method);
   // };
 }
 
@@ -51,8 +51,8 @@ GetLastMethodEvents = function (_indices) {
 
 GetPubSubMetrics = function () {
   var metricsArr = [];
-  for(var dateId in Apm.models.pubsub.metricsByMinute) {
-    metricsArr.push(Apm.models.pubsub.metricsByMinute[dateId]);
+  for(var dateId in Kadira.models.pubsub.metricsByMinute) {
+    metricsArr.push(Kadira.models.pubsub.metricsByMinute[dateId]);
   }
   return metricsArr;
 }
@@ -71,7 +71,7 @@ FindMetricsForPub = function (pubname) {
 }
 
 GetPubSubPayload = function (detailInfoNeeded) {
-  return Apm.models.pubsub.buildPayload(detailInfoNeeded).pubMetrics;
+  return Kadira.models.pubsub.buildPayload(detailInfoNeeded).pubMetrics;
 }
 
 Wait = function (time) {
@@ -97,9 +97,9 @@ GetDataSize = function (docs) {
 CleanTestData = function () {
   MethodStore = [];
   TestData.remove({});
-  Apm.models.pubsub.metricsByMinute
-  Apm.models.pubsub.metricsByMinute = {};
-  Apm.models.pubsub.subscriptions = {};
+  Kadira.models.pubsub.metricsByMinute
+  Kadira.models.pubsub.metricsByMinute = {};
+  Kadira.models.pubsub.subscriptions = {};
 }
 
 SubscribeAndWait = function(client, name, args) {

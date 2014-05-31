@@ -1,4 +1,4 @@
-Apm.connect('foo', 'bar');
+Kadira.connect('foo', 'bar');
 
 Npm.require('http').createServer(function(req, res) {
   res.writeHead(200);
@@ -41,9 +41,9 @@ Meteor.publish('tinytest-data-delayed', function() {
 })();
 
 (function () {
-  var original = Apm.models.methods.processMethod;
-  Apm.models.methods.processMethod = function(method) {
+  var original = Kadira.models.methods.processMethod;
+  Kadira.models.methods.processMethod = function(method) {
     MethodStore.push(method);
-    original.call(Apm.models.methods, method);
+    original.call(Kadira.models.methods, method);
   };
 })();
