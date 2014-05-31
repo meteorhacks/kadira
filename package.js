@@ -20,7 +20,7 @@ Package.on_use(function(api) {
     api.use('iron-router', 'client', {weak: true});
   }
 
-  api.export(['Apm']);
+  api.export(['Kadira']);
 });
 
 Package.on_test(function(api) {
@@ -94,7 +94,7 @@ function configurePackage(api) {
     'lib/models/methods.js',
     'lib/models/pubsub.js',
     'lib/models/system.js',
-    'lib/apm.js',
+    'lib/kadira.js',
     'lib/tracer.js',
     'lib/tracer_store.js',
     'lib/hijack/wrap_session.js',

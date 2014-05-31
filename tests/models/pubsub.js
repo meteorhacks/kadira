@@ -181,12 +181,12 @@ Tinytest.add(
 Tinytest.add(
   'Models - PubSub - Observer Cache - no cache',
   function (test) {
-    var original = Apm.syncedDate.getTime;
+    var original = Kadira.syncedDate.getTime;
     var dates = [
       new Date('2013 Dec 10 20:31:12').getTime(),
       new Date('2013 Dec 10 20:31:22').getTime()
     ];
-    Apm.syncedDate.getTime = function () {
+    Kadira.syncedDate.getTime = function () {
       return dates.pop();
     }
     var model = new PubsubModel();
@@ -198,19 +198,19 @@ Tinytest.add(
     ];
     test.equal(metrics[0].pubMetrics[0].pubs.postsList.totalObservers, 2);
     test.equal(metrics[0].pubMetrics[0].pubs.postsList.cachedObservers, 0);
-    Apm.syncedDate.getTime = original;
+    Kadira.syncedDate.getTime = original;
   }
 );
 
 Tinytest.add(
   'Models - PubSub - Observer Cache - single cache',
   function (test) {
-    var original = Apm.syncedDate.getTime;
+    var original = Kadira.syncedDate.getTime;
     var dates = [
       new Date('2013 Dec 10 20:31:12').getTime(),
       new Date('2013 Dec 10 20:31:22').getTime()
     ];
-    Apm.syncedDate.getTime = function () {
+    Kadira.syncedDate.getTime = function () {
       return dates.pop();
     }
     var model = new PubsubModel();
@@ -222,19 +222,19 @@ Tinytest.add(
     ];
     test.equal(metrics[0].pubMetrics[0].pubs.postsList.totalObservers, 2);
     test.equal(metrics[0].pubMetrics[0].pubs.postsList.cachedObservers, 1);
-    Apm.syncedDate.getTime = original;
+    Kadira.syncedDate.getTime = original;
   }
 );
 
 Tinytest.add(
   'Models - PubSub - Observer Cache - multiple dates',
   function (test) {
-    var original = Apm.syncedDate.getTime;
+    var original = Kadira.syncedDate.getTime;
     var dates = [
       new Date('2013 Dec 10 20:31:12').getTime(),
       new Date('2013 Dec 12 20:31:22').getTime()
     ];
-    Apm.syncedDate.getTime = function () {
+    Kadira.syncedDate.getTime = function () {
       return dates.pop();
     }
     var model = new PubsubModel();
@@ -248,7 +248,7 @@ Tinytest.add(
     test.equal(metrics[0].pubMetrics[0].pubs.postsList.cachedObservers, 0);
     test.equal(metrics[0].pubMetrics[1].pubs.postsList.totalObservers, 1);
     test.equal(metrics[0].pubMetrics[1].pubs.postsList.cachedObservers, 1);
-    Apm.syncedDate.getTime = original;
+    Kadira.syncedDate.getTime = original;
   }
 );
 

@@ -315,7 +315,7 @@ Tinytest.add(
       this.ready();
       this.ready();
     });
-    Apm.models.pubsub._trackReady = function(session, sub) {
+    Kadira.models.pubsub._trackReady = function(session, sub) {
       if(sub._name == pubId) {
         ReadyCounts++;
       }
