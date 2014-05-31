@@ -2,7 +2,7 @@ var path = Npm.require('path');
 var fs = Npm.require('fs');
 
 Package.describe({
-  "summary": "Application Performance Monitoring for Meteor"
+  "summary": "Performance Monitoring for Meteor"
 });
 
 Npm.depends({
