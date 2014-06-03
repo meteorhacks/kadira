@@ -12,14 +12,6 @@ Npm.depends({
 
 Package.on_use(function(api) {
   configurePackage(api);
-  if(isPackageExists('npm')) {
-    api.use('npm', 'server', {weak: true});
-  }
-
-  if(isPackageExists('iron-router')) {
-    api.use('iron-router', 'client', {weak: true});
-  }
-
   api.export(['Kadira']);
 });
 
@@ -49,40 +41,6 @@ Package.on_test(function(api) {
     'tests/tracer.js'
   ], 'server');
 });
-
-function isPackageExists(name) {
-  var fs = Npm.require('fs');
-  var path = Npm.require('path');
-  var meteorRootPath = meteorRoot();
-  if (meteorRootPath) {
-    var meteorPackages = fs.readFileSync(path.join(meteorRoot(), '.meteor', 'packages'), 'utf8');
-    return !!meteorPackages.match(new RegExp(name));
-  };
-}
-
-function isAppDir(filepath) {
-  try {
-    return fs.statSync(path.join(filepath, '.meteor', 'packages')).isFile();
-  } catch (e) {
-    return false;
-  }
-}
-
-function meteorRoot() {
-  var currentDir = process.cwd();
-  while (currentDir) {
-    var newDir = path.dirname(currentDir);
-    if (isAppDir(currentDir)) {
-      break;
-    } else if (newDir === currentDir) {
-      return null;
-    } else {
-      currentDir = newDir;
-    }
-  }
-
-  return currentDir;
-}
 
 function configurePackage(api) {
   api.use(['minimongo', 'livedata', 'mongo-livedata', 'ejson', 'underscore', 'http', 'email', 'random'], ['server']);
