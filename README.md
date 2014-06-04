@@ -17,7 +17,7 @@ Meteor.startup(function() {
 });
 ~~~
 
-5. Now you can deploy your application and it will send information to Kadira. Wait upto one minute and you'll see, data appeared on the Kadira Dashboard.
+Now you can deploy your application and it will send information to Kadira. Wait upto one minute and you'll see, data appeared on the Kadira Dashboard.
 
 ### Auto Connect
 
