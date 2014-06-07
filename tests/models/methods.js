@@ -26,6 +26,9 @@ Tinytest.add(
       ],
       methodRequests: []
     };
+
+    var startTime = expected.methodMetrics[0].startTime;
+    expected.methodMetrics[0].startTime = Kadira.syncedDate.syncTime(startTime);
     // TODO comparing without stringify fails
     test.equal(EJSON.stringify(payload), EJSON.stringify(expected));
     CleanTestData();
@@ -55,6 +58,7 @@ Tinytest.add(
       }
     }];
     // TODO comparing without stringify fails
+    expected[0].startTime = Kadira.syncedDate.syncTime(expected[0].startTime);
     test.equal(EJSON.stringify(payload.methodMetrics), EJSON.stringify(expected));
     CleanTestData();
   }
@@ -101,6 +105,7 @@ function CreateMethodErrored (sessionName, methodName, methodId, errorMessage, s
   method = Kadira.tracer.buildTrace(method);
   model.processMethod(method);
 }
+
 
 function Pick (doc, fields) {
   var newDoc = {};
