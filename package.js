@@ -38,7 +38,8 @@ Package.on_test(function(api) {
     'tests/models/pubsub.js',
     'tests/models/system.js',
     'tests/tracer_store.js',
-    'tests/tracer.js'
+    'tests/tracer.js',
+    'tests/check_for_oplog.js',
   ], 'server');
 });
 
@@ -53,6 +54,7 @@ function configurePackage(api) {
     'lib/models/pubsub.js',
     'lib/models/system.js',
     'lib/kadira.js',
+    'lib/check_for_oplog.js',
     'lib/tracer.js',
     'lib/tracer_store.js',
     'lib/hijack/wrap_session.js',
