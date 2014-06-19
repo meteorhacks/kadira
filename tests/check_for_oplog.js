@@ -224,6 +224,26 @@ Tinytest.add(
 );
 
 Tinytest.add(
+  'CheckForOplog - OplogCheck.miniMongoSorter - supported sort specifier',
+  function (test) {
+    var result = OplogCheck.miniMongoSorter({options: {
+      sort: {aa: 1}
+    }});
+    test.equal(result, true);
+  }
+);
+
+Tinytest.add(
+  'CheckForOplog - OplogCheck.miniMongoSorter - unsupported sort specifier',
+  function (test) {
+    var result = OplogCheck.miniMongoSorter({options: {
+      sort: {$natural: 1}
+    }});
+    test.equal(result.code, "MINIMONGO_SORTER_ERROR");
+  }
+);
+
+Tinytest.add(
   'CheckForOplog - OplogCheck.olderVersion - older version',
   function (test) {
     var driver = function() {};
