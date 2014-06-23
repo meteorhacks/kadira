@@ -49,6 +49,7 @@ function configurePackage(api) {
     'lib/retry.js',
     'lib/utils.js',
     'lib/ntp.js',
+    'lib/messenger.js',
     'lib/models/0model.js',
     'lib/models/methods.js',
     'lib/models/pubsub.js',
