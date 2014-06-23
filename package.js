@@ -27,6 +27,7 @@ Package.on_test(function(api) {
     'tests/_helpers/helpers.js',
     'tests/_helpers/init.js',
     'tests/ping.js',
+    'tests/messenger.js',
     'tests/hijack/user.js',
     'tests/hijack/email.js',
     'tests/hijack/base.js',

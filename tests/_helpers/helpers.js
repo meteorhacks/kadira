@@ -1,4 +1,5 @@
 var Future = Npm.require('fibers/future');
+var Fibers = Npm.require('fibers');
 
 GetMeteorClient = function (_url) {
   var url = _url || Meteor.absoluteUrl();
@@ -147,3 +148,8 @@ CloseClient = function(client) {
   checkClientExtence(sessionId);
   return f.wait();
 };
+
+
+WithFiber = function(cb) {
+  new Fibers(cb).run();
+}
