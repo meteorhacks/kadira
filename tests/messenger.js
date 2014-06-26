@@ -92,11 +92,17 @@ Tinytest.addAsync(
     var m = new Messenger('app', 'secret', 'http://localhost:' + port);
     m.sendRequest = function(method, path, httpOptions, callback) {
       WithFiber(function() {
+        var hostname = Npm.require('os').hostname();
         test.equal(method, 'POST');
         test.equal(path, '/messenger');
-        test.equal(httpOptions, {json: {messages: [
-          {type: 'ty', data: {aa: 10}}
-        ]}});
+        test.equal(httpOptions, {
+          json: {
+            messages: [
+              {type: 'ty', data: {aa: 10}}
+            ],
+            host: hostname
+          }
+        });
         callback(null, {statusCode: 200})
         done();
       });
