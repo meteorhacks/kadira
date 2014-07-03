@@ -7,7 +7,7 @@ Package.describe({
 
 Npm.depends({
   "debug": "0.7.4",
-  "usage": "0.4.5-bin"
+  "usage": "0.4.9"
 });
 
 Package.on_use(function(api) {
