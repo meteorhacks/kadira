@@ -11,22 +11,22 @@
 3. Run `mrt add kadira` in your project
 4. Configure your Meteor app with the `AppId` and `AppSecret` by adding the following code snippet to a `server/kadira.js` file:
 
-~~~js
+```js
 Meteor.startup(function() {
   Kadira.connect('<AppId>', '<AppSecret>');
 });
-~~~
+```
 
-Now you can deploy your application and it will send information to Kadira. Wait upto one minute and you'll see, data appeared on the Kadira Dashboard.
+Now you can deploy your application and it will send information to Kadira. Wait up to one minute and you'll see data appearing in the Kadira Dashboard.
 
 ### Auto Connect
 
-It is possible to automatically connect to Kadira using Environment Variables or using [`Meteor.settings`](http://docs.meteor.com/#meteor_settings).
+Your app can connect to Kadira using environment variables or using [`Meteor.settings`](http://docs.meteor.com/#meteor_settings).
 
-#### Using Meteor Settings
-use followng `settings.json` file with your app.
+#### Using Meteor.settings
+Use the followng `settings.json` file with your app:
 
-~~~js
+```js
 {
   ...
   "kadira": {
@@ -35,15 +35,18 @@ use followng `settings.json` file with your app.
   }
   ...
 }
-~~~
+```
+
+The run your app with `meteor --settings=settings.json`.
 
 #### Using Environment Variables
-expose following environemnt variables before when you are runnign or deploying your app.
 
-~~~
+Export the following environment variables before running or deploying your app:
+
+```
 export KADIRA_APP_ID=<appId>
 export KADIRA_APP_SECRET=<appSecret>
-~~~
+````
 
 ### More information
 
