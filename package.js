@@ -72,6 +72,7 @@ function configurePackage(api) {
     'lib/retry.js',
     'lib/ntp.js',
     'lib/client/route.js',
+    'lib/client/stacktrace.js',
     'lib/client/kadira.js',
   ], 'client')
 }
