@@ -77,5 +77,6 @@ function configurePackage(api) {
     'lib/client/kadira.js',
     'lib/client/error_reporters/zone.js',
     'lib/client/error_reporters/window_error.js',
+    'lib/client/hijack.js',
   ], 'client')
 }
