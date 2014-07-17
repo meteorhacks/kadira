@@ -70,7 +70,7 @@ function configurePackage(api) {
 
   api.add_files([
     'lib/retry.js',
-    'lib/client/ntp.js',
+    'lib/ntp.js',
     'lib/client/route.js',
     'lib/client/kadira.js',
   ], 'client')
