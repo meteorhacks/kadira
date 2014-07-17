@@ -45,6 +45,7 @@ Package.on_test(function(api) {
 
 function configurePackage(api) {
   api.use(['minimongo', 'livedata', 'mongo-livedata', 'ejson', 'underscore', 'http', 'email', 'random'], ['server']);
+  api.use(['underscore', 'random', 'jquery'], ['client']);
   api.add_files([
     'lib/retry.js',
     'lib/utils.js',
@@ -67,5 +68,10 @@ function configurePackage(api) {
     'lib/auto_connect.js'
   ], 'server');
 
-  api.add_files(['lib/client/route.js'], 'client')
+  api.add_files([
+    'lib/retry.js',
+    'lib/client/ntp.js',
+    'lib/client/route.js',
+    'lib/client/kadira.js',
+  ], 'client')
 }
