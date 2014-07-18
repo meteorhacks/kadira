@@ -23,6 +23,7 @@ Package.on_test(function(api) {
   ], 'server');
 
   api.add_files([
+    'tests/ntp.js',
     'tests/_helpers/globals.js',
     'tests/_helpers/helpers.js',
     'tests/_helpers/init.js',
