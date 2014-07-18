@@ -37,6 +37,7 @@ Package.on_test(function(api) {
     'tests/models/methods.js',
     'tests/models/pubsub.js',
     'tests/models/system.js',
+    'tests/models/errors.js',
     'tests/tracer_store.js',
     'tests/tracer.js',
     'tests/check_for_oplog.js',
