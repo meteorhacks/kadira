@@ -55,6 +55,7 @@ function configurePackage(api) {
     'lib/models/methods.js',
     'lib/models/pubsub.js',
     'lib/models/system.js',
+    'lib/models/errors.js',
     'lib/kadira.js',
     'lib/check_for_oplog.js',
     'lib/tracer.js',
