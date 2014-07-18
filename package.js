@@ -46,6 +46,7 @@ Package.on_test(function(api) {
 function configurePackage(api) {
   api.use(['minimongo', 'livedata', 'mongo-livedata', 'ejson', 'underscore', 'http', 'email', 'random'], ['server']);
   api.use(['underscore', 'random', 'jquery', 'localstorage'], ['client']);
+  api.use('zones');
   api.add_files([
     'lib/retry.js',
     'lib/utils.js',
@@ -71,7 +72,8 @@ function configurePackage(api) {
   api.add_files([
     'lib/retry.js',
     'lib/ntp.js',
-    'lib/client/route.js',
+    'lib/client/stacktrace.js',
     'lib/client/kadira.js',
+    'lib/client/zone-reporter.js',
   ], 'client')
 }
