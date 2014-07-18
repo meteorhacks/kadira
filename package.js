@@ -74,6 +74,7 @@ function configurePackage(api) {
     'lib/ntp.js',
     'lib/client/stacktrace.js',
     'lib/client/kadira.js',
-    'lib/client/zone-reporter.js',
+    'lib/client/error_reporters/zone.js',
+    'lib/client/error_reporters/window_error.js',
   ], 'client')
 }
