@@ -72,6 +72,7 @@ function configurePackage(api) {
   api.add_files([
     'lib/retry.js',
     'lib/ntp.js',
+    'lib/client/utils.js',
     'lib/client/stacktrace.js',
     'lib/client/kadira.js',
     'lib/client/error_reporters/zone.js',
