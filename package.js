@@ -68,6 +68,7 @@ function configurePackage(api) {
     'lib/hijack/http.js',
     'lib/hijack/email.js',
     'lib/hijack/async.js',
+    'lib/hijack/error.js',
     'lib/auto_connect.js'
   ], 'server');
 
