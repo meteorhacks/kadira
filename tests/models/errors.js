@@ -14,26 +14,22 @@ Tinytest.add(
   function (test) {
     var model = new ErrorModel('_appId');
     var error = {name: '_name', message: '_message', stack: '_stack'};
-    model.trackError(error, '_source');
+    var trace = {at: '_at', type: '_type', name: '_name', events: '_events'};
+    model.trackError(error, trace);
     var metrics = model.buildPayload().errors;
     test.isTrue(Array.isArray(metrics));
     test.equal(metrics.length, 1);
     var payload = metrics[0];
     var expected = {
       appId : '_appId',
-      name : '_name: _message',
-      source : '_source',
-      // startTime : now,
+      name : '_message',
+      source : '_type:_name',
+      startTime : '_at',
       type : 'server',
-      stack : [{/*at: now, */events: [], stack: '_stack'}],
+      trace: trace,
+      stack : [{at: '_at', events: '_events', stack: '_stack'}],
       count: 1,
     };
-    test.isTrue(payload.startTime);
-    test.equal(typeof payload.startTime, 'number');
-    delete payload.startTime;
-    test.isTrue(payload.stack[0].at);
-    test.equal(typeof payload.stack[0].at, 'number');
-    delete payload.stack[0].at;
     test.equal(payload, expected);
   }
 );
@@ -43,28 +39,24 @@ Tinytest.add(
   function (test) {
     var model = new ErrorModel('_appId');
     var error = {name: '_name', message: '_message', stack: '_stack'};
-    model.trackError(error, '_source');
-    model.trackError(error, '_source');
-    model.trackError(error, '_source');
+    var trace = {at: '_at', type: '_type', name: '_name', events: '_events'};
+    model.trackError(error, trace);
+    model.trackError(error, trace);
+    model.trackError(error, trace);
     var metrics = model.buildPayload().errors;
     test.isTrue(Array.isArray(metrics));
     test.equal(metrics.length, 1);
     var payload = metrics[0];
     var expected = {
       appId : '_appId',
-      name : '_name: _message',
-      source : '_source',
-      // startTime : now,
+      name : '_message',
+      source : '_type:_name',
+      startTime : '_at',
       type : 'server',
-      stack : [{/*at: now, */events: [], stack: '_stack'}],
+      trace: trace,
+      stack : [{at: '_at', events: '_events', stack: '_stack'}],
       count: 3,
     };
-    test.isTrue(payload.startTime);
-    test.equal(typeof payload.startTime, 'number');
-    delete payload.startTime;
-    test.isTrue(payload.stack[0].at);
-    test.equal(typeof payload.stack[0].at, 'number');
-    delete payload.stack[0].at;
     test.equal(payload, expected);
   }
 );
@@ -73,30 +65,29 @@ Tinytest.add(
   'Models - Errors - different errors',
   function (test) {
     var model = new ErrorModel('_appId');
-    var error1 = {name: '_name1', message: '_message1', stack: '_stack1'};
-    var error2 = {name: '_name2', message: '_message2', stack: '_stack2'};
-    model.trackError(error1, '_source');
-    model.trackError(error2, '_source');
+    [1, 2, 3].forEach(function(n) {
+      var error = {name: '_name'+n, message: '_message'+n, stack: '_stack'+n};
+      var trace = {at: '_at'+n, type: '_type'+n, name: '_name'+n, events: '_events'+n};
+      model.trackError(error, trace);
+    });
+
     var metrics = model.buildPayload().errors;
     test.isTrue(Array.isArray(metrics));
-    test.equal(metrics.length, 2);
-    [1, 2].forEach(function (n) {
+    test.equal(metrics.length, 3);
+
+    [1, 2, 3].forEach(function(n) {
       var payload = metrics[n-1];
+      var trace = {at: '_at'+n, type: '_type'+n, name: '_name'+n, events: '_events'+n};
       var expected = {
         appId : '_appId',
-        name : '_name'+n+': _message'+n,
-        source : '_source',
-        // startTime : now,
+        name : '_message'+n,
+        source : '_type'+n+':_name'+n,
+        startTime : '_at'+n,
         type : 'server',
-        stack : [{/*at: now, */events: [], stack: '_stack'+n}],
+        trace: trace,
+        stack : [{at: '_at'+n, events: '_events'+n, stack: '_stack'+n}],
         count: 1,
       };
-      test.isTrue(payload.startTime);
-      test.equal(typeof payload.startTime, 'number');
-      delete payload.startTime;
-      test.isTrue(payload.stack[0].at);
-      test.equal(typeof payload.stack[0].at, 'number');
-      delete payload.stack[0].at;
       test.equal(payload, expected);
     });
   }
