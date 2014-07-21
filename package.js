@@ -37,6 +37,7 @@ Package.on_test(function(api) {
     'tests/models/methods.js',
     'tests/models/pubsub.js',
     'tests/models/system.js',
+    'tests/models/errors.js',
     'tests/tracer_store.js',
     'tests/tracer.js',
     'tests/check_for_oplog.js',
@@ -55,6 +56,7 @@ function configurePackage(api) {
     'lib/models/methods.js',
     'lib/models/pubsub.js',
     'lib/models/system.js',
+    'lib/models/errors.js',
     'lib/kadira.js',
     'lib/check_for_oplog.js',
     'lib/tracer.js',
@@ -66,6 +68,7 @@ function configurePackage(api) {
     'lib/hijack/http.js',
     'lib/hijack/email.js',
     'lib/hijack/async.js',
+    'lib/hijack/error.js',
     'lib/auto_connect.js'
   ], 'server');
 
