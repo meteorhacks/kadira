@@ -14,7 +14,7 @@ Tinytest.add(
   function (test) {
     var model = new ErrorModel('_appId');
     var error = {name: '_name', message: '_message', stack: '_stack'};
-    var trace = {at: '_at', type: '_type', name: '_name', events: '_events'};
+    var trace = {type: '_type', name: '_name'};
     model.trackError(error, trace);
     var metrics = model.buildPayload().errors;
     test.isTrue(Array.isArray(metrics));
@@ -24,12 +24,14 @@ Tinytest.add(
       appId: '_appId',
       name: '_message',
       source: '_type:_name',
-      startTime: '_at',
+      // startTime: Date.now(),
       type: 'server',
       trace: trace,
       stacks: [{stack: '_stack'}],
       count: 1,
     };
+    test.equal(typeof payload.startTime, 'number');
+    delete payload.startTime;
     test.equal(payload, expected);
   }
 );
@@ -39,7 +41,7 @@ Tinytest.add(
   function (test) {
     var model = new ErrorModel('_appId');
     var error = {name: '_name', message: '_message', stack: '_stack'};
-    var trace = {at: '_at', type: '_type', name: '_name', events: '_events'};
+    var trace = {type: '_type', name: '_name'};
     model.trackError(error, trace);
     model.trackError(error, trace);
     model.trackError(error, trace);
@@ -51,12 +53,14 @@ Tinytest.add(
       appId: '_appId',
       name: '_message',
       source: '_type:_name',
-      startTime: '_at',
+      // startTime: Date.now(),
       type: 'server',
       trace: trace,
       stacks: [{stack: '_stack'}],
       count: 3,
     };
+    test.equal(typeof payload.startTime, 'number');
+    delete payload.startTime;
     test.equal(payload, expected);
   }
 );
@@ -67,7 +71,7 @@ Tinytest.add(
     var model = new ErrorModel('_appId');
     [1, 2, 3].forEach(function(n) {
       var error = {name: '_name'+n, message: '_message'+n, stack: '_stack'+n};
-      var trace = {at: '_at'+n, type: '_type'+n, name: '_name'+n, events: '_events'+n};
+      var trace = {type: '_type'+n, name: '_name'+n};
       model.trackError(error, trace);
     });
 
@@ -77,17 +81,19 @@ Tinytest.add(
 
     [1, 2, 3].forEach(function(n) {
       var payload = metrics[n-1];
-      var trace = {at: '_at'+n, type: '_type'+n, name: '_name'+n, events: '_events'+n};
+      var trace = {type: '_type'+n, name: '_name'+n};
       var expected = {
         appId: '_appId',
         name: '_message'+n,
         source: '_type'+n+':_name'+n,
-        startTime: '_at'+n,
+        // startTime: Date.now(),
         type: 'server',
         trace: trace,
         stacks: [{stack: '_stack'+n}],
         count: 1,
       };
+      test.equal(typeof payload.startTime, 'number');
+      delete payload.startTime;
       test.equal(payload, expected);
     });
   }
