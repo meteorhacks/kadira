@@ -21,13 +21,13 @@ Tinytest.add(
     test.equal(metrics.length, 1);
     var payload = metrics[0];
     var expected = {
-      appId : '_appId',
-      name : '_message',
-      source : '_type:_name',
-      startTime : '_at',
-      type : 'server',
+      appId: '_appId',
+      name: '_message',
+      source: '_type:_name',
+      startTime: '_at',
+      type: 'server',
       trace: trace,
-      stack : [{at: '_at', events: '_events', stack: '_stack'}],
+      stacks: [{stack: '_stack'}],
       count: 1,
     };
     test.equal(payload, expected);
@@ -48,13 +48,13 @@ Tinytest.add(
     test.equal(metrics.length, 1);
     var payload = metrics[0];
     var expected = {
-      appId : '_appId',
-      name : '_message',
-      source : '_type:_name',
-      startTime : '_at',
-      type : 'server',
+      appId: '_appId',
+      name: '_message',
+      source: '_type:_name',
+      startTime: '_at',
+      type: 'server',
       trace: trace,
-      stack : [{at: '_at', events: '_events', stack: '_stack'}],
+      stacks: [{stack: '_stack'}],
       count: 3,
     };
     test.equal(payload, expected);
@@ -79,13 +79,13 @@ Tinytest.add(
       var payload = metrics[n-1];
       var trace = {at: '_at'+n, type: '_type'+n, name: '_name'+n, events: '_events'+n};
       var expected = {
-        appId : '_appId',
-        name : '_message'+n,
-        source : '_type'+n+':_name'+n,
-        startTime : '_at'+n,
-        type : 'server',
+        appId: '_appId',
+        name: '_message'+n,
+        source: '_type'+n+':_name'+n,
+        startTime: '_at'+n,
+        type: 'server',
         trace: trace,
-        stack : [{at: '_at'+n, events: '_events'+n, stack: '_stack'+n}],
+        stacks: [{stack: '_stack'+n}],
         count: 1,
       };
       test.equal(payload, expected);
