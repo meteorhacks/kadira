@@ -38,3 +38,28 @@ Tinytest.add(
     }
   }
 );
+
+Tinytest.add(
+  'Client Side - Error Manager - Utils - getNormalizedStacktrace()',
+  function (test) {
+    test.equal(typeof getNormalizedStacktrace, 'function');
+    var expected = [
+      '    at foo/bar.js:12:34',
+      '    at funName (foo/bar.js:12:34)',
+    ].join('\n');
+    var original_printStackTrace = printStackTrace;
+    printStackTrace = mock_printStackTrace;
+    test.equal(expected, getNormalizedStacktrace());
+    printStackTrace = original_printStackTrace;
+
+    function mock_printStackTrace() {
+      var o = getCurrentOrigin();
+      return [
+        '{anonymous}()@'+o+'/packages/zones/assets/bar.js:12:34',
+        'funName@'+o+'/packages/zones/assets/bar.js:12:34',
+        '{anonymous}()@'+o+'/foo/bar.js:12:34',
+        'funName@'+o+'/foo/bar.js:12:34'
+      ];
+    }
+  }
+);
