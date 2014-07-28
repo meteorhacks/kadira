@@ -2,29 +2,29 @@
 Tinytest.add(
   'Client Side - Error Manager - Utils - stackFramesFilter()',
   function (test) {
-    test.equal(typeof stackFramesFilter, 'function');
-    test.equal(stackFramesFilter('/packages/zones/assets/zone.js'), false);
-    test.equal(stackFramesFilter('/packages/foo/bar.js'), true);
+    test.equal('function', typeof stackFramesFilter);
+    test.equal(false, stackFramesFilter('/packages/zones/assets/zone.js'));
+    test.equal(true, stackFramesFilter('/packages/foo/bar.js'));
   }
 );
 
 Tinytest.add(
   'Client Side - Error Manager - Utils - getCurrentOrigin()',
   function (test) {
-    test.equal(typeof getCurrentOrigin, 'function');
+    test.equal('function', typeof getCurrentOrigin);
     // Simple regex to catch origin part of the url
     // (may not work for all cases but sufficient for tests)
     var regex = /^https?:\/\/[a-zA-Z0-9\.]+:?[0-9]*$/;
     var origin = getCurrentOrigin();
-    test.equal(typeof origin, 'string');
-    test.equal(!!origin.match(regex), true);
+    test.equal('string', typeof origin);
+    test.equal(true, !!origin.match(regex));
   }
 );
 
 Tinytest.add(
   'Client Side - Error Manager - Utils - formatTraceLine()',
   function (test) {
-    test.equal(typeof formatTraceLine, 'function');
+    test.equal('function', typeof formatTraceLine);
     var lines = [
       '{anonymous}()@'+getCurrentOrigin()+'/foo/bar.js:12:34',
       'funName@'+getCurrentOrigin()+'/foo/bar.js:12:34'
@@ -43,7 +43,7 @@ Tinytest.add(
   'Client Side - Error Manager - Utils - getNormalizedStacktrace()',
   function (test) {
     hijackPrintStackTrace(mock_printStackTrace);
-    test.equal(typeof getNormalizedStacktrace, 'function');
+    test.equal('function', typeof getNormalizedStacktrace);
     var expected = [
       '    at foo/bar.js:12:34',
       '    at funName (foo/bar.js:12:34)',
@@ -56,7 +56,7 @@ Tinytest.add(
 Tinytest.add(
   'Client Side - Error Manager - Utils - getErrorStack()',
   function (test) {
-    test.equal(typeof getErrorStack, 'function');
+    test.equal('function', typeof getErrorStack);
   }
 );
 
