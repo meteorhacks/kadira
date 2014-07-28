@@ -44,7 +44,8 @@ Package.on_test(function(api) {
   ], 'server');
 
   api.add_files([
-    'tests/client/utils.js'
+    'tests/client/utils.js',
+    'tests/client/error_reporters/window_error.js'
   ], 'client');
 });
 
