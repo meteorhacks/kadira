@@ -217,6 +217,32 @@ Tinytest.add(
   }
 );
 
+Tinytest.add(
+  'Client Side - Error Manager - Utils - getBrowserInfo() for guest',
+  function (test) {
+    test.equal(typeof getBrowserInfo, 'function');
+    var info = getBrowserInfo();
+    test.equal('string', typeof info.browser);
+    test.equal('string', typeof info.url);
+    test.equal(undefined, info.userId);
+  }
+);
+
+Tinytest.add(
+  'Client Side - Error Manager - Utils - getBrowserInfo() for users',
+  function (test) {
+    hijackMeteorUserId(mock_MeteorUserId);
+    test.equal(typeof getBrowserInfo, 'function');
+    var info = getBrowserInfo();
+    test.equal('string', typeof info.browser);
+    test.equal('string', typeof info.url);
+    test.equal('string', typeof info.userId);
+    restoreMeteorUserId();
+  }
+);
+
+//--------------------------------------------------------------------------\\
+
 var original_printStackTrace = printStackTrace;
 
 function hijackPrintStackTrace(mock) {
@@ -235,4 +261,18 @@ function mock_printStackTrace() {
     '{anonymous}()@'+o+'/foo/bar.js:12:34',
     'funName@'+o+'/foo/bar.js:12:34'
   ];
+}
+
+var original_MeteorUserId = Meteor.userId;
+
+function hijackMeteorUserId(mock) {
+  Meteor.userId = mock;
+}
+
+function restoreMeteorUserId() {
+  Meteor.userId = original_MeteorUserId;
+}
+
+function mock_MeteorUserId() {
+  return Random.id();
 }
