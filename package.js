@@ -20,7 +20,7 @@ Package.on_test(function(api) {
   api.use([
     'tinytest',
     'test-helpers'
-  ], 'server');
+  ], ['client', 'server']);
 
   api.add_files([
     'tests/_helpers/globals.js',
@@ -42,6 +42,12 @@ Package.on_test(function(api) {
     'tests/tracer.js',
     'tests/check_for_oplog.js',
   ], 'server');
+
+  api.add_files([
+    'tests/client/utils.js',
+    'tests/client/error_reporters/window_error.js',
+    'tests/client/error_reporters/zone.js'
+  ], 'client');
 });
 
 function configurePackage(api) {

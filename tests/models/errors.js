@@ -10,7 +10,31 @@ Tinytest.add(
 );
 
 Tinytest.add(
-  'Models - Errors - simple',
+  'Models - Errors - add errors to model',
+  function (test) {
+    var model = new ErrorModel('_appId');
+    var error = {name: '_name', message: '_message', stack: '_stack'};
+    var trace = {type: '_type', name: '_name'};
+    model.trackError(error, trace);
+    var storedMetric = model.errors['_type:_message'];
+    var expected = {
+      appId: '_appId',
+      name: '_message',
+      source: '_type:_name',
+      // startTime: Date.now(),
+      type: 'server',
+      trace: trace,
+      stacks: [{stack: '_stack'}],
+      count: 1,
+    };
+    test.equal(typeof storedMetric.startTime, 'number');
+    delete storedMetric.startTime;
+    test.equal(storedMetric, expected);
+  }
+);
+
+Tinytest.add(
+  'Models - Errors - buildPayload',
   function (test) {
     var model = new ErrorModel('_appId');
     var error = {name: '_name', message: '_message', stack: '_stack'};
@@ -37,7 +61,20 @@ Tinytest.add(
 );
 
 Tinytest.add(
-  'Models - Errors - same error',
+  'Models - Errors - clear data after buildPayload',
+  function (test) {
+    var model = new ErrorModel('_appId');
+    var error = {name: '_name', message: '_message', stack: '_stack'};
+    var trace = {type: '_type', name: '_name'};
+    model.trackError(error, trace);
+    test.equal(true, !!model.errors['_type:_message']);
+    var metrics = model.buildPayload().errors;
+    test.equal(false, !!model.errors['_type:_message']);
+  }
+);
+
+Tinytest.add(
+  'Models - Errors - buildPayload with same error message',
   function (test) {
     var model = new ErrorModel('_appId');
     var error = {name: '_name', message: '_message', stack: '_stack'};
@@ -66,7 +103,7 @@ Tinytest.add(
 );
 
 Tinytest.add(
-  'Models - Errors - different errors',
+  'Models - Errors - buildPayload with different error messages',
   function (test) {
     var model = new ErrorModel('_appId');
     [1, 2, 3].forEach(function(n) {
