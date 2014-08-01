@@ -97,6 +97,7 @@ Tinytest.add(
       stack: stack,
       owner: '_owner',
       ownerArgs: [],
+      info: [],
       events: undefined,
       zoneId: 'foo'
     };
@@ -137,6 +138,7 @@ Tinytest.add(
       stack: stack,
       owner: '_owner',
       ownerArgs: ['foo', 'bar'],
+      info: [],
       events: [{type: '_type', args: ['bar', 'baz']}],
       zoneId: 'foo'
     };
@@ -193,6 +195,7 @@ Tinytest.add(
       stack: stack,
       owner: '_owner',
       ownerArgs: ['foo', 'bar'],
+      info: [],
       events: [{type: '_type', args: ['bar', 'baz']}],
       zoneId: 'foo'
     };
@@ -203,6 +206,7 @@ Tinytest.add(
       stack: stack,
       owner: '_owner2',
       ownerArgs: ['foo2', 'bar2'],
+      info: [],
       events: [{type: '_type2', args: ['bar2', 'baz2']}],
       zoneId: 'bar'
     };
