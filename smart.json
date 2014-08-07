@@ -3,6 +3,6 @@
   "description": "Performance Monitoring for Meteor",
   "homepage": "https://kadira.io",
   "author": "MeteorHacks <hello@meteorhacks.com>",
-  "version": "2.4.11",
+  "version": "2.4.12",
   "git": "https://github.com/meteorhacks/kadira.git"
 }
