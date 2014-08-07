@@ -1,13 +1,51 @@
 
-Tinytest.addAsync(
-  'Client Side - Error Manager - Reporters - meteor._debug - default',
-  function (test, next) {
+Tinytest.add(
+  'Client Side - Error Manager - Reporters - meteor._debug - with zone',
+  function (test) {
     hijackPrintStackTrace(mock_printStackTrace);
     hijackKadiraSendErrors(mock_KadiraSendErrors);
     test.equal(typeof Meteor._debug, 'function');
-    Meteor._debug('_error', '_stack');
+    var errorSent = false;
+    var errorThrown = false;
+
+    try {
+      Meteor._debug('_error', '_stack');
+    } catch(e) {
+      errorThrown = true;
+    };
+
+    test.equal(errorSent, false);
+    test.equal(errorThrown, true);
+    restoreKadiraSendErrors();
+    restorePrintStackTrace();
 
     function mock_KadiraSendErrors(data) {
+      errorSent = true;
+    }
+  }
+);
+
+Tinytest.add(
+  'Client Side - Error Manager - Reporters - meteor._debug - without zone',
+  function (test) {
+    hijackPrintStackTrace(mock_printStackTrace);
+    hijackKadiraSendErrors(mock_KadiraSendErrors);
+    test.equal(typeof Meteor._debug, 'function');
+    var errorSent = false;
+    var originalZone = window.zone;
+    window.zone = undefined;
+
+    try {
+      Meteor._debug('_error', '_stack');
+    } catch(e) {};
+
+    window.zone = originalZone;
+    test.equal(errorSent, true);
+    restoreKadiraSendErrors();
+    restorePrintStackTrace();
+
+    function mock_KadiraSendErrors(data) {
+      errorSent = true;
       test.equal(true, Array.isArray(data));
       test.equal(1, data.length);
       var error = data[0];
@@ -18,9 +56,6 @@ Tinytest.addAsync(
       test.equal(true, Array.isArray(error.stacks));
       test.equal('number', typeof error.startTime);
       test.equal('meteor._debug', error.type);
-      restoreKadiraSendErrors();
-      restorePrintStackTrace();
-      next();
     }
   }
 );
