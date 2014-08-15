@@ -5,8 +5,9 @@ Tinytest.addAsync(
     hijackPrintStackTrace(mock_printStackTrace);
     hijackKadiraSendErrors(mock_KadiraSendErrors);
     test.equal(typeof window.onerror, 'function');
+    var message = Meteor.uuid();
     setTimeout(function (argument) {
-      throw new Error('test-error');
+      throw new Error(message);
     }, 0);
 
     function mock_KadiraSendErrors(data) {
@@ -15,7 +16,7 @@ Tinytest.addAsync(
       var error = data[0];
       test.equal('string', typeof error.appId);
       test.equal('object', typeof error.info);
-      test.equal('test-error', error.name);
+      test.equal(message, error.name);
       test.equal('client', error.source);
       test.equal(true, Array.isArray(error.stacks));
       test.equal('number', typeof error.startTime);

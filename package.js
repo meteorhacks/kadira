@@ -22,6 +22,8 @@ Package.on_test(function(api) {
     'test-helpers'
   ], ['client', 'server']);
 
+  // "tests/zones.js" should be last because it messes up kadira instrumenting
+  // by calling Kadira.connect() multiple times
   api.add_files([
     'tests/_helpers/globals.js',
     'tests/_helpers/helpers.js',
@@ -41,10 +43,12 @@ Package.on_test(function(api) {
     'tests/tracer_store.js',
     'tests/tracer.js',
     'tests/check_for_oplog.js',
+    'tests/zones.js', // !important
   ], 'server');
 
   api.add_files([
     'tests/client/utils.js',
+    'tests/client/error-manager.js',
     'tests/client/error_reporters/window_error.js',
     'tests/client/error_reporters/zone.js',
     'tests/client/error_reporters/meteor_debug.js'
