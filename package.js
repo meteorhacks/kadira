@@ -48,6 +48,7 @@ Package.on_test(function(api) {
 
   api.add_files([
     'tests/client/utils.js',
+    'tests/client/error-manager.js',
     'tests/client/error_reporters/window_error.js',
     'tests/client/error_reporters/zone.js',
     'tests/client/error_reporters/meteor_debug.js'

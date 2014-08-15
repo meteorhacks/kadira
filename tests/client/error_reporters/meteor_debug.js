@@ -7,9 +7,10 @@ Tinytest.add(
     test.equal(typeof Meteor._debug, 'function');
     var errorSent = false;
     var errorThrown = false;
+    var message = Meteor.uuid();
 
     try {
-      Meteor._debug('_error', '_stack');
+      Meteor._debug(message, '_stack');
     } catch(e) {
       errorThrown = true;
     };
@@ -33,10 +34,11 @@ Tinytest.add(
     test.equal(typeof Meteor._debug, 'function');
     var errorSent = false;
     var originalZone = window.zone;
+    var message = Meteor.uuid();
     window.zone = undefined;
 
     try {
-      Meteor._debug('_error', '_stack');
+      Meteor._debug(message, '_stack');
     } catch(e) {};
 
     window.zone = originalZone;
@@ -51,7 +53,7 @@ Tinytest.add(
       var error = data[0];
       test.equal('string', typeof error.appId);
       test.equal('object', typeof error.info);
-      test.equal('_error', error.name);
+      test.equal(message, error.name);
       test.equal('client', error.source);
       test.equal(true, Array.isArray(error.stacks));
       test.equal('number', typeof error.startTime);
