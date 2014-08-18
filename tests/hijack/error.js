@@ -9,11 +9,11 @@ Tinytest.add(
     var expected = {
       appId: "foo",
       name: "_debug",
-      source: "server-missed:_debug",
+      source: "server-misc:_debug",
       // startTime: 1408098721327,
       type: "server",
       trace: {
-        type: "server-missed",
+        type: "server-misc",
         name: "_debug",
         errored: true,
         // at: 1408098721326,
