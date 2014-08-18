@@ -36,6 +36,7 @@ Package.on_test(function(api) {
     'tests/hijack/http.js',
     'tests/hijack/db.js',
     'tests/hijack/subscriptions.js',
+    'tests/hijack/error.js',
     'tests/models/methods.js',
     'tests/models/pubsub.js',
     'tests/models/system.js',
