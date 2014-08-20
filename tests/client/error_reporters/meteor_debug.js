@@ -9,11 +9,10 @@ Tinytest.add(
     var errorThrown = false;
     var message = Meteor.uuid();
 
-    try {
-      Meteor._debug(message, '_stack');
-    } catch(e) {
+    zone.onError = function(e) {
       errorThrown = true;
     };
+    Meteor._debug(message, '_stack');
 
     test.equal(errorSent, false);
     test.equal(errorThrown, true);
