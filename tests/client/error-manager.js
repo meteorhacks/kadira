@@ -9,6 +9,74 @@ Tinytest.add(
 );
 
 Tinytest.add(
+  'Client Side - Error Manager - do not send immediately',
+  function (test) {
+    var originalSend = Kadira.send;
+    var errors = [{foo: 'bar'}];
+    var errorsSent = false;
+    Kadira.syncedDate.synced = false;
+    Kadira.send = function (payload) {
+      errorsSent = true;
+    };
+    Kadira.sendErrors(errors);
+    test.isFalse(errorsSent);
+    Kadira.send = originalSend;
+  }
+);
+
+Tinytest.addAsync(
+  'Client Side - Error Manager - send anyways after 2 seconds',
+  function (test, next) {
+    var originalSend = Kadira.send;
+    var errors = [{foo: 'bar'}];
+    var errorsSent = false;
+    Kadira.syncedDate.synced = false;
+    Kadira.send = function (payload) {
+      errorsSent = true;
+    };
+    Kadira.sendErrors(errors);
+    test.isFalse(errorsSent);
+    setTimeout(function () {
+      test.isTrue(errorsSent);
+      Kadira.send = originalSend;
+      next();
+    }, 1000*3);
+  }
+);
+
+Tinytest.add(
+  'Client Side - Error Manager - send immediately if forced',
+  function (test) {
+    var originalSend = Kadira.send;
+    var errors = [{foo: 'bar'}];
+    var errorsSent = false;
+    Kadira.syncedDate.synced = false;
+    Kadira.send = function (payload) {
+      errorsSent = true;
+    };
+    Kadira.sendErrors(errors, true);
+    test.isTrue(errorsSent);
+    Kadira.send = originalSend;
+  }
+);
+
+Tinytest.add(
+  'Client Side - Error Manager - send immediately if ntp sync is done',
+  function (test) {
+    var originalSend = Kadira.send;
+    var errors = [{foo: 'bar'}];
+    var errorsSent = false;
+    Kadira.syncedDate.synced = true;
+    Kadira.send = function (payload) {
+      errorsSent = true;
+    };
+    Kadira.sendErrors(errors);
+    test.isTrue(errorsSent);
+    Kadira.send = originalSend;
+  }
+);
+
+Tinytest.add(
   'Client Side - Error Manager - automatically send first time',
   function (test) {
     Kadira.errors = {};
