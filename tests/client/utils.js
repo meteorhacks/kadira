@@ -60,24 +60,26 @@ Tinytest.add(
   }
 );
 
-Tinytest.add(
+Tinytest.addAsync(
   'Client Side - Error Manager - Utils - getErrorStack() errored stack',
-  function (test) {
+  function (test, done) {
     hijackPrintStackTrace(mock_printStackTrace);
     var zone = {
       erroredStack: {_e: new Error()}
     };
-    var trace = getErrorStack(zone);
-    test.equal(1, trace.length);
-    test.equal('number', typeof trace[0].at);
-    test.equal('string', typeof trace[0].stack);
-    restorePrintStackTrace();
+    getErrorStack(zone, function(trace) {
+      test.equal(1, trace.length);
+      test.equal('number', typeof trace[0].at);
+      test.equal('string', typeof trace[0].stack);
+      restorePrintStackTrace();
+      done();
+    });
   }
 );
 
-Tinytest.add(
+Tinytest.addAsync(
   'Client Side - Error Manager - Utils - getErrorStack() without events',
-  function (test) {
+  function (test, done) {
     hijackPrintStackTrace(mock_printStackTrace);
     var stack = '    at foo/bar.js:12:34\n    at funName (foo/bar.js:12:34)';
 
@@ -103,18 +105,20 @@ Tinytest.add(
       zoneId: 'foo'
     };
 
-    var trace = getErrorStack(zone);
-    test.equal(2, trace.length);
-    test.equal('number', typeof trace[0].at);
-    test.equal(stack, trace[0].stack);
-    test.equal(expected, trace[1]);
-    restorePrintStackTrace();
+    getErrorStack(zone, function(trace) {
+      test.equal(2, trace.length);
+      test.equal('number', typeof trace[0].at);
+      test.equal(stack, trace[0].stack);
+      test.equal(expected, trace[1]);
+      restorePrintStackTrace();
+      done();
+    });
   }
 );
 
-Tinytest.add(
+Tinytest.addAsync(
   'Client Side - Error Manager - Utils - getErrorStack() with stack',
-  function (test) {
+  function (test, done) {
     hijackPrintStackTrace(mock_printStackTrace);
     var stack = '    at foo/bar.js:12:34\n    at funName (foo/bar.js:12:34)';
 
@@ -145,18 +149,20 @@ Tinytest.add(
       zoneId: 'foo'
     };
 
-    var trace = getErrorStack(zone);
-    test.equal(2, trace.length);
-    test.equal('number', typeof trace[0].at);
-    test.equal(stack, trace[0].stack);
-    test.equal(expected, trace[1]);
-    restorePrintStackTrace();
+    getErrorStack(zone, function(trace) {
+      test.equal(2, trace.length);
+      test.equal('number', typeof trace[0].at);
+      test.equal(stack, trace[0].stack);
+      test.equal(expected, trace[1]);
+      restorePrintStackTrace();
+      done();
+    });
   }
 );
 
-Tinytest.add(
+Tinytest.addAsync(
   'Client Side - Error Manager - Utils - getErrorStack() with parent zone',
-  function (test) {
+  function (test, done) {
     hijackPrintStackTrace(mock_printStackTrace);
     var stack = '    at foo/bar.js:12:34\n    at funName (foo/bar.js:12:34)';
 
@@ -215,13 +221,15 @@ Tinytest.add(
       zoneId: 'bar'
     };
 
-    var trace = getErrorStack(zone);
-    test.equal(3, trace.length);
-    test.equal('number', typeof trace[0].at);
-    test.equal(stack, trace[0].stack);
-    test.equal(expected, trace[1]);
-    test.equal(expected2, trace[2]);
-    restorePrintStackTrace();
+    getErrorStack(zone, function(trace) {
+      test.equal(3, trace.length);
+      test.equal('number', typeof trace[0].at);
+      test.equal(stack, trace[0].stack);
+      test.equal(expected, trace[1]);
+      test.equal(expected2, trace[2]);
+      restorePrintStackTrace();
+      done();
+    });
   }
 );
 
