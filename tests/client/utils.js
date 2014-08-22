@@ -89,6 +89,7 @@ Tinytest.add(
       currentStack: {_e: new Error()},
       erroredStack: {_e: new Error()},
       // eventMap: {}
+      depth: 20
     };
 
     var expected = {
@@ -129,7 +130,8 @@ Tinytest.add(
       owner: '_owner',
       currentStack: {_e: new Error()},
       erroredStack: {_e: new Error()},
-      eventMap: eventMap
+      eventMap: eventMap,
+      depth: 20
     };
 
     var expected = {
@@ -176,6 +178,7 @@ Tinytest.add(
       owner: '_owner2',
       currentStack: {_e: new Error()},
       erroredStack: {_e: new Error()},
+      depth: 20
     };
 
     var zone = {
@@ -186,7 +189,8 @@ Tinytest.add(
       parent: zone2,
       currentStack: {_e: new Error()},
       erroredStack: {_e: new Error()},
-      eventMap: eventMap
+      eventMap: eventMap,
+      depth: 20
     };
 
     var expected = {
