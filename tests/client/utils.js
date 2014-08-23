@@ -101,7 +101,7 @@ Tinytest.addAsync(
       owner: '_owner',
       ownerArgs: [],
       info: [],
-      events: undefined,
+      events: [],
       zoneId: 'foo'
     };
 
@@ -254,6 +254,40 @@ Tinytest.add(
     test.equal('string', typeof info.url);
     test.equal('string', typeof info.userId);
     restoreMeteorUserId();
+  }
+);
+
+Tinytest.add(
+  'Client Side - Error Manager - Utils - checkSizeAndPickFields - filter large fields', 
+  function(test) {
+    var obj = {
+      shortOne: "hello",
+      longOne: {a: "cooliossssss"}
+    };
+
+    var expected = {
+      shortOne: "hello",
+      longOne: '{"a":"cool ...'
+    };
+    var result = checkSizeAndPickFields(10)(obj);
+    test.equal(result, expected)
+  }
+);
+
+Tinytest.add(
+  'Client Side - Error Manager - Utils - checkSizeAndPickFields - handling cyclic fields', 
+  function(test) {
+    var obj = {
+      shortOne: "hello",
+      longOne: {same: $('body')}
+    };
+
+    var expected = {
+      shortOne: "hello",
+      longOne: "Error: cannot stringify value"
+    };
+    var result = checkSizeAndPickFields(10)(obj);
+    test.equal(result, expected)
   }
 );
 
