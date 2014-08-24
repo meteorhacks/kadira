@@ -135,6 +135,92 @@ Tinytest.addAsync(
   }
 );
 
+Tinytest.addAsync(
+  'Client Side - Error Model - wait for ntpSync - not synced yet', 
+  function(test, done) {
+    var em = new KadiraErrorModel({
+      waitForNtpSyncInterval: 200
+    });
+
+    Kadira.syncedDate.synced = false;
+    var payloadReceived;
+    var resetSend = onKadiraSend(function(payload) {
+      payloadReceived = payload;
+      resetSend();
+    });
+    em.sendError({name: "hello"});
+
+    setTimeout(function() {
+      test.equal(payloadReceived, {errors: [
+        {name: "hello", count: 1}
+      ]});
+      
+      test.equal(em.errorsSent["hello"], {
+        name: "hello", count: 0
+      });
+
+      em.close();
+      done();
+    }, 250);
+  }
+);
+
+Tinytest.add(
+  'Client Side - Error Model - wait for ntpSync - already synced', 
+  function(test) {
+    var em = new KadiraErrorModel({
+      waitForNtpSyncInterval: 200
+    });
+
+    Kadira.syncedDate.synced = true;
+    var payloadReceived;
+    var resetSend = onKadiraSend(function(payload) {
+      payloadReceived = payload;
+      resetSend();
+    });
+    em.sendError({name: "hello"});
+
+    test.equal(payloadReceived, {errors: [
+      {name: "hello", count: 1}
+    ]});
+    
+    test.equal(em.errorsSent["hello"], {
+      name: "hello", count: 0
+    });
+
+    em.close();
+  }
+);
+
+Tinytest.add(
+  'Client Side - Error Model - wait for ntpSync - syncing time', 
+  function(test) {
+    var em = new KadiraErrorModel({
+      waitForNtpSyncInterval: 200
+    });
+
+    var orginalSyncTime = Kadira.syncedDate.syncTime;
+    Kadira.syncedDate.syncTime = function(localTime) {
+      return localTime + 500;
+    };
+    Kadira.syncedDate.synced = true;
+
+    var payloadReceived;
+    var resetSend = onKadiraSend(function(payload) {
+      payloadReceived = payload;
+      resetSend();
+    });
+    em.sendError({name: "hello", startTime: 100});
+
+    test.equal(payloadReceived, {errors: [
+      {name: "hello", count: 1, startTime: 600}
+    ]});
+
+    Kadira.syncedDate.syncTime = orginalSyncTime;
+    em.close();
+  }
+);
+
 function onKadiraSend(callback) {
   var originalSend = Kadira.send;
   Kadira.send = function(payload) {
