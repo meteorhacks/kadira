@@ -10,10 +10,7 @@ Tinytest.addAsync(
       throw new Error(message);
     }, 0);
 
-    function mock_KadiraSendErrors(data) {
-      test.equal(true, Array.isArray(data));
-      test.equal(1, data.length);
-      var error = data[0];
+    function mock_KadiraSendErrors(error) {
       test.equal('string', typeof error.appId);
       test.equal('object', typeof error.info);
       test.equal(message, error.name);
@@ -24,6 +21,7 @@ Tinytest.addAsync(
       restoreKadiraSendErrors();
       restorePrintStackTrace();
       next();
+      
     }
   }
 );
@@ -50,12 +48,12 @@ function mock_printStackTrace() {
   ];
 }
 
-var original_KadiraSendErrors = Kadira.sendErrors;
+var original_KadiraSendErrors = Kadira.errors.sendError;
 
 function hijackKadiraSendErrors(mock) {
-  Kadira.sendErrors = mock;
+  Kadira.errors.sendError = mock;
 }
 
 function restoreKadiraSendErrors() {
-  Kadira.sendErrors = original_KadiraSendErrors;
+  Kadira.errors.sendError = original_KadiraSendErrors;
 }
