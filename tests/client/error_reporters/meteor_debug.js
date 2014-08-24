@@ -51,7 +51,7 @@ Tinytest.add(
       test.equal('object', typeof error.info);
       test.equal(message, error.name);
       test.equal('client', error.source);
-      test.equal(true, Array.isArray(error.stacks));
+      test.equal(true, Array.isArray(JSON.parse(error.stacks)));
       test.equal('number', typeof error.startTime);
       test.equal('meteor._debug', error.type);
     }

@@ -14,7 +14,7 @@ Tinytest.addAsync(
       test.equal('object', typeof error.info);
       test.equal(message, error.name);
       test.equal('client', error.source);
-      test.equal(true, Array.isArray(error.stacks));
+      test.equal(true, Array.isArray(JSON.parse(error.stacks)));
       test.equal('number', typeof error.startTime);
       test.equal('window.onerror', error.type);
       restoreKadiraSendErrors();
@@ -38,7 +38,7 @@ Tinytest.addAsync(
       test.equal('object', typeof error.info);
       test.equal(message, error.name);
       test.equal('client', error.source);
-      test.equal(true, Array.isArray(error.stacks));
+      test.equal(true, Array.isArray(JSON.parse(error.stacks)));
       test.equal('number', typeof error.startTime);
       test.equal('window.onerror', error.type);
       restoreKadiraSendErrors();
