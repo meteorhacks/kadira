@@ -49,10 +49,10 @@ Package.on_test(function(api) {
 
   api.add_files([
     'tests/client/utils.js',
-    'tests/client/error-manager.js',
+    'tests/client/models/error.js',
     'tests/client/error_reporters/window_error.js',
     'tests/client/error_reporters/zone.js',
-    'tests/client/error_reporters/meteor_debug.js'
+    'tests/client/error_reporters/meteor_debug.js',
   ], 'client');
 });
 
@@ -89,6 +89,7 @@ function configurePackage(api) {
     'lib/ntp.js',
     'lib/client/utils.js',
     'lib/client/stacktrace.js',
+    'lib/client/models/error.js',
     'lib/client/kadira.js',
     'lib/client/error_reporters/zone.js',
     'lib/client/error_reporters/window_error.js',

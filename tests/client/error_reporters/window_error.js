@@ -9,15 +9,12 @@ Tinytest.addAsync(
     var message = Meteor.uuid();
     window.onerror(message, '_url', 1, 1, error);
 
-    function mock_KadiraSendErrors(data) {
-      test.equal(true, Array.isArray(data));
-      test.equal(1, data.length);
-      var error = data[0];
+    function mock_KadiraSendErrors(error) {
       test.equal('string', typeof error.appId);
       test.equal('object', typeof error.info);
       test.equal(message, error.name);
       test.equal('client', error.source);
-      test.equal(true, Array.isArray(error.stacks));
+      test.equal(true, Array.isArray(JSON.parse(error.stacks)));
       test.equal('number', typeof error.startTime);
       test.equal('window.onerror', error.type);
       restoreKadiraSendErrors();
@@ -36,15 +33,12 @@ Tinytest.addAsync(
     var message = Meteor.uuid();
     window.onerror(message, '_url', 1, 1);
 
-    function mock_KadiraSendErrors(data) {
-      test.equal(true, Array.isArray(data));
-      test.equal(1, data.length);
-      var error = data[0];
+    function mock_KadiraSendErrors(error) {
       test.equal('string', typeof error.appId);
       test.equal('object', typeof error.info);
       test.equal(message, error.name);
       test.equal('client', error.source);
-      test.equal(true, Array.isArray(error.stacks));
+      test.equal(true, Array.isArray(JSON.parse(error.stacks)));
       test.equal('number', typeof error.startTime);
       test.equal('window.onerror', error.type);
       restoreKadiraSendErrors();
@@ -76,12 +70,12 @@ function mock_printStackTrace() {
   ];
 }
 
-var original_KadiraSendErrors = Kadira.sendErrors;
+var original_KadiraSendErrors = Kadira.errors.sendError;
 
 function hijackKadiraSendErrors(mock) {
-  Kadira.sendErrors = mock;
+  Kadira.errors.sendError = mock;
 }
 
 function restoreKadiraSendErrors() {
-  Kadira.sendErrors = original_KadiraSendErrors;
+  Kadira.errors.sendError = original_KadiraSendErrors;
 }
