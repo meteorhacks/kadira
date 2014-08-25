@@ -2,7 +2,6 @@
 Tinytest.addAsync(
   'Client Side - Error Manager - Reporters - window.onerror - with all args',
   function (test, next) {
-    hijackPrintStackTrace(mock_printStackTrace);
     hijackKadiraSendErrors(mock_KadiraSendErrors);
     test.equal(typeof window.onerror, 'function');
     var error = new Error('test-error');
@@ -18,7 +17,6 @@ Tinytest.addAsync(
       test.equal('number', typeof error.startTime);
       test.equal('window.onerror', error.type);
       restoreKadiraSendErrors();
-      restorePrintStackTrace();
       next();
     }
   }
@@ -27,7 +25,6 @@ Tinytest.addAsync(
 Tinytest.addAsync(
   'Client Side - Error Manager - Reporters - window.onerror - without error',
   function (test, next) {
-    hijackPrintStackTrace(mock_printStackTrace);
     hijackKadiraSendErrors(mock_KadiraSendErrors);
     test.equal(typeof window.onerror, 'function');
     var message = Meteor.uuid();
@@ -42,33 +39,12 @@ Tinytest.addAsync(
       test.equal('number', typeof error.startTime);
       test.equal('window.onerror', error.type);
       restoreKadiraSendErrors();
-      restorePrintStackTrace();
       next();
     }
   }
 );
 
 //--------------------------------------------------------------------------\\
-
-var original_printStackTrace = printStackTrace;
-
-function hijackPrintStackTrace(mock) {
-  printStackTrace = mock;
-}
-
-function restorePrintStackTrace() {
-  printStackTrace = original_printStackTrace;
-}
-
-function mock_printStackTrace() {
-  var o = getCurrentOrigin();
-  return [
-    '{anonymous}()@'+o+'/packages/zones/assets/bar.js:12:34',
-    'funName@'+o+'/packages/zones/assets/bar.js:12:34',
-    '{anonymous}()@'+o+'/foo/bar.js:12:34',
-    'funName@'+o+'/foo/bar.js:12:34'
-  ];
-}
 
 var original_KadiraSendErrors = Kadira.errors.sendError;
 

@@ -1,31 +1,5 @@
 
 Tinytest.add(
-  'Client Side - Error Manager - Utils - stackFramesFilter()',
-  function (test) {
-    test.equal('function', typeof stackFramesFilter);
-    test.equal(false, stackFramesFilter('/packages/zones/assets/zone.js'));
-    test.equal(true, stackFramesFilter('/packages/foo/bar.js'));
-  }
-);
-
-Tinytest.add(
-  'Client Side - Error Manager - Utils - getNormalizedStacktrace()',
-  function (test) {
-    test.equal('function', typeof getNormalizedStacktrace);
-    var stack = ['Error:',
-      '    at /packages/zones/assets/zone.js:12:34',
-      '    at funName (/packages/zones/assets/zone.js:12:34)',
-      '    at funName (foo/bar.js:12:34)',
-    ].join('\n');
-    var expected = ['Error:',
-      '    at funName (foo/bar.js:12:34)',
-    ].join('\n');
-    var result = getNormalizedStacktrace(stack);
-    test.equal(result, expected);
-  }
-);
-
-Tinytest.add(
   'Client Side - Error Manager - Utils - getErrorStack()',
   function (test) {
     test.equal('function', typeof getErrorStack);
