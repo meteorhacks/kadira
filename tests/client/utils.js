@@ -9,8 +9,9 @@ Tinytest.add(
 Tinytest.addAsync(
   'Client Side - Error Manager - Utils - getErrorStack() errored stack',
   function (test, done) {
+    var stack = '-- test stack --';
     var zone = {
-      erroredStack: {_e: new Error()}
+      erroredStack: {_e: {stack: 'stack'}}
     };
     getErrorStack(zone, function(trace) {
       test.equal(1, trace.length);
