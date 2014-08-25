@@ -2,7 +2,6 @@
 Tinytest.add(
   'Client Side - Error Manager - Reporters - meteor._debug - with zone',
   function (test) {
-    hijackPrintStackTrace(mock_printStackTrace);
     hijackKadiraSendErrors(mock_KadiraSendErrors);
     test.equal(typeof Meteor._debug, 'function');
     var errorSent = false;
@@ -12,12 +11,11 @@ Tinytest.add(
     zone.onError = function(e) {
       errorThrown = true;
     };
-    Meteor._debug(message, '_stack');
 
+    Meteor._debug(message, '_stack');
     test.equal(errorSent, false);
     test.equal(errorThrown, true);
     restoreKadiraSendErrors();
-    restorePrintStackTrace();
 
     function mock_KadiraSendErrors(data) {
       errorSent = true;
@@ -28,7 +26,6 @@ Tinytest.add(
 Tinytest.add(
   'Client Side - Error Manager - Reporters - meteor._debug - without zone',
   function (test) {
-    hijackPrintStackTrace(mock_printStackTrace);
     hijackKadiraSendErrors(mock_KadiraSendErrors);
     test.equal(typeof Meteor._debug, 'function');
     var errorSent = false;
@@ -43,7 +40,6 @@ Tinytest.add(
     window.zone = originalZone;
     test.equal(errorSent, true);
     restoreKadiraSendErrors();
-    restorePrintStackTrace();
 
     function mock_KadiraSendErrors(error) {
       errorSent = true;
@@ -59,26 +55,6 @@ Tinytest.add(
 );
 
 //--------------------------------------------------------------------------\\
-
-var original_printStackTrace = printStackTrace;
-
-function hijackPrintStackTrace(mock) {
-  printStackTrace = mock;
-}
-
-function restorePrintStackTrace() {
-  printStackTrace = original_printStackTrace;
-}
-
-function mock_printStackTrace() {
-  var o = getCurrentOrigin();
-  return [
-    '{anonymous}()@'+o+'/packages/zones/assets/bar.js:12:34',
-    'funName@'+o+'/packages/zones/assets/bar.js:12:34',
-    '{anonymous}()@'+o+'/foo/bar.js:12:34',
-    'funName@'+o+'/foo/bar.js:12:34'
-  ];
-}
 
 var original_KadiraSendErrors = Kadira.errors.sendError;
 
