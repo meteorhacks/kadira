@@ -1,8 +1,8 @@
-var path = Npm.require('path');
-var fs = Npm.require('fs');
-
 Package.describe({
-  "summary": "Performance Monitoring for Meteor"
+  "summary": "Performance Monitoring for Meteor",
+  "version": "2.5.0",
+  "git": "https://github.com/meteorhacks/kadira.git",
+  "name": "meteorhacks:kadira"
 });
 
 Npm.depends({
@@ -46,6 +46,10 @@ Package.on_test(function(api) {
 });
 
 function configurePackage(api) {
+  if(api.versionsFrom) {
+    api.versionsFrom('METEOR@0.9.0');
+  }
+  
   api.use(['minimongo', 'livedata', 'mongo-livedata', 'ejson', 'underscore', 'http', 'email', 'random'], ['server']);
   api.add_files([
     'lib/retry.js',

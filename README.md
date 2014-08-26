@@ -8,8 +8,9 @@
 
 1. Create an account at <https://kadira.io>
 2. From the UI, create an app. You'll get an `AppId` and an `AppSecret`.
-3. Run `mrt add kadira` in your project
-4. Configure your Meteor app with the `AppId` and `AppSecret` by adding the following code snippet to a `server/kadira.js` file:
+3. Run `meteor add meteorhacks:kadira` in your project
+4. (use `mrt add kadira` if you've not yet migrated to meteor 0.9)
+5. Configure your Meteor app with the `AppId` and `AppSecret` by adding the following code snippet to a `server/kadira.js` file:
 
 ```js
 Meteor.startup(function() {
