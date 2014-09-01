@@ -4,5 +4,8 @@
   "homepage": "https://kadira.io",
   "author": "MeteorHacks <hello@meteorhacks.com>",
   "version": "2.5.2",
-  "git": "https://github.com/meteorhacks/kadira.git"
+  "git": "https://github.com/meteorhacks/kadira.git",
+  "packages": {
+    "zones": {}
+  }
 }

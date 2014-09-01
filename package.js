@@ -29,8 +29,10 @@ Package.on_test(function(api) {
   api.use([
     'tinytest',
     'test-helpers'
-  ], 'server');
+  ], ['client', 'server']);
 
+  // "tests/zones.js" should be last because it messes up kadira instrumenting
+  // by calling Kadira.connect() multiple times
   api.add_files([
     'tests/ntp.js',
     'tests/_helpers/globals.js',
@@ -45,27 +47,42 @@ Package.on_test(function(api) {
     'tests/hijack/http.js',
     'tests/hijack/db.js',
     'tests/hijack/subscriptions.js',
+    'tests/hijack/error.js',
     'tests/models/methods.js',
     'tests/models/pubsub.js',
     'tests/models/system.js',
+    'tests/models/errors.js',
     'tests/tracer_store.js',
     'tests/tracer.js',
     'tests/check_for_oplog.js',
+    'tests/zones.js', // !important
   ], 'server');
+
+  api.add_files([
+    'tests/client/utils.js',
+    'tests/client/models/error.js',
+    'tests/client/error_reporters/window_error.js',
+    'tests/client/error_reporters/zone.js',
+    'tests/client/error_reporters/meteor_debug.js',
+  ], 'client');
 });
 
 function configurePackage(api) {
   if(api.versionsFrom) {
     api.versionsFrom('METEOR@0.9.0');
     // binary dependencies
-    api.use('meteorhacks:kadira-binary-deps@1.0.0')
+    api.use('meteorhacks:kadira-binary-deps@1.0.0');
+    api.use('meteorhacks:zones@1.0.0');
+  } else {
+    // for Meteor releases <= 0.8.3
+    api.use('zones');
   }
   
   api.use([
     'minimongo', 'livedata', 'mongo-livedata', 'ejson', 
     'underscore', 'http', 'email', 'random'
   ], ['server']);
-
+  api.use(['underscore', 'random', 'jquery', 'localstorage'], ['client']);
 
   api.add_files([
     'lib/retry.js',
@@ -75,6 +92,7 @@ function configurePackage(api) {
     'lib/models/methods.js',
     'lib/models/pubsub.js',
     'lib/models/system.js',
+    'lib/models/errors.js',
     'lib/kadira.js',
     'lib/check_for_oplog.js',
     'lib/tracer.js',
@@ -86,8 +104,18 @@ function configurePackage(api) {
     'lib/hijack/http.js',
     'lib/hijack/email.js',
     'lib/hijack/async.js',
+    'lib/hijack/error.js',
     'lib/auto_connect.js'
   ], 'server');
 
-  api.add_files(['lib/client/route.js'], 'client')
+  api.add_files([
+    'lib/retry.js',
+    'lib/ntp.js',
+    'lib/client/utils.js',
+    'lib/client/models/error.js',
+    'lib/client/kadira.js',
+    'lib/client/error_reporters/zone.js',
+    'lib/client/error_reporters/window_error.js',
+    'lib/client/error_reporters/meteor_debug.js',
+  ], 'client')
 }
