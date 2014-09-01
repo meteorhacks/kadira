@@ -1,14 +1,23 @@
-var path = Npm.require('path');
-var fs = Npm.require('fs');
-
 Package.describe({
-  "summary": "Performance Monitoring for Meteor"
+  "summary": "Performance Monitoring for Meteor",
+  "version": "2.5.2",
+  "git": "https://github.com/meteorhacks/kadira.git",
+  "name": "meteorhacks:kadira"
 });
 
-Npm.depends({
-  "debug": "0.7.4",
-  "usage": "0.4.9"
-});
+var npmModules = {
+  "debug": "0.7.4"
+};
+
+if(!Package.onUse) {
+  // this is not Meteor 0.9
+  // we need to add usage @0.4.9 which contains platform specific builds
+  // for 0.9+ we are using meteorhacks:kadira-binary-deps 
+  // which has platform specific builds
+  npmModules.usage = "0.4.9"
+}
+
+Npm.depends(npmModules);
 
 Package.on_use(function(api) {
   configurePackage(api);
@@ -25,10 +34,12 @@ Package.on_test(function(api) {
   // "tests/zones.js" should be last because it messes up kadira instrumenting
   // by calling Kadira.connect() multiple times
   api.add_files([
+    'tests/ntp.js',
     'tests/_helpers/globals.js',
     'tests/_helpers/helpers.js',
     'tests/_helpers/init.js',
     'tests/ping.js',
+    'tests/hijack/info.js',
     'tests/hijack/user.js',
     'tests/hijack/email.js',
     'tests/hijack/base.js',
@@ -57,9 +68,22 @@ Package.on_test(function(api) {
 });
 
 function configurePackage(api) {
-  api.use(['minimongo', 'livedata', 'mongo-livedata', 'ejson', 'underscore', 'http', 'email', 'random'], ['server']);
+  if(api.versionsFrom) {
+    api.versionsFrom('METEOR@0.9.0');
+    // binary dependencies
+    api.use('meteorhacks:kadira-binary-deps@1.0.0');
+    api.use('meteorhacks:zones@1.0.0');
+  } else {
+    // for Meteor releases <= 0.8.3
+    api.use('zones');
+  }
+  
+  api.use([
+    'minimongo', 'livedata', 'mongo-livedata', 'ejson', 
+    'underscore', 'http', 'email', 'random'
+  ], ['server']);
   api.use(['underscore', 'random', 'jquery', 'localstorage'], ['client']);
-  api.use('zones');
+
   api.add_files([
     'lib/retry.js',
     'lib/utils.js',
