@@ -1,6 +1,6 @@
 Package.describe({
   "summary": "Performance Monitoring for Meteor",
-  "version": "2.5.2",
+  "version": "2.5.3-cordova5",
   "git": "https://github.com/meteorhacks/kadira.git",
   "name": "meteorhacks:kadira"
 });
@@ -56,7 +56,7 @@ Package.on_test(function(api) {
 
 function configurePackage(api) {
   if(api.versionsFrom) {
-    api.versionsFrom('METEOR@0.9.0');
+    api.versionsFrom('CORDOVA-PREVIEW@5');
     // binary dependencies
     api.use('meteorhacks:kadira-binary-deps@1.0.0')
   }
