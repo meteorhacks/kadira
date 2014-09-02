@@ -55,6 +55,7 @@ Package.on_test(function(api) {
     'tests/tracer_store.js',
     'tests/tracer.js',
     'tests/check_for_oplog.js',
+    'tests/error_tracking.js',
     'tests/zones.js', // !important (should be the last test)
   ], 'server');
 
