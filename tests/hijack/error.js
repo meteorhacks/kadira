@@ -11,9 +11,9 @@ Tinytest.add(
     var expected = {
       appId: "foo",
       name: "_debug",
-      source: "server-internal:_debug",
+      subType: "_debug",
       // startTime: 1408098721327,
-      type: "server",
+      type: "server-internal",
       trace: {
         type: "server-internal",
         name: "_debug",
@@ -54,7 +54,8 @@ Tinytest.add(
     var payload = Kadira.models.error.buildPayload();
     var error = payload.errors[0];
     test.equal(1, payload.errors.length);
-    test.equal(error.source, 'method:'+method);
+    test.equal(error.type, 'method');
+    test.equal(error.subType, method);
     _resetErrorTracking(originalErrorTrackingStatus);
 
     function causeError () {

@@ -46,10 +46,10 @@ Tinytest.add(
       test.equal('string', typeof error.appId);
       test.equal('object', typeof error.info);
       test.equal(message, error.name);
-      test.equal('client', error.source);
+      test.equal('client', error.type);
       test.equal(true, Array.isArray(JSON.parse(error.stacks)));
       test.equal('number', typeof error.startTime);
-      test.equal('meteor._debug', error.type);
+      test.equal('meteor._debug', error.subType);
     }
   })
 );

@@ -19,10 +19,10 @@ Tinytest.addAsync(
       test.equal('string', typeof error.appId);
       test.equal('object', typeof error.info);
       test.equal(message, error.name);
-      test.equal('client', error.source);
+      test.equal('client', error.type);
       test.equal(true, Array.isArray(JSON.parse(error.stacks)));
       test.equal('number', typeof error.startTime);
-      test.equal('zone', error.type);
+      test.equal('zone', error.subType);
       restoreKadiraSendErrors();
       next();
     }
