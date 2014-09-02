@@ -3,6 +3,8 @@ Tinytest.add(
   'Errors - Meteor._debug - track with Meteor._debug',
   function (test) {
     var originalErrorModel = Kadira.models.error;
+    var originalErrorTrackingStatus = Kadira.options.enableErrorTracking;
+    Kadira.options.enableErrorTracking = true;
     Kadira.models.error = new ErrorModel('foo');
     Meteor._debug('_debug', '_stack');
     var payload = Kadira.models.error.buildPayload();
@@ -32,6 +34,7 @@ Tinytest.add(
     delete error.trace.at;
     test.equal(expected, error);
     Kadira.models.error = originalErrorModel;
+    Kadira.options.enableErrorTracking = originalErrorTrackingStatus;
   }
 );
 
@@ -39,6 +42,8 @@ Tinytest.add(
   'Errors - Meteor._debug - do not track method errors',
   function (test) {
     var originalErrorModel = Kadira.models.error;
+    var originalErrorTrackingStatus = Kadira.options.enableErrorTracking;
+    Kadira.options.enableErrorTracking = true;
     Kadira.models.error = new ErrorModel('foo');
     var method = RegisterMethod(causeError);
     var client = GetMeteorClient();
@@ -54,6 +59,7 @@ Tinytest.add(
     test.equal(1, payload.errors.length);
     test.equal(error.source, 'method:'+method);
     Kadira.models.error = originalErrorModel;
+    Kadira.options.enableErrorTracking = originalErrorTrackingStatus;
 
     function causeError () {
       HTTP.call('POST', 'localhost', Function());
@@ -65,6 +71,8 @@ Tinytest.add(
   'Errors - Meteor._debug - do not track pubsub errors',
   function (test) {
     var originalErrorModel = Kadira.models.error;
+    var originalErrorTrackingStatus = Kadira.options.enableErrorTracking;
+    Kadira.options.enableErrorTracking = true;
     Kadira.models.error = new ErrorModel('foo');
     var pubsub = RegisterPublication(causeError);
     var client = GetMeteorClient();
@@ -74,6 +82,7 @@ Tinytest.add(
       test.equal(1, payload.errors.length);
       test.equal(error.source, 'sub:'+pubsub);
       Kadira.models.error = originalErrorModel;
+      Kadira.options.enableErrorTracking = originalErrorTrackingStatus;
     }});
 
     function causeError () {
