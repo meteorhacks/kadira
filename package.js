@@ -12,7 +12,7 @@ var npmModules = {
 if(!Package.onUse) {
   // this is not Meteor 0.9
   // we need to add usage @0.4.9 which contains platform specific builds
-  // for 0.9+ we are using meteorhacks:kadira-binary-deps 
+  // for 0.9+ we are using meteorhacks:kadira-binary-deps
   // which has platform specific builds
   npmModules.usage = "0.4.9"
 }
@@ -55,11 +55,13 @@ Package.on_test(function(api) {
     'tests/tracer_store.js',
     'tests/tracer.js',
     'tests/check_for_oplog.js',
-    'tests/zones.js', // !important
+    'tests/error_tracking.js',
+    'tests/zones.js', // !important (should be the last test)
   ], 'server');
 
   api.add_files([
     'tests/client/utils.js',
+    'tests/client/error_tracking.js', // !important (enables error tracking)
     'tests/client/models/error.js',
     'tests/client/error_reporters/window_error.js',
     'tests/client/error_reporters/zone.js',
@@ -77,9 +79,9 @@ function configurePackage(api) {
     // for Meteor releases <= 0.8.3
     api.use('zones');
   }
-  
+
   api.use([
-    'minimongo', 'livedata', 'mongo-livedata', 'ejson', 
+    'minimongo', 'livedata', 'mongo-livedata', 'ejson',
     'underscore', 'http', 'email', 'random'
   ], ['server']);
   api.use(['underscore', 'random', 'jquery', 'localstorage'], ['client']);
@@ -113,9 +115,9 @@ function configurePackage(api) {
     'lib/ntp.js',
     'lib/client/utils.js',
     'lib/client/models/error.js',
-    'lib/client/kadira.js',
     'lib/client/error_reporters/zone.js',
     'lib/client/error_reporters/window_error.js',
     'lib/client/error_reporters/meteor_debug.js',
+    'lib/client/kadira.js',
   ], 'client')
 }
