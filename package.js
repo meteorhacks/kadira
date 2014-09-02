@@ -55,11 +55,12 @@ Package.on_test(function(api) {
     'tests/tracer_store.js',
     'tests/tracer.js',
     'tests/check_for_oplog.js',
-    'tests/zones.js', // !important
+    'tests/zones.js', // !important (should be the last test)
   ], 'server');
 
   api.add_files([
     'tests/client/utils.js',
+    'tests/client/error_tracking.js', // !important (enables error tracking)
     'tests/client/models/error.js',
     'tests/client/error_reporters/window_error.js',
     'tests/client/error_reporters/zone.js',

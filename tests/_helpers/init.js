@@ -1,6 +1,4 @@
-Kadira.connect('foo', 'bar', {
-  enableErrorTracking: true
-});
+Kadira.connect('foo', 'bar');
 
 Npm.require('http').createServer(function(req, res) {
   res.writeHead(200);

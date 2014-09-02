@@ -56,9 +56,10 @@ Tinytest.add(
 
 //--------------------------------------------------------------------------\\
 
-var original_KadiraSendErrors = Kadira.errors.sendError;
+var original_KadiraSendErrors;
 
 function hijackKadiraSendErrors(mock) {
+  original_KadiraSendErrors = Kadira.errors.sendError;
   Kadira.errors.sendError = mock;
 }
 
