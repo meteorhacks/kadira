@@ -8,9 +8,7 @@ Tinytest.add(
       disabled = true
     };
     try {
-      Kadira.connect(null, null, {
-        enableErrorTracking: true
-      });
+      Kadira.connect();
     } catch (e) {}
     test.equal(disabled, false);
     Zones.disable = original;
@@ -27,7 +25,6 @@ Tinytest.add(
     };
     try {
       Kadira.connect(null, null, {
-        enableErrorTracking: true,
         enableZones: false
       });
     } catch (e) {}
