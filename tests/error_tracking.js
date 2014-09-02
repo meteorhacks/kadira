@@ -23,6 +23,8 @@ Tinytest.add(
   'Errors - Custom Errors - simple',
   function (test) {
     var originalTrackError = Kadira.models.error.trackError;
+    var originalErrorTrackingStatus = Kadira.options.enableErrorTracking;
+    Kadira.enableErrorTracking();
     Kadira.models.error.trackError = function (err, trace) {
       test.equal(err, {message: 'msg', stack: ''});
       delete trace.at;
@@ -41,6 +43,7 @@ Tinytest.add(
     }
     Kadira.trackError('type', 'msg');
     Kadira.models.error.trackError = originalTrackError;
+    _resetErrorTracking(originalErrorTrackingStatus);
   }
 );
 
@@ -48,6 +51,8 @@ Tinytest.add(
   'Errors - Custom Errors - with all values',
   function (test) {
     var originalTrackError = Kadira.models.error.trackError;
+    var originalErrorTrackingStatus = Kadira.options.enableErrorTracking;
+    Kadira.enableErrorTracking();
     Kadira.models.error.trackError = function (err, trace) {
       test.equal(err, {message: 'msg', stack: 's'});
       delete trace.at;
@@ -66,6 +71,7 @@ Tinytest.add(
     }
     Kadira.trackError('type', 'msg', {subType: 'st', stacks: 's'});
     Kadira.models.error.trackError = originalTrackError;
+    _resetErrorTracking(originalErrorTrackingStatus);
   }
 );
 
