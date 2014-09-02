@@ -12,7 +12,7 @@ var npmModules = {
 if(!Package.onUse) {
   // this is not Meteor 0.9
   // we need to add usage @0.4.9 which contains platform specific builds
-  // for 0.9+ we are using meteorhacks:kadira-binary-deps 
+  // for 0.9+ we are using meteorhacks:kadira-binary-deps
   // which has platform specific builds
   npmModules.usage = "0.4.9"
 }
@@ -77,9 +77,9 @@ function configurePackage(api) {
     // for Meteor releases <= 0.8.3
     api.use('zones');
   }
-  
+
   api.use([
-    'minimongo', 'livedata', 'mongo-livedata', 'ejson', 
+    'minimongo', 'livedata', 'mongo-livedata', 'ejson',
     'underscore', 'http', 'email', 'random'
   ], ['server']);
   api.use(['underscore', 'random', 'jquery', 'localstorage'], ['client']);
@@ -113,9 +113,9 @@ function configurePackage(api) {
     'lib/ntp.js',
     'lib/client/utils.js',
     'lib/client/models/error.js',
-    'lib/client/kadira.js',
     'lib/client/error_reporters/zone.js',
     'lib/client/error_reporters/window_error.js',
     'lib/client/error_reporters/meteor_debug.js',
+    'lib/client/kadira.js',
   ], 'client')
 }
