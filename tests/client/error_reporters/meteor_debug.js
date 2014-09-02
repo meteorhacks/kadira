@@ -1,7 +1,7 @@
 
 Tinytest.add(
   'Client Side - Error Manager - Reporters - meteor._debug - with zone',
-  function (test) {
+  TestWithErrorTracking(function (test) {
     hijackKadiraSendErrors(mock_KadiraSendErrors);
     test.equal(typeof Meteor._debug, 'function');
     var errorSent = false;
@@ -20,12 +20,12 @@ Tinytest.add(
     function mock_KadiraSendErrors(data) {
       errorSent = true;
     }
-  }
+  })
 );
 
 Tinytest.add(
   'Client Side - Error Manager - Reporters - meteor._debug - without zone',
-  function (test) {
+  TestWithErrorTracking(function (test) {
     hijackKadiraSendErrors(mock_KadiraSendErrors);
     test.equal(typeof Meteor._debug, 'function');
     var errorSent = false;
@@ -51,7 +51,7 @@ Tinytest.add(
       test.equal('number', typeof error.startTime);
       test.equal('meteor._debug', error.type);
     }
-  }
+  })
 );
 
 //--------------------------------------------------------------------------\\
@@ -65,4 +65,16 @@ function hijackKadiraSendErrors(mock) {
 
 function restoreKadiraSendErrors() {
   Kadira.errors.sendError = original_KadiraSendErrors;
+}
+
+function TestWithErrorTracking (testFunction) {
+  return function (test) {
+    var status = Kadira.options.enableErrorTracking;
+    var appId = Kadira.options.appId;
+    Kadira.options.appId = 'app';
+    Kadira.enableErrorTracking();
+    testFunction(test);
+    Kadira.options.appId = appId;
+    status ? Kadira.enableErrorTracking() : Kadira.disableErrorTracking();
+  }
 }

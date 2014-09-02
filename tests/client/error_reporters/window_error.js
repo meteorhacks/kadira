@@ -1,7 +1,7 @@
 
 Tinytest.addAsync(
   'Client Side - Error Manager - Reporters - window.onerror - with all args',
-  function (test, next) {
+  TestWithErrorTrackingAsync(function (test, next) {
     hijackKadiraSendErrors(mock_KadiraSendErrors);
     test.equal(typeof window.onerror, 'function');
     var error = new Error('test-error');
@@ -19,12 +19,12 @@ Tinytest.addAsync(
       restoreKadiraSendErrors();
       next();
     }
-  }
+  })
 );
 
 Tinytest.addAsync(
   'Client Side - Error Manager - Reporters - window.onerror - without error',
-  function (test, next) {
+  TestWithErrorTrackingAsync(function (test, next) {
     hijackKadiraSendErrors(mock_KadiraSendErrors);
     test.equal(typeof window.onerror, 'function');
     var message = Meteor.uuid();
@@ -41,7 +41,7 @@ Tinytest.addAsync(
       restoreKadiraSendErrors();
       next();
     }
-  }
+  })
 );
 
 //--------------------------------------------------------------------------\\
@@ -55,4 +55,18 @@ function hijackKadiraSendErrors(mock) {
 
 function restoreKadiraSendErrors() {
   Kadira.errors.sendError = original_KadiraSendErrors;
+}
+
+function TestWithErrorTrackingAsync (testFunction) {
+  return function (test, next) {
+    var status = Kadira.options.enableErrorTracking;
+    var appId = Kadira.options.appId;
+    Kadira.options.appId = 'app';
+    Kadira.enableErrorTracking();
+    testFunction(test, function () {
+      Kadira.options.appId = appId;
+      status ? Kadira.enableErrorTracking() : Kadira.disableErrorTracking();
+      next();
+    });
+  }
 }

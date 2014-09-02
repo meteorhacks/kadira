@@ -61,7 +61,7 @@ Package.on_test(function(api) {
 
   api.add_files([
     'tests/client/utils.js',
-    'tests/client/error_tracking.js', // !important (enables error tracking)
+    'tests/client/error_tracking.js',
     'tests/client/models/error.js',
     'tests/client/error_reporters/window_error.js',
     'tests/client/error_reporters/zone.js',

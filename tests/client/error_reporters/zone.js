@@ -1,7 +1,7 @@
 
 Tinytest.addAsync(
   'Client Side - Error Manager - Reporters - zone - setTimeout',
-  function (test, next) {
+  TestWithErrorTrackingAsync(function (test, next) {
     hijackKadiraSendErrors(mock_KadiraSendErrors);
     test.equal(typeof window.onerror, 'function');
     var message = Meteor.uuid();
@@ -9,6 +9,11 @@ Tinytest.addAsync(
     setTimeout(function (argument) {
       throw new Error(message);
     }, 0);
+
+    setTimeout(function (argument) {
+      test.fail('test didn\'t finish within 2 second');
+      next();
+    }, 1000);
 
     function mock_KadiraSendErrors(error) {
       test.equal('string', typeof error.appId);
@@ -21,18 +26,31 @@ Tinytest.addAsync(
       restoreKadiraSendErrors();
       next();
     }
-  }
+  })
 );
 
 //--------------------------------------------------------------------------\\
 
-var original_KadiraSendErrors;
+var original_KadiraSendErrors = Kadira.errors.sendError;
 
 function hijackKadiraSendErrors(mock) {
-  original_KadiraSendErrors = Kadira.errors.sendError;
   Kadira.errors.sendError = mock;
 }
 
 function restoreKadiraSendErrors() {
   Kadira.errors.sendError = original_KadiraSendErrors;
+}
+
+function TestWithErrorTrackingAsync (testFunction) {
+  return function (test, next) {
+    var status = Kadira.options.enableErrorTracking;
+    var appId = Kadira.options.appId;
+    Kadira.options.appId = 'app';
+    Kadira.enableErrorTracking();
+    testFunction(test, function () {
+      Kadira.options.appId = appId;
+      status ? Kadira.enableErrorTracking() : Kadira.disableErrorTracking();
+      next();
+    });
+  }
 }
