@@ -5,7 +5,6 @@ Tinytest.add(
     var originalErrorTrackingStatus = Kadira.options.enableErrorTracking;
     Kadira.enableErrorTracking();
     test.equal(Kadira.options.enableErrorTracking, true);
-    test.notEqual(Kadira.models.error, null);
     _resetErrorTracking(originalErrorTrackingStatus);
   }
 );
@@ -16,7 +15,6 @@ Tinytest.add(
     var originalErrorTrackingStatus = Kadira.options.enableErrorTracking;
     Kadira.disableErrorTracking();
     test.equal(Kadira.options.enableErrorTracking, false);
-    test.equal(Kadira.models.error, null);
     _resetErrorTracking(originalErrorTrackingStatus);
   }
 );
