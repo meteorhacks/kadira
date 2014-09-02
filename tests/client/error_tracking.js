@@ -1,19 +1,28 @@
 
 Tinytest.add(
-  'Client Side - Error Manager - Disabled by default',
+  'Client Side - Error Manager - enableErrorTracking',
   function (test) {
-    test.equal(typeof Kadira.syncedData, 'undefined');
-    test.equal(typeof Kadira.send, 'undefined');
-    test.equal(typeof Kadira.errors, 'undefined');
+    var originalErrorTrackingStatus = Kadira.options.enableErrorTracking;
+    Kadira.enableErrorTracking();
+    test.equal(Kadira.options.enableErrorTracking, true);
+    _resetErrorTracking(originalErrorTrackingStatus);
   }
 );
 
 Tinytest.add(
-  'Client Side - Error Manager - Enable with function',
+  'Client Side - Error Manager - disableErrorTracking',
   function (test) {
-    enableErrorTracking();
-    test.equal(typeof Kadira.syncedDate, 'object');
-    test.equal(typeof Kadira.send, 'function');
-    test.equal(typeof Kadira.errors, 'object');
+    var originalErrorTrackingStatus = Kadira.options.enableErrorTracking;
+    Kadira.disableErrorTracking();
+    test.equal(Kadira.options.enableErrorTracking, false);
+    _resetErrorTracking(originalErrorTrackingStatus);
   }
 );
+
+function _resetErrorTracking (status) {
+  if(status) {
+    Kadira.enableErrorTracking();
+  } else {
+    Kadira.disableErrorTracking();
+  }
+}
