@@ -2,6 +2,7 @@
 Tinytest.add(
   'Errors - Meteor._debug - track with Meteor._debug',
   function (test) {
+    var originalErrorModel = Kadira.models.error;
     Kadira.models.error = new ErrorModel('foo');
     Meteor._debug('_debug', '_stack');
     var payload = Kadira.models.error.buildPayload();
@@ -30,12 +31,14 @@ Tinytest.add(
     delete error.startTime;
     delete error.trace.at;
     test.equal(expected, error);
+    Kadira.models.error = originalErrorModel;
   }
 );
 
 Tinytest.add(
   'Errors - Meteor._debug - do not track method errors',
   function (test) {
+    var originalErrorModel = Kadira.models.error;
     Kadira.models.error = new ErrorModel('foo');
     var method = RegisterMethod(causeError);
     var client = GetMeteorClient();
@@ -50,6 +53,7 @@ Tinytest.add(
     var error = payload.errors[0];
     test.equal(1, payload.errors.length);
     test.equal(error.source, 'method:'+method);
+    Kadira.models.error = originalErrorModel;
 
     function causeError () {
       HTTP.call('POST', 'localhost', Function());
@@ -60,6 +64,7 @@ Tinytest.add(
 Tinytest.add(
   'Errors - Meteor._debug - do not track pubsub errors',
   function (test) {
+    var originalErrorModel = Kadira.models.error;
     Kadira.models.error = new ErrorModel('foo');
     var pubsub = RegisterPublication(causeError);
     var client = GetMeteorClient();
@@ -68,6 +73,7 @@ Tinytest.add(
       var error = payload.errors[0];
       test.equal(1, payload.errors.length);
       test.equal(error.source, 'sub:'+pubsub);
+      Kadira.models.error = originalErrorModel;
     }});
 
     function causeError () {
