@@ -44,8 +44,11 @@ function restoreKadiraSendErrors() {
 function TestWithErrorTrackingAsync (testFunction) {
   return function (test, next) {
     var status = Kadira.options.enableErrorTracking;
+    var appId = Kadira.options.appId;
+    Kadira.options.appId = 'app';
     Kadira.enableErrorTracking();
     testFunction(test, function () {
+      Kadira.options.appId = appId;
       status ? Kadira.enableErrorTracking() : Kadira.disableErrorTracking();
       next();
     });

@@ -70,8 +70,11 @@ function restoreKadiraSendErrors() {
 function TestWithErrorTracking (testFunction) {
   return function (test) {
     var status = Kadira.options.enableErrorTracking;
+    var appId = Kadira.options.appId;
+    Kadira.options.appId = 'app';
     Kadira.enableErrorTracking();
     testFunction(test);
+    Kadira.options.appId = appId;
     status ? Kadira.enableErrorTracking() : Kadira.disableErrorTracking();
   }
 }
