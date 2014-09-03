@@ -11,12 +11,13 @@ Tinytest.add(
     var expected = {
       appId: "foo",
       name: "_debug",
-      subType: "_debug",
+      subType: "Meteor._debug",
       // startTime: 1408098721327,
       type: "server-internal",
       trace: {
         type: "server-internal",
         name: "_debug",
+        subType: "Meteor._debug",
         errored: true,
         // at: 1408098721326,
         events: [
