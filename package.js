@@ -1,6 +1,6 @@
 Package.describe({
   "summary": "Performance Monitoring for Meteor",
-  "version": "2.6.0",
+  "version": "2.6.1",
   "git": "https://github.com/meteorhacks/kadira.git",
   "name": "meteorhacks:kadira"
 });
@@ -74,7 +74,7 @@ function configurePackage(api) {
     api.versionsFrom('METEOR@0.9.0');
     // binary dependencies
     api.use('meteorhacks:kadira-binary-deps@1.0.1');
-    api.use('meteorhacks:zones@1.0.0');
+    api.use('meteorhacks:zones@1.0.1');
   } else {
     // for Meteor releases <= 0.8.3
     api.use('zones');
