@@ -56,7 +56,6 @@ Package.on_test(function(api) {
     'tests/tracer.js',
     'tests/check_for_oplog.js',
     'tests/error_tracking.js',
-    'tests/zones.js', // !important (should be the last test)
   ], 'server');
 
   api.add_files([
@@ -74,10 +73,12 @@ function configurePackage(api) {
     api.versionsFrom('METEOR@0.9.0');
     // binary dependencies
     api.use('meteorhacks:kadira-binary-deps@1.0.1');
-    api.use('meteorhacks:zones@1.1.1');
+    api.use('meteorhacks:zones@1.1.1', {weak: true});
   } else {
     // for Meteor releases <= 0.8.3
-    api.use('zones');
+    // now, zones is a weak dependancy!
+    // kadira on the client side knows how to handle it 
+    // api.use('zones');
   }
 
   api.use([
