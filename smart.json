@@ -3,7 +3,7 @@
   "description": "Performance Monitoring for Meteor",
   "homepage": "https://kadira.io",
   "author": "MeteorHacks <hello@meteorhacks.com>",
-  "version": "2.6.0",
+  "version": "2.6.2",
   "git": "https://github.com/meteorhacks/kadira.git",
   "packages": {
     "zones": {}
