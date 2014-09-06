@@ -2,7 +2,7 @@
   "dependencies": [
     [
       "application-configuration",
-      "1.0.1"
+      "1.0.1-rc0"
     ],
     [
       "binary-heap",
@@ -10,7 +10,7 @@
     ],
     [
       "blaze",
-      "2.0.0"
+      "1.0.0"
     ],
     [
       "blaze-tools",
@@ -26,7 +26,7 @@
     ],
     [
       "ddp",
-      "1.0.8"
+      "1.0.8-rc0"
     ],
     [
       "deps",
@@ -42,7 +42,7 @@
     ],
     [
       "follower-livedata",
-      "1.0.1"
+      "1.0.1-rc0"
     ],
     [
       "geojson-utils",
@@ -54,7 +54,7 @@
     ],
     [
       "htmljs",
-      "1.0.0"
+      "1.0.0-cordova1"
     ],
     [
       "http",
@@ -82,7 +82,7 @@
     ],
     [
       "logging",
-      "1.0.2"
+      "1.0.2-cordova1"
     ],
     [
       "meteor",
@@ -98,11 +98,11 @@
     ],
     [
       "meteorhacks:zones",
-      "1.0.1"
+      "1.1.1"
     ],
     [
       "minifiers",
-      "1.0.2"
+      "1.0.2-glasser1"
     ],
     [
       "minimongo",
@@ -110,7 +110,7 @@
     ],
     [
       "mongo",
-      "1.0.4"
+      "1.0.4-rc1"
     ],
     [
       "mongo-livedata",
@@ -118,7 +118,7 @@
     ],
     [
       "observe-sequence",
-      "1.0.2"
+      "1.0.2-rc0"
     ],
     [
       "ordered-dict",
@@ -130,11 +130,7 @@
     ],
     [
       "reactive-dict",
-      "1.0.1"
-    ],
-    [
-      "reactive-var",
-      "1.0.1"
+      "1.0.1-glasser1"
     ],
     [
       "retry",
@@ -150,19 +146,19 @@
     ],
     [
       "spacebars",
-      "1.0.1"
+      "1.0.1-rc0"
     ],
     [
       "spacebars-compiler",
-      "1.0.2"
+      "1.0.2-rc0"
     ],
     [
       "templating",
-      "1.0.5"
+      "1.0.4"
     ],
     [
       "tracker",
-      "1.0.2"
+      "1.0.2-rc0"
     ],
     [
       "ui",
@@ -174,7 +170,7 @@
     ],
     [
       "webapp",
-      "1.0.3"
+      "1.0.3-rc0"
     ]
   ],
   "pluginDependencies": [],
