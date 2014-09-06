@@ -74,7 +74,7 @@ function configurePackage(api) {
     api.versionsFrom('METEOR@0.9.0');
     // binary dependencies
     api.use('meteorhacks:kadira-binary-deps@1.0.1');
-    api.use('meteorhacks:zones@1.0.1');
+    api.use('meteorhacks:zones@1.1.1');
   } else {
     // for Meteor releases <= 0.8.3
     api.use('zones');
