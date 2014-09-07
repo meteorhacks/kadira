@@ -5,18 +5,18 @@ Tinytest.add(
     hijackKadiraSendErrors(mock_KadiraSendErrors);
     test.equal(typeof Meteor._debug, 'function');
     var errorSent = false;
-    var errorThrown = false;
     var message = Meteor.uuid();
 
-    zone.onError = function(e) {
-      errorThrown = true;
-    };
+    // set window.zone as nothing
+    var originalZone = window.zone;
+    window.zone = {};
 
     Meteor._debug(message, '_stack');
     test.equal(errorSent, false);
-    test.equal(errorThrown, true);
     restoreKadiraSendErrors();
 
+    // cleajr 
+    window.zone = originalZone;
     function mock_KadiraSendErrors(data) {
       errorSent = true;
     }
