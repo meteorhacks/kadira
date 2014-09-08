@@ -51,6 +51,11 @@ export KADIRA_APP_ID=<appId>
 export KADIRA_APP_SECRET=<appSecret>
 ````
 
+### Error Tracking
+
+Kadira comes with built in error tracking solution for Meteor apps. It has been enabled by default.
+For more information, please visit our [docs](http://support.kadira.io/knowledgebase/topics/62637-error-tracking) on [error tracking](http://support.kadira.io/knowledgebase/topics/62637-error-tracking).
+
 ### More information
 
-Check out [Kadira Academy](https://kadira.io/academy) for more information.
+Check out [Kadira Academy](https://kadira.io/academy) for more information and improve your app with Kadira.
