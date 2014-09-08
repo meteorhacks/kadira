@@ -1,5 +1,5 @@
 Tinytest.add(
-  'Client Side - Error Model - sends errors', 
+  'Client Side - Error Model - sends errors',
   function(test) {
     var em = new KadiraErrorModel();
     var payloadReceived;
@@ -12,7 +12,7 @@ Tinytest.add(
     test.equal(payloadReceived, {errors: [
       {name: "hello", count: 1}
     ]});
-    
+
     test.equal(em.errorsSent["hello"], {
       name: "hello", count: 0
     });
@@ -22,7 +22,7 @@ Tinytest.add(
 );
 
 Tinytest.add(
-  'Client Side - Error Model - sends same error twice', 
+  'Client Side - Error Model - sends same error twice',
   function(test) {
     var em = new KadiraErrorModel();
     var payloadReceived;
@@ -36,7 +36,7 @@ Tinytest.add(
     test.equal(payloadReceived, {errors: [
       {name: "hello", count: 1}
     ]});
-    
+
     test.equal(em.errorsSent["hello"], {
       name: "hello", count: 1
     });
@@ -46,14 +46,14 @@ Tinytest.add(
 );
 
 Tinytest.add(
-  'Client Side - Error Model - isErrorExists', 
+  'Client Side - Error Model - isErrorExists',
   function(test) {
     var em = new KadiraErrorModel();
     var payloadReceived;
     var resetSend = onKadiraSend(function(payload) {
       resetSend();
     });
-    
+
     em.sendError({name: "hoo"});
     test.equal(em.isErrorExists("hoo"), true);
     test.equal(em.isErrorExists("no-hoo"), false);
@@ -63,18 +63,18 @@ Tinytest.add(
 );
 
 Tinytest.add(
-  'Client Side - Error Model - increamentErrorCount', 
+  'Client Side - Error Model - increamentErrorCount',
   function(test) {
     var em = new KadiraErrorModel();
     var payloadReceived;
     var resetSend = onKadiraSend(function(payload) {
       resetSend();
     });
-    
+
     em.sendError({name: "hoo"});
     em.increamentErrorCount("hoo");
     em.increamentErrorCount("hoo");
-    
+
     test.equal(em.errorsSent["hoo"], {
       name: "hoo", count: 2
     });
@@ -84,14 +84,14 @@ Tinytest.add(
 );
 
 Tinytest.add(
-  'Client Side - Error Model - canSendErrors', 
+  'Client Side - Error Model - canSendErrors',
   function(test) {
     var em = new KadiraErrorModel({maxErrorsPerInterval: 2});
     var payloadReceived;
     var resetSend = onKadiraSend(function(payload) {
       resetSend();
     });
-    
+
     em.sendError({name: "hoo"});
     test.equal(em.canSendErrors(), true);
     em.sendError({name: "hoo2"});
@@ -102,32 +102,19 @@ Tinytest.add(
 );
 
 Tinytest.addAsync(
-  'Client Side - Error Model - validateInterval', 
+  'Client Side - Error Model - validateInterval',
   function(test, done) {
     var em = new KadiraErrorModel({
       maxErrorsPerInterval: 2,
       intervalInMillis: 200
     });
-    
-    em.sendError({name: "hoo"});
-    em.sendError({name: "hoo2"});
 
     em.sendError({name: "hoo"});
     em.sendError({name: "hoo2"});
     test.equal(em.canSendErrors(), false);
 
-    var lastPayload;
-    var resetSend = onKadiraSend(function(payload) {
-      lastPayload = payload;
-      resetSend();
-    });
-
     setTimeout(function() {
       test.equal(em.canSendErrors(), true);
-      test.equal(lastPayload, {errors: [
-        {name: "hoo", count: 1},
-        {name: "hoo2", count: 1},
-      ]});
       em.close();
       done();
     }, 250);
@@ -136,7 +123,7 @@ Tinytest.addAsync(
 );
 
 Tinytest.addAsync(
-  'Client Side - Error Model - wait for ntpSync - not synced yet', 
+  'Client Side - Error Model - wait for ntpSync - not synced yet',
   function(test, done) {
     var em = new KadiraErrorModel({
       waitForNtpSyncInterval: 200
@@ -154,7 +141,7 @@ Tinytest.addAsync(
       test.equal(payloadReceived, {errors: [
         {name: "hello", count: 1}
       ]});
-      
+
       test.equal(em.errorsSent["hello"], {
         name: "hello", count: 0
       });
@@ -166,7 +153,7 @@ Tinytest.addAsync(
 );
 
 Tinytest.add(
-  'Client Side - Error Model - wait for ntpSync - already synced', 
+  'Client Side - Error Model - wait for ntpSync - already synced',
   function(test) {
     var em = new KadiraErrorModel({
       waitForNtpSyncInterval: 200
@@ -183,7 +170,7 @@ Tinytest.add(
     test.equal(payloadReceived, {errors: [
       {name: "hello", count: 1}
     ]});
-    
+
     test.equal(em.errorsSent["hello"], {
       name: "hello", count: 0
     });
@@ -193,7 +180,7 @@ Tinytest.add(
 );
 
 Tinytest.add(
-  'Client Side - Error Model - wait for ntpSync - syncing time', 
+  'Client Side - Error Model - wait for ntpSync - syncing time',
   function(test) {
     var em = new KadiraErrorModel({
       waitForNtpSyncInterval: 200
