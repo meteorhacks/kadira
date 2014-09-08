@@ -11,7 +11,7 @@ Tinytest.addAsync(
   function (test, done) {
     var stack = '-- test stack --';
     var zone = {
-      erroredStack: {_e: {stack: 'stack'}}
+      erroredStack: {get: function () {return stack}}
     };
     getErrorStack(zone, function(trace) {
       test.equal(1, trace.length);
@@ -31,8 +31,8 @@ Tinytest.addAsync(
       createdAt: 100,
       runAt: 200,
       owner: '_owner',
-      currentStack: {_e: {stack: stack}},
-      erroredStack: {_e: {stack: stack}},
+      currentStack: {get: function () {return stack}},
+      erroredStack: {get: function () {return stack}},
       // eventMap: {}
       depth: 20
     };
@@ -72,8 +72,8 @@ Tinytest.addAsync(
       createdAt: 100,
       runAt: 200,
       owner: '_owner',
-      currentStack: {_e: {stack: stack}},
-      erroredStack: {_e: {stack: stack}},
+      currentStack: {get: function () {return stack}},
+      erroredStack: {get: function () {return stack}},
       eventMap: eventMap,
       depth: 20
     };
@@ -120,8 +120,8 @@ Tinytest.addAsync(
       createdAt: 110,
       runAt: 210,
       owner: '_owner2',
-      currentStack: {_e: {stack: stack}},
-      erroredStack: {_e: {stack: stack}},
+      currentStack: {get: function () {return stack}},
+      erroredStack: {get: function () {return stack}},
       depth: 20
     };
 
@@ -131,8 +131,8 @@ Tinytest.addAsync(
       runAt: 200,
       owner: '_owner',
       parent: zone2,
-      currentStack: {_e: {stack: stack}},
-      erroredStack: {_e: {stack: stack}},
+      currentStack: {get: function () {return stack}},
+      erroredStack: {get: function () {return stack}},
       eventMap: eventMap,
       depth: 20
     };
