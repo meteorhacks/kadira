@@ -163,7 +163,7 @@ Tinytest.add(
     var h1 = SubscribeAndWait(client, 'tinytest-data');
     Wait(200);
     var metrics = GetPubSubMetrics();
-    test.equal(metrics[0].pubs['tinytest-data'].bytesBeforeReady, GetDataSize(docs));
+    test.equal(metrics[0].pubs['tinytest-data'].bytesBeforeReady > GetDataSize(docs), true);
     h1.stop();
     CloseClient(client);
   }
@@ -189,7 +189,7 @@ Tinytest.add(
 
     Wait(200);
     var metrics = GetPubSubMetrics();
-    test.equal(metrics[0].pubs[publicationId].bytesBeforeReady, GetDataSize(docs));
+    test.equal(metrics[0].pubs[publicationId].bytesBeforeReady > GetDataSize(docs), true);
     h1.stop();
     CloseClient(client);
   }
@@ -209,7 +209,7 @@ Tinytest.add(
 
     Wait(200);
     var metrics = GetPubSubMetrics();
-    test.equal(metrics[0].pubs['tinytest-data'].bytesBeforeReady, GetDataSize(docs));
+    test.equal(metrics[0].pubs['tinytest-data'].bytesBeforeReady > GetDataSize(docs), true);
     h1.stop();
     h2.stop();
     CloseClient(client);
@@ -230,8 +230,8 @@ Tinytest.add(
 
     Wait(200);
     var metrics = GetPubSubMetrics();
-    test.equal(metrics[0].pubs['tinytest-data'].bytesBeforeReady, GetDataSize(post1));
-    test.equal(metrics[0].pubs['tinytest-data'].bytesAddedAfterReady, GetDataSize(post2));
+    test.equal(metrics[0].pubs['tinytest-data'].bytesBeforeReady > GetDataSize(post1), true);
+    test.equal(metrics[0].pubs['tinytest-data'].bytesAddedAfterReady > GetDataSize(post2), true);
     test.equal(metrics[0].pubs['tinytest-data'].bytesChangedAfterReady, 0);
     h1.stop();
     CloseClient(client);
@@ -252,9 +252,9 @@ Tinytest.add(
 
     Wait(200);
     var metrics = GetPubSubMetrics();
-    test.equal(metrics[0].pubs['tinytest-data'].bytesBeforeReady, GetDataSize(post1));
+    test.equal(metrics[0].pubs['tinytest-data'].bytesBeforeReady > GetDataSize(post1), true);
     test.equal(metrics[0].pubs['tinytest-data'].bytesAddedAfterReady, 0);
-    test.equal(metrics[0].pubs['tinytest-data'].bytesChangedAfterReady, GetDataSize(post2));
+    test.equal(metrics[0].pubs['tinytest-data'].bytesChangedAfterReady > GetDataSize(post2), true);
     h1.stop();
     CloseClient(client);
   }
@@ -276,9 +276,9 @@ Tinytest.add(
 
     Wait(200);
     var metrics = GetPubSubMetrics();
-    test.equal(metrics[0].pubs['tinytest-data'].bytesBeforeReady, GetDataSize(post1));
-    test.equal(metrics[0].pubs['tinytest-data'].bytesAddedAfterReady, GetDataSize(post3));
-    test.equal(metrics[0].pubs['tinytest-data'].bytesChangedAfterReady, GetDataSize(post2));
+    test.equal(metrics[0].pubs['tinytest-data'].bytesBeforeReady > GetDataSize(post1), true);
+    test.equal(metrics[0].pubs['tinytest-data'].bytesAddedAfterReady > GetDataSize(post3), true);
+    test.equal(metrics[0].pubs['tinytest-data'].bytesChangedAfterReady > GetDataSize(post2), true);
     h1.stop();
     CloseClient(client);
   }
@@ -297,7 +297,7 @@ Tinytest.add(
 
     Wait(200);
     var metrics = GetPubSubMetrics();
-    test.equal(metrics[0].pubs['tinytest-data'].bytesBeforeReady, GetDataSize(docs));
+    test.equal(metrics[0].pubs['tinytest-data'].bytesBeforeReady > GetDataSize(docs), true);
     test.equal(metrics[0].pubs['tinytest-data'].bytesAddedAfterReady, 0);
     test.equal(metrics[0].pubs['tinytest-data'].bytesChangedAfterReady, 0);
     h1.stop();
