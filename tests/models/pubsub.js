@@ -388,7 +388,7 @@ Tinytest.add(
     var h1 = SubscribeAndWait(client, 'tinytest-data');
     Wait(200);
     var payload = GetPubSubPayload();
-    test.equal(payload[0].pubs['tinytest-data'].avgDocSize, size/3);
+    test.equal(payload[0].pubs['tinytest-data'].avgDocSize >  size/3, true);
     h1.stop();
     CloseClient(client);
   }
@@ -412,7 +412,7 @@ Tinytest.add(
     var h3 = SubscribeAndWait(client3, 'tinytest-data');
     Wait(200);
     var payload = GetPubSubPayload();
-    test.equal(payload[0].pubs['tinytest-data'].avgDocSize, 3*size/9);
+    test.equal(payload[0].pubs['tinytest-data'].avgDocSize > 3*size/9, true);
     h1.stop();
     h2.stop();
     h3.stop();
