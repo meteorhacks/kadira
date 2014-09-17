@@ -54,7 +54,7 @@
     ],
     [
       "livedata",
-      "1.0.9"
+      "1.0.8"
     ],
     [
       "localstorage",
@@ -106,6 +106,6 @@
     ]
   ],
   "pluginDependencies": [],
-  "toolVersion": "meteor-tool@1.0.30",
+  "toolVersion": "meteor-tool@1.0.27",
   "format": "1.0"
 }
