@@ -56,6 +56,7 @@ Package.on_test(function(api) {
     'tests/tracer.js',
     'tests/check_for_oplog.js',
     'tests/error_tracking.js',
+    'tests/wait_time_builder.js',
   ], 'server');
 
   api.add_files([
