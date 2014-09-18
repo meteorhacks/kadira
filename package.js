@@ -1,6 +1,6 @@
 Package.describe({
   "summary": "Performance Monitoring for Meteor",
-  "version": "2.8.1",
+  "version": "2.9.0-rc1",
   "git": "https://github.com/meteorhacks/kadira.git",
   "name": "meteorhacks:kadira"
 });
@@ -56,6 +56,7 @@ Package.on_test(function(api) {
     'tests/tracer.js',
     'tests/check_for_oplog.js',
     'tests/error_tracking.js',
+    'tests/wait_time_builder.js',
   ], 'server');
 
   api.add_files([
@@ -91,6 +92,7 @@ function configurePackage(api) {
     'lib/retry.js',
     'lib/utils.js',
     'lib/ntp.js',
+    'lib/wait_time_builder.js',
     'lib/models/0model.js',
     'lib/models/methods.js',
     'lib/models/pubsub.js',
