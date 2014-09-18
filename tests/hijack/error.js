@@ -65,9 +65,9 @@ Tinytest.add(
   }
 );
 
-Tinytest.add(
+Tinytest.addAsync(
   'Errors - Meteor._debug - do not track pubsub errors',
-  function (test) {
+  function (test, done) {
     var originalErrorTrackingStatus = Kadira.options.enableErrorTracking;
     Kadira.enableErrorTracking();
     Kadira.models.error = new ErrorModel('foo');
@@ -77,8 +77,10 @@ Tinytest.add(
       var payload = Kadira.models.error.buildPayload();
       var error = payload.errors[0];
       test.equal(1, payload.errors.length);
-      test.equal(error.source, 'sub:'+pubsub);
+      test.equal(error.type, 'sub');
+      test.equal(error.subType, pubsub);
       _resetErrorTracking(originalErrorTrackingStatus);
+      done();
     }});
 
     function causeError () {
