@@ -6,7 +6,8 @@ Package.describe({
 });
 
 var npmModules = {
-  "debug": "0.7.4"
+  "debug": "0.7.4",
+  "v8-profiler": "5.1.1"
 };
 
 if(!Package.onUse) {
@@ -110,6 +111,7 @@ function configurePackage(api) {
     'lib/hijack/email.js',
     'lib/hijack/async.js',
     'lib/hijack/error.js',
+    'lib/profile/server.js',
     'lib/auto_connect.js'
   ], 'server');
 
@@ -122,5 +124,6 @@ function configurePackage(api) {
     'lib/client/error_reporters/window_error.js',
     'lib/client/error_reporters/meteor_debug.js',
     'lib/client/kadira.js',
+    'lib/profile/client.js',
   ], 'client')
 }
