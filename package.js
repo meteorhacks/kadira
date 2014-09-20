@@ -7,7 +7,7 @@ Package.describe({
 
 var npmModules = {
   "debug": "0.7.4",
-  "v8-profiler": "5.1.1"
+  "v8-profiler": "https://github.com/arunoda/v8-profiler/archive/2413633fb50897773766eae4e6df391aec0885ea.tar.gz"
 };
 
 if(!Package.onUse) {
@@ -112,6 +112,8 @@ function configurePackage(api) {
     'lib/hijack/async.js',
     'lib/hijack/error.js',
     'lib/profile/server.js',
+    'lib/profile/sample.cpuprofile.js',
+    'lib/profile/process_profile.js',
     'lib/auto_connect.js'
   ], 'server');
 
