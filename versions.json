@@ -2,7 +2,11 @@
   "dependencies": [
     [
       "application-configuration",
-      "1.0.1"
+      "1.0.2"
+    ],
+    [
+      "base64",
+      "1.0.0"
     ],
     [
       "binary-heap",
@@ -22,7 +26,7 @@
     ],
     [
       "ejson",
-      "1.0.1"
+      "1.0.2"
     ],
     [
       "email",
@@ -38,7 +42,7 @@
     ],
     [
       "http",
-      "1.0.4"
+      "1.0.5"
     ],
     [
       "id-map",
@@ -54,7 +58,7 @@
     ],
     [
       "livedata",
-      "1.0.8"
+      "1.0.9"
     ],
     [
       "localstorage",
@@ -62,11 +66,11 @@
     ],
     [
       "logging",
-      "1.0.2"
+      "1.0.3"
     ],
     [
       "meteor",
-      "1.0.3"
+      "1.1.0"
     ],
     [
       "meteorhacks:kadira-binary-deps",
@@ -74,11 +78,11 @@
     ],
     [
       "minimongo",
-      "1.0.2"
+      "1.0.3"
     ],
     [
       "mongo",
-      "1.0.4"
+      "1.0.5"
     ],
     [
       "mongo-livedata",
@@ -102,6 +106,10 @@
     ],
     [
       "underscore",
+      "1.0.0"
+    ],
+    [
+      "url",
       "1.0.0"
     ]
   ],
