@@ -44,6 +44,20 @@ Tinytest.add(
 );
 
 Tinytest.add(
+  'Models - BaseErrorModel - remove filters - multiple errors',
+  function (test) {
+    var model = new BaseErrorModel();
+    var falseFilter = function() { return false; };
+    model.addFilter(function() { return true; });
+    model.addFilter(falseFilter);
+    model.removeFilter(falseFilter);
+
+    var validated = model.applyFilters('type', 'message', {}, 'subType');
+    test.equal(validated, true);
+  }
+);
+
+Tinytest.add(
   'Models - BaseErrorModel - add filters - invalid filters',
   function (test) {
     var model = new BaseErrorModel();
@@ -83,7 +97,6 @@ Tinytest.add(
       model.applyFilters();
       test.fail('we are looking for an error');
     } catch(ex) {
-      console.log(ex);
       test.equal(/an error thrown from a filter you've suplied/.test(ex.message), true);
     }
   }
