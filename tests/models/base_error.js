@@ -11,6 +11,15 @@ Tinytest.add(
 );
 
 Tinytest.add(
+  'Models - BaseErrorModel - add filters - no filters',
+  function (test) {
+    var model = new BaseErrorModel();
+    var validated = model.applyFilters('type', 'message', {}, 'subType');
+    test.equal(validated, true);
+  }
+);
+
+Tinytest.add(
   'Models - BaseErrorModel - add filters - fail errors',
   function (test) {
     var model = new BaseErrorModel();
