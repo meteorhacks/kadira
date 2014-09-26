@@ -31,6 +31,10 @@ Package.on_test(function(api) {
     'test-helpers'
   ], ['client', 'server']);
 
+  api.add_files([
+    'tests/models/base_error.js'
+  ], ['client', 'server']);
+
   // "tests/zones.js" should be last because it messes up kadira instrumenting
   // by calling Kadira.connect() multiple times
   api.add_files([
@@ -87,6 +91,10 @@ function configurePackage(api) {
     'underscore', 'http', 'email', 'random'
   ], ['server']);
   api.use(['underscore', 'random', 'jquery', 'localstorage'], ['client']);
+
+  api.add_files([
+    'lib/models/base_error.js'
+  ], ['client', 'server']);
 
   api.add_files([
     'lib/retry.js',
