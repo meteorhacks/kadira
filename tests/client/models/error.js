@@ -1,7 +1,7 @@
 Tinytest.add(
   'Client Side - Error Model - sends errors',
   function(test) {
-    var em = new KadiraErrorModel();
+    var em = new ErrorModel();
     var payloadReceived;
     var resetSend = onKadiraSend(function(payload) {
       payloadReceived = payload;
@@ -24,7 +24,7 @@ Tinytest.add(
 Tinytest.add(
   'Client Side - Error Model - sends same error twice',
   function(test) {
-    var em = new KadiraErrorModel();
+    var em = new ErrorModel();
     var payloadReceived;
     var resetSend = onKadiraSend(function(payload) {
       payloadReceived = payload;
@@ -48,7 +48,7 @@ Tinytest.add(
 Tinytest.add(
   'Client Side - Error Model - isErrorExists',
   function(test) {
-    var em = new KadiraErrorModel();
+    var em = new ErrorModel();
     var payloadReceived;
     var resetSend = onKadiraSend(function(payload) {
       resetSend();
@@ -65,7 +65,7 @@ Tinytest.add(
 Tinytest.add(
   'Client Side - Error Model - increamentErrorCount',
   function(test) {
-    var em = new KadiraErrorModel();
+    var em = new ErrorModel();
     var payloadReceived;
     var resetSend = onKadiraSend(function(payload) {
       resetSend();
@@ -86,7 +86,7 @@ Tinytest.add(
 Tinytest.add(
   'Client Side - Error Model - canSendErrors',
   function(test) {
-    var em = new KadiraErrorModel({maxErrorsPerInterval: 2});
+    var em = new ErrorModel({maxErrorsPerInterval: 2});
     var payloadReceived;
     var resetSend = onKadiraSend(function(payload) {
       resetSend();
@@ -104,7 +104,7 @@ Tinytest.add(
 Tinytest.addAsync(
   'Client Side - Error Model - validateInterval',
   function(test, done) {
-    var em = new KadiraErrorModel({
+    var em = new ErrorModel({
       maxErrorsPerInterval: 2,
       intervalInMillis: 200
     });
@@ -125,7 +125,7 @@ Tinytest.addAsync(
 Tinytest.addAsync(
   'Client Side - Error Model - wait for ntpSync - not synced yet',
   function(test, done) {
-    var em = new KadiraErrorModel({
+    var em = new ErrorModel({
       waitForNtpSyncInterval: 200
     });
 
@@ -155,7 +155,7 @@ Tinytest.addAsync(
 Tinytest.add(
   'Client Side - Error Model - wait for ntpSync - already synced',
   function(test) {
-    var em = new KadiraErrorModel({
+    var em = new ErrorModel({
       waitForNtpSyncInterval: 200
     });
 
@@ -182,7 +182,7 @@ Tinytest.add(
 Tinytest.add(
   'Client Side - Error Model - wait for ntpSync - syncing time',
   function(test) {
-    var em = new KadiraErrorModel({
+    var em = new ErrorModel({
       waitForNtpSyncInterval: 200
     });
 

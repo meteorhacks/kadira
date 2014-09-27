@@ -31,8 +31,12 @@ Package.on_test(function(api) {
     'test-helpers'
   ], ['client', 'server']);
 
-  // "tests/zones.js" should be last because it messes up kadira instrumenting
-  // by calling Kadira.connect() multiple times
+  // common before
+  api.add_files([
+    'tests/models/base_error.js'
+  ], ['client', 'server']);
+
+  // common server
   api.add_files([
     'tests/ntp.js',
     'tests/_helpers/globals.js',
@@ -59,6 +63,7 @@ Package.on_test(function(api) {
     'tests/wait_time_builder.js',
   ], 'server');
 
+  // common client
   api.add_files([
     'tests/client/utils.js',
     'tests/client/error_tracking.js',
@@ -67,6 +72,11 @@ Package.on_test(function(api) {
     'tests/client/error_reporters/zone.js',
     'tests/client/error_reporters/meteor_debug.js',
   ], 'client');
+
+  // common after
+  api.add_files([
+    'tests/common/default_error_filters.js'
+  ], ['client', 'server']);
 });
 
 function configurePackage(api) {
@@ -88,6 +98,12 @@ function configurePackage(api) {
   ], ['server']);
   api.use(['underscore', 'random', 'jquery', 'localstorage'], ['client']);
 
+  // common before
+  api.add_files([
+    'lib/models/base_error.js'
+  ], ['client', 'server']);
+
+  // only server
   api.add_files([
     'lib/retry.js',
     'lib/utils.js',
@@ -113,6 +129,7 @@ function configurePackage(api) {
     'lib/auto_connect.js'
   ], 'server');
 
+  // only client
   api.add_files([
     'lib/retry.js',
     'lib/ntp.js',
@@ -122,5 +139,10 @@ function configurePackage(api) {
     'lib/client/error_reporters/window_error.js',
     'lib/client/error_reporters/meteor_debug.js',
     'lib/client/kadira.js',
-  ], 'client')
+  ], 'client');
+
+  // common after
+  api.add_files([
+    'lib/common/default_error_filters.js'
+  ], ['client', 'server']);
 }
