@@ -547,5 +547,5 @@ Tinytest.add(
 function clearAdditionalObserverInfo (info) {
   delete info.queueLength;
   delete info.initialPollingTime;
-  delete info.elapsedPollWaitTime;
+  delete info.elapsedPollingTime;
 }
