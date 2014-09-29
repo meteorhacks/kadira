@@ -76,7 +76,8 @@ Package.on_test(function(api) {
 
   // common after
   api.add_files([
-    'tests/common/default_error_filters.js'
+    'tests/common/default_error_filters.js',
+    'tests/common/send.js'
   ], ['client', 'server']);
 });
 
@@ -142,11 +143,12 @@ function configurePackage(api) {
     'lib/client/error_reporters/window_error.js',
     'lib/client/error_reporters/meteor_debug.js',
     'lib/client/kadira.js',
-    'lib/profile/client.js',
+    'lib/profile/client.js'
   ], 'client');
 
   // common after
   api.add_files([
-    'lib/common/default_error_filters.js'
+    'lib/common/default_error_filters.js',
+    'lib/common/send.js'
   ], ['client', 'server']);
 }
