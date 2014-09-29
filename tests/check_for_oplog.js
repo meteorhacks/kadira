@@ -1,3 +1,7 @@
+if(typeof Minimongo == 'undefined') {
+  return;
+}
+
 Tinytest.add(
   'CheckForOplog - OplogCheck._070 - no limit supported',
   function (test) {
