@@ -92,6 +92,7 @@ function configurePackage(api) {
     // now, zones is a weak dependancy!
     // kadira on the client side knows how to handle it 
     // api.use('zones');
+    api.use('async');
   }
 
   api.use([
@@ -102,11 +103,13 @@ function configurePackage(api) {
 
   // common before
   api.add_files([
+    'lib/common/unify.js',
     'lib/models/base_error.js'
   ], ['client', 'server']);
 
   // only server
   api.add_files([
+    'lib/jobs.js',
     'lib/retry.js',
     'lib/utils.js',
     'lib/ntp.js',
