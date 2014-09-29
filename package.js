@@ -112,8 +112,6 @@ function configurePackage(api) {
     'lib/hijack/async.js',
     'lib/hijack/error.js',
     'lib/profile/server.js',
-    'lib/profile/sample.cpuprofile.js',
-    'lib/profile/process_profile.js',
     'lib/auto_connect.js'
   ], 'server');
 
