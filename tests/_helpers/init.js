@@ -33,8 +33,12 @@ http.createServer(function(req, res) {
 
       res.end(JSON.stringify(sendData));
     } else {
-      res.writeHead(500);
-      res.end();
+      res.writeHead(400, {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET,POST',
+        'Access-Control-Allow-Headers': 'Content-Type'
+      });
+      res.end('internal-error-here');
     }
   });
   

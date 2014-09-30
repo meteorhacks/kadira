@@ -54,6 +54,23 @@ Tinytest.addAsync(
   }
 );
 
+if(Meteor.isServer) {
+  Tinytest.addAsync(
+    'Kadira Send - Kadira.send - accepting server errors',
+    function (test, done) {
+      var payload = {aa: 10};
+      var newKadiraOptions = {endpoint: 'http://localhost:8808'};
+      withKadiraOptions(newKadiraOptions, function() {
+        Kadira.send(payload, 'non-exisiting-route', function(err, data) {
+          test.equal(err.reason, 'internal-error-here');
+          test.equal(err.error, 400);
+          done();
+        });
+      });
+    }
+  );
+}
+
 function withKadiraOptions(options, f) {
   var orginalOptions = Kadira.options;
   Kadira.options = options;
