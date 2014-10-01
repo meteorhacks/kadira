@@ -6,8 +6,7 @@ Package.describe({
 });
 
 var npmModules = {
-  "debug": "0.7.4",
-  "v8-profiler": "https://github.com/arunoda/v8-profiler/archive/2413633fb50897773766eae4e6df391aec0885ea.tar.gz"
+  "debug": "0.7.4"
 };
 
 if(!Package.onUse) {
@@ -15,7 +14,8 @@ if(!Package.onUse) {
   // we need to add usage @0.4.9 which contains platform specific builds
   // for 0.9+ we are using meteorhacks:kadira-binary-deps
   // which has platform specific builds
-  npmModules.usage = "0.4.9"
+  npmModules["usage"] = "0.4.9";
+  npmModules["v8-profiler"] = "5.2.0";
 }
 
 Npm.depends(npmModules);
@@ -85,7 +85,7 @@ function configurePackage(api) {
   if(api.versionsFrom) {
     api.versionsFrom('METEOR@0.9.1');
     // binary dependencies
-    api.use('meteorhacks:kadira-binary-deps@1.0.1');
+    api.use('meteorhacks:kadira-binary-deps@1.2.0');
     api.use('meteorhacks:zones@1.2.1', {weak: true});
   } else {
     // for Meteor releases <= 0.8.3
