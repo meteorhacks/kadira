@@ -1,9 +1,51 @@
 Kadira.connect('foo', 'bar', {enableErrorTracking: true});
+var http = Npm.require('http');
+var Future = Npm.require('fibers/future');
 
-Npm.require('http').createServer(function(req, res) {
+var server3301 = new Future();
+var server8808 = new Future();
+
+http.createServer(function(req, res) {
   res.writeHead(200);
   res.end('hello');
-}).listen(3301);
+}).listen(3301, server3301.return.bind(server3301));
+
+http.createServer(function(req, res) {
+  var data = "";
+  req.on('data', function(d) {
+    data += d.toString();
+  });
+  
+  req.on('end', function() {
+    if(req.url == '/echo') {
+      var sendData = {success: true};
+      res.writeHead(200, {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET,POST',
+        'Access-Control-Allow-Headers': 'Content-Type'
+      });
+
+      if(req.headers['content-type'] == 'application/json') {
+        data = JSON.parse(data);
+        sendData = {echo: data};
+      }
+
+      res.end(JSON.stringify(sendData));
+    } else {
+      res.writeHead(400, {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET,POST',
+        'Access-Control-Allow-Headers': 'Content-Type'
+      });
+      res.end('internal-error-here');
+    }
+  });
+  
+}).listen(8808, server8808.return.bind(server8808));
+
+server3301.wait();
+server8808.wait();
 
 // TODO use RegisterPublication instead of these
 

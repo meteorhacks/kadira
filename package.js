@@ -14,7 +14,8 @@ if(!Package.onUse) {
   // we need to add usage @0.4.9 which contains platform specific builds
   // for 0.9+ we are using meteorhacks:kadira-binary-deps
   // which has platform specific builds
-  npmModules.usage = "0.4.9"
+  npmModules["usage"] = "0.4.9";
+  npmModules["v8-profiler"] = "5.2.0";
 }
 
 Npm.depends(npmModules);
@@ -75,7 +76,8 @@ Package.on_test(function(api) {
 
   // common after
   api.add_files([
-    'tests/common/default_error_filters.js'
+    'tests/common/default_error_filters.js',
+    'tests/common/send.js'
   ], ['client', 'server']);
 });
 
@@ -83,13 +85,14 @@ function configurePackage(api) {
   if(api.versionsFrom) {
     api.versionsFrom('METEOR@0.9.1');
     // binary dependencies
-    api.use('meteorhacks:kadira-binary-deps@1.0.1');
+    api.use('meteorhacks:kadira-binary-deps@1.2.0');
     api.use('meteorhacks:zones@1.2.1', {weak: true});
   } else {
     // for Meteor releases <= 0.8.3
     // now, zones is a weak dependancy!
     // kadira on the client side knows how to handle it 
     // api.use('zones');
+    api.use('async');
   }
 
   api.use([
@@ -100,11 +103,13 @@ function configurePackage(api) {
 
   // common before
   api.add_files([
+    'lib/common/unify.js',
     'lib/models/base_error.js'
   ], ['client', 'server']);
 
   // only server
   api.add_files([
+    'lib/jobs.js',
     'lib/retry.js',
     'lib/utils.js',
     'lib/ntp.js',
@@ -127,6 +132,7 @@ function configurePackage(api) {
     'lib/hijack/email.js',
     'lib/hijack/async.js',
     'lib/hijack/error.js',
+    'lib/profile/server.js',
     'lib/auto_connect.js'
   ], 'server');
 
@@ -140,10 +146,12 @@ function configurePackage(api) {
     'lib/client/error_reporters/window_error.js',
     'lib/client/error_reporters/meteor_debug.js',
     'lib/client/kadira.js',
+    'lib/profile/client.js'
   ], 'client');
 
   // common after
   api.add_files([
-    'lib/common/default_error_filters.js'
+    'lib/common/default_error_filters.js',
+    'lib/common/send.js'
   ], ['client', 'server']);
 }
