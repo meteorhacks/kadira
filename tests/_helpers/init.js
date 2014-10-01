@@ -16,7 +16,7 @@ Meteor.publish('tinytest-data-2', function() {
 });
 
 Meteor.publish('tinytest-data-delayed', function() {
-  Meteor.wrapAsync(function(done) {
+  wrapAsync(function(done) {
     setTimeout(done, 200);
   })();
   return TestData.find();

@@ -28,7 +28,7 @@ Tinytest.add(
   function (test) {
     EnableTrackingMethods();
     var methodId = RegisterMethod(function () {
-      var wait = Meteor.wrapAsync(function(waitTime, callback) {
+      var wait = wrapAsync(function(waitTime, callback) {
         setTimeout(function () {
           callback(new Error('error'));
         }, waitTime);
