@@ -4,7 +4,7 @@ Tinytest.add(
   function (test) {
     var beforeTime = (new Date).getTime();
     var model = new SystemModel();
-    Meteor._wrapAsync(function(callback) {
+    Meteor.wrapAsync(function(callback) {
       setTimeout(callback, 1000);
     })();
     var payload = model.buildPayload().systemMetrics[0];
