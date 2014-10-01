@@ -1,6 +1,6 @@
 Package.describe({
   "summary": "Performance Monitoring for Meteor",
-  "version": "2.10.0",
+  "version": "2.10.1",
   "git": "https://github.com/meteorhacks/kadira.git",
   "name": "meteorhacks:kadira"
 });
@@ -92,7 +92,6 @@ function configurePackage(api) {
     // now, zones is a weak dependancy!
     // kadira on the client side knows how to handle it 
     // api.use('zones');
-    api.use('async');
   }
 
   api.use([
