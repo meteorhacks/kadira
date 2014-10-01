@@ -1,10 +1,10 @@
 
 Tinytest.add(
-  'Async - track with Meteor._wrapAsync',
+  'Async - track with Meteor.wrapAsync',
   function (test) {
     EnableTrackingMethods();
     var methodId = RegisterMethod(function () {
-      var wait = Meteor._wrapAsync(function(waitTime, callback) {
+      var wait = Meteor.wrapAsync(function(waitTime, callback) {
         setTimeout(callback, waitTime);
       });
       wait(100);
@@ -24,11 +24,11 @@ Tinytest.add(
 );
 
 Tinytest.add(
-  'Async - track with Meteor._wrapAsync with error',
+  'Async - track with Meteor.wrapAsync with error',
   function (test) {
     EnableTrackingMethods();
     var methodId = RegisterMethod(function () {
-      var wait = Meteor._wrapAsync(function(waitTime, callback) {
+      var wait = wrapAsync(function(waitTime, callback) {
         setTimeout(function () {
           callback(new Error('error'));
         }, waitTime);
