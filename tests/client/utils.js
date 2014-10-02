@@ -2,14 +2,12 @@
 Tinytest.addAsync(
   'Client Side - Settings - publication',
   function (test, done) {
-    Meteor.subscribe('kadira_settings');
-    new Meteor.Collection('kadira_settings').find().observe({
-      'added': function (options) {
-        test.equal(!!options.appId, true);
-        test.equal(!!options.endpoint, true);
-        done();
-      }
-    });
+    var SettingsCollection = new Meteor.Collection('kadira_settings');
+    SettingsCollection.find().observe({added: _.once(function (options) {
+      test.equal(!!options.appId, true);
+      test.equal(!!options.endpoint, true);
+      done();
+    })});
   }
 );
 
