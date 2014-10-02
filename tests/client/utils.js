@@ -1,4 +1,16 @@
 
+Tinytest.addAsync(
+  'Client Side - Settings - publication',
+  function (test, done) {
+    var SettingsCollection = new Meteor.Collection('kadira_settings');
+    SettingsCollection.find().observe({added: _.once(function (options) {
+      test.equal(!!options.appId, true);
+      test.equal(!!options.endpoint, true);
+      done();
+    })});
+  }
+);
+
 Tinytest.add(
   'Client Side - Error Manager - Utils - getErrorStack()',
   function (test) {
