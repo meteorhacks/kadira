@@ -54,6 +54,39 @@ Tinytest.add(
   })
 );
 
+Tinytest.add(
+  'Client Side - Error Manager - Reporters - meteor._debug - using Error only',
+  TestWithErrorTracking(function (test) {
+    hijackKadiraSendErrors(mock_KadiraSendErrors);
+    test.equal(typeof Meteor._debug, 'function');
+    var errorSent = false;
+    var originalZone = window.zone;
+    var message = Meteor.uuid();
+    window.zone = undefined;
+
+    try {
+      var err = new Error(message);
+      err.stack = '_stack';
+      Meteor._debug(err);
+    } catch(e) {};
+
+    window.zone = originalZone;
+    test.equal(errorSent, true);
+    restoreKadiraSendErrors();
+
+    function mock_KadiraSendErrors(error) {
+      errorSent = true;
+      test.equal('string', typeof error.appId);
+      test.equal('object', typeof error.info);
+      test.equal(message, error.name);
+      test.equal('client', error.type);
+      test.equal(true, Array.isArray(JSON.parse(error.stacks)));
+      test.equal('number', typeof error.startTime);
+      test.equal('meteor._debug', error.subType);
+    }
+  })
+);
+
 //--------------------------------------------------------------------------\\
 
 var original_KadiraSendErrors;
