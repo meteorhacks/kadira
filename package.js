@@ -122,6 +122,7 @@ function configurePackage(api) {
     'lib/check_for_oplog.js',
     'lib/tracer.js',
     'lib/tracer_store.js',
+    'lib/hijack/wrap_server.js',
     'lib/hijack/wrap_session.js',
     'lib/hijack/wrap_subscription.js',
     'lib/hijack/wrap_observers.js',
