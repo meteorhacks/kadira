@@ -117,3 +117,36 @@ Tinytest.add(
     test.equal(_.keys(model._sessionMap).length, 0);
   }
 );
+
+Tinytest.add(
+  'Models - System - new Sessions - integration - new connections',
+  function (test) {
+    var model = Kadira.models.system;
+    var initCount = model.newSessions;
+
+    GetMeteorClient();
+    GetMeteorClient();
+
+    Wait(100);
+    var newSessions = model.newSessions - initCount;
+    test.equal(newSessions, 2);
+  }
+);
+
+Tinytest.add(
+  'Models - System - new Sessions - integration - reconnect',
+  function (test) {
+    var model = Kadira.models.system;
+    var initCount = model.newSessions;
+
+    var client = GetMeteorClient();
+    Wait(50);
+    client.disconnect();
+    Wait(50);
+    client.reconnect();
+    Wait(50);
+
+    var newSessions = model.newSessions - initCount;
+    test.equal(newSessions, 1);
+  }
+);
