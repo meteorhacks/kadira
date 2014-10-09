@@ -6,7 +6,8 @@ Package.describe({
 });
 
 var npmModules = {
-  "debug": "0.7.4"
+  "debug": "0.7.4",
+  "toobusy-js": "0.3.1",
 };
 
 if(!Package.onUse) {
