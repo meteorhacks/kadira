@@ -29,7 +29,7 @@ Tinytest.add(
   'Models - System - new Sessions - ignore local sessions',
   function (test) {
     var model = new SystemModel();
-    model.handleSessionActivity({msg: 'connect', _isLocalhost: true}, 'id');
+    model.handleSessionActivity({msg: 'connect', _address: '127.0.0.1'}, 'id');
     test.equal(model.newSessions, 0);
   }
 );
