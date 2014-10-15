@@ -77,10 +77,6 @@
       "1.2.0"
     ],
     [
-      "meteorhacks:meteorx",
-      "1.1.0"
-    ],
-    [
       "minimongo",
       "1.0.3"
     ],
@@ -118,6 +114,6 @@
     ]
   ],
   "pluginDependencies": [],
-  "toolVersion": "meteor-tool@1.0.33",
+  "toolVersion": "meteor-tool@1.0.34",
   "format": "1.0"
 }
