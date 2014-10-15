@@ -77,6 +77,10 @@
       "1.2.0"
     ],
     [
+      "meteorhacks:meteorx",
+      "1.1.0"
+    ],
+    [
       "minimongo",
       "1.0.4"
     ],
