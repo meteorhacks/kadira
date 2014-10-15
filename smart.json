@@ -5,5 +5,7 @@
   "author": "MeteorHacks <hello@meteorhacks.com>",
   "version": "2.11.8",
   "git": "https://github.com/meteorhacks/kadira.git",
-  "packages": {}
+  "packages": {
+    "meteorx": "1.1.0"
+  }
 }
