@@ -62,6 +62,7 @@ Package.on_test(function(api) {
     'tests/check_for_oplog.js',
     'tests/error_tracking.js',
     'tests/wait_time_builder.js',
+    'tests/profile/set_labels.js',
   ], 'server');
 
   // common client
@@ -135,6 +136,7 @@ function configurePackage(api) {
     'lib/hijack/async.js',
     'lib/hijack/error.js',
     'lib/profile/server.js',
+    'lib/profile/set_labels.js',
     'lib/auto_connect.js'
   ], 'server');
 
