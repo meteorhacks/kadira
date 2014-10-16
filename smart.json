@@ -6,6 +6,6 @@
   "version": "2.11.10",
   "git": "https://github.com/meteorhacks/kadira.git",
   "packages": {
-    "meteorx": "1.1.0"
+    "meteorx": "1.2.0"
   }
 }
