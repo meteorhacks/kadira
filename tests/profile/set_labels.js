@@ -42,3 +42,13 @@ Tinytest.add(
     });
   }
 );
+
+Tinytest.add(
+  'CPU Profiler - set labels - Session sends',
+  function (test) {
+    var sessionProto = MeteorX.Session.prototype;
+    ['sendAdded', 'sendChanged', 'sendRemoved'].forEach(function (name) {
+      test.equal(sessionProto[name].name, 'kadira_Session_'+name);
+    });
+  }
+);
