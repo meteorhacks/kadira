@@ -32,3 +32,13 @@ Tinytest.add(
     test.equal(name, 'kadira_Multiplexer_sendAdds');
   }
 );
+
+Tinytest.add(
+  'CPU Profiler - set labels - MongoConnection methods',
+  function (test) {
+    var cursorProto = MeteorX.MongoConnection.prototype;
+    ['insert', 'update', 'remove'].forEach(function (name) {
+      test.equal(cursorProto['_'+name].name, 'kadira_MongoConnection_'+name);
+    });
+  }
+);
