@@ -3,7 +3,9 @@
   "description": "Performance Monitoring for Meteor",
   "homepage": "https://kadira.io",
   "author": "MeteorHacks <hello@meteorhacks.com>",
-  "version": "2.11.11",
+  "version": "2.11.10",
   "git": "https://github.com/meteorhacks/kadira.git",
-  "packages": {}
+  "packages": {
+    "meteorx": "1.2.0"
+  }
 }
