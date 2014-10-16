@@ -24,3 +24,11 @@ Tinytest.add(
     });
   }
 );
+
+Tinytest.add(
+  'CPU Profiler - set labels - Multiplexer.prototype._sendAdds',
+  function (test) {
+    var name = MeteorX.Multiplexer.prototype._sendAdds.name;
+    test.equal(name, 'kadira_Multiplexer_sendAdds');
+  }
+);
