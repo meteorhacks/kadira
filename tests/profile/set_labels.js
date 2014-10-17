@@ -52,3 +52,13 @@ Tinytest.add(
     });
   }
 );
+
+Tinytest.add(
+  'CPU Profiler - set labels - Crossbar methods',
+  function (test) {
+    var crossbarProto = DDPServer._Crossbar.prototype;
+    ['listen', 'fire'].forEach(function (name) {
+      test.equal(crossbarProto[name].name, 'kadira_Crossbar_'+name);
+    });
+  }
+);
