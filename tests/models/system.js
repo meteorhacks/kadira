@@ -17,11 +17,22 @@ Tinytest.add(
 );
 
 Tinytest.add(
-  'Models - System - new Sessions - a new session',
+  'Models - System - new Sessions - count new session',
   function (test) {
     var model = new SystemModel();
-    model.handleSessionActivity({msg: 'connect'}, 'the-new-id');
+    var session = {socket: {headers: {'x-forwarded-for': '1.1.1.1'}}};
+    model.handleSessionActivity({msg: 'connect'}, session);
     test.equal(model.newSessions, 1);
+  }
+);
+
+Tinytest.add(
+  'Models - System - new Sessions - initial _activeAt',
+  function (test) {
+    var model = new SystemModel();
+    var session = {socket: {headers: {'x-forwarded-for': '1.1.1.1'}}};
+    model.handleSessionActivity({msg: 'connect'}, session);
+    test.equal(Date.now() - session._activeAt < 1000, true);
   }
 );
 
@@ -29,7 +40,8 @@ Tinytest.add(
   'Models - System - new Sessions - ignore local sessions',
   function (test) {
     var model = new SystemModel();
-    model.handleSessionActivity({msg: 'connect', _address: '127.0.0.1'}, 'id');
+    var session = {socket: {headers: {'x-forwarded-for': '127.0.0.1'}}};
+    model.handleSessionActivity({msg: 'connect'}, session);
     test.equal(model.newSessions, 0);
   }
 );
@@ -38,8 +50,10 @@ Tinytest.add(
   'Models - System - new Sessions - multiple sessions',
   function (test) {
     var model = new SystemModel();
-    model.handleSessionActivity({msg: 'connect'}, Random.id());
-    model.handleSessionActivity({msg: 'connect'}, Random.id());
+    var session1 = {socket: {headers: {'x-forwarded-for': '1.1.1.1'}}};
+    var session2 = {socket: {headers: {'x-forwarded-for': '1.1.1.1'}}};
+    model.handleSessionActivity({msg: 'connect'}, session1);
+    model.handleSessionActivity({msg: 'connect'}, session2);
     test.equal(model.newSessions, 2);
   }
 );
@@ -48,20 +62,21 @@ Tinytest.add(
   'Models - System - new Sessions - reconnecting',
   function (test) {
     var model = new SystemModel();
-    model.handleSessionActivity({msg: 'connect'}, 'the-new-id');
-    model.handleSessionActivity({msg: 'connect', session: 'the-new-id'}, Random.id());
-    model.handleSessionActivity({msg: 'connect', session: 'the-new-id'}, Random.id());
-    test.equal(model.newSessions, 1);
+    var session = {socket: {headers: {'x-forwarded-for': '1.1.1.1'}}};
+    model.handleSessionActivity({msg: 'connect', session: 'foo'}, session);
+    test.equal(model.newSessions, 0);
   }
 );
 
 Tinytest.add(
-  'Models - System - new Sessions - reconnecting twice',
+  'Models - System - new Sessions - active ddp client',
   function (test) {
     var model = new SystemModel();
-    model.handleSessionActivity({msg: 'connect'}, 'the-new-id');
-    model.handleSessionActivity({msg: 'connect', session: 'the-new-id'}, 'the-id-2');
-    model.handleSessionActivity({msg: 'connect', session: 'the-id-2'}, 'the-id-3');
+    model.sessionTimeout = 500;
+    var session = {socket: {headers: {'x-forwarded-for': '1.1.1.1'}}};
+    model.handleSessionActivity({msg: 'connect'}, session);
+    Wait(200);
+    model.handleSessionActivity({msg: 'sub'}, session);
     test.equal(model.newSessions, 1);
   }
 );
@@ -70,60 +85,12 @@ Tinytest.add(
   'Models - System - new Sessions - inactive ddp client',
   function (test) {
     var model = new SystemModel();
-    model.handleSessionActivity({msg: 'connect'}, 'the-new-id');
-    model.handleSessionActivity({msg: 'sub'}, 'the-new-id');
     model.sessionTimeout = 100;
-
+    var session = {socket: {headers: {'x-forwarded-for': '1.1.1.1'}}};
+    model.handleSessionActivity({msg: 'connect'}, session);
     Wait(200);
-    model.handleSessionActivity({msg: 'sub'}, 'the-new-id');
+    model.handleSessionActivity({msg: 'sub'}, session);
     test.equal(model.newSessions, 2);
-  }
-);
-
-Tinytest.add(
-  'Models - System - new Sessions - active ddp client',
-  function (test) {
-    var model = new SystemModel();
-    model.handleSessionActivity({msg: 'connect'}, 'the-new-id');
-    model.handleSessionActivity({msg: 'sub'}, 'the-new-id');
-    model.sessionTimeout = 100;
-
-    Wait(50);
-    model.handleSessionActivity({msg: 'sub'}, 'the-new-id');
-    test.equal(model.newSessions, 1);
-  }
-);
-
-Tinytest.add(
-  'Models - System - new Sessions - timeout a session',
-  function (test) {
-    var model = new SystemModel();
-    model.sessionTimeout = 100;
-    model.handleSessionActivity({msg: 'connect'}, 'the-new-id');
-    model.handleSessionActivity({msg: 'sub'}, 'the-new-id');
-
-    Wait(150);
-    test.equal(_.keys(model._sessionMap).length, 0);
-  }
-);
-
-Tinytest.add(
-  'Models - System - new Sessions - timeout session and reactive',
-  function (test) {
-    var model = new SystemModel();
-    model.sessionTimeout = 100;
-    model.handleSessionActivity({msg: 'connect'}, 'the-new-id');
-    model.handleSessionActivity({msg: 'sub'}, 'the-new-id');
-
-    Wait(50);
-    model.handleSessionActivity({msg: 'sub'}, 'the-new-id');
-    test.equal(_.keys(model._sessionMap).length, 1);
-
-    Wait(80);
-    test.equal(_.keys(model._sessionMap).length, 1);
-
-    Wait(80)
-    test.equal(_.keys(model._sessionMap).length, 0);
   }
 );
 
@@ -148,9 +115,9 @@ Tinytest.add(
     var model = Kadira.models.system;
     var initCount = model.newSessions;
 
-    var sessionId = sendConnectMessage({remoteAddress: '1.1.1.1'});
+    var session = sendConnectMessage({remoteAddress: '1.1.1.1'});
     Wait(50);
-    sendConnectMessage({remoteAddress: '1.1.1.1', sessionId: sessionId});
+    sendConnectMessage({remoteAddress: '1.1.1.1', sessionId: session.id});
     Wait(50);
 
     var newSessions = model.newSessions - initCount;
@@ -175,22 +142,13 @@ Tinytest.add(
 
 function sendConnectMessage (options) {
   var socket = {send: function() {}, close: function() {}, headers: []};
+  var message = {msg: 'connect', version: 'pre1', support: ['pre1']};
   if(options.remoteAddress)
     socket.remoteAddress = options.remoteAddress;
   if(options.forwardedAddress)
     socket.headers['x-forwarded-for'] = options.forwardedAddress;
-
-  var message = {msg: 'connect', version: 'pre1', support: ['pre1']};
   if(options.sessionId)
     message.session = options.sessionId;
-
-  var session = null;
-  var _originalOnConnection = Meteor.onConnection;
-  Meteor.onConnection = function (cb) {
-    return _originalOnConnection(function (s) { session = s; cb(s); });
-  }
-
   Meteor.default_server._handleConnect(socket, message);
-  Meteor.onConnection = _originalOnConnection;
-  return session.id;
+  return socket._meteorSession;
 }
