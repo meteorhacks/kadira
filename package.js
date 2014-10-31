@@ -1,6 +1,6 @@
 Package.describe({
   "summary": "Performance Monitoring for Meteor",
-  "version": "2.12.0",
+  "version": "2.11.13",
   "git": "https://github.com/meteorhacks/kadira.git",
   "name": "meteorhacks:kadira"
 });
@@ -84,7 +84,7 @@ Package.on_test(function(api) {
 
 function configurePackage(api) {
   if(api.versionsFrom) {
-    api.versionsFrom('METEOR@1.0');
+    api.versionsFrom('METEOR@0.9.1');
     // binary dependencies
     api.use('meteorhacks:kadira-binary-deps@1.2.0');
     api.use('meteorhacks:meteorx@1.2.0');
