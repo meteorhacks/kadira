@@ -77,6 +77,7 @@ Package.on_test(function(api) {
 
   // common after
   api.add_files([
+    'tests/common/version.js',
     'tests/common/default_error_filters.js',
     'tests/common/send.js'
   ], ['client', 'server']);
