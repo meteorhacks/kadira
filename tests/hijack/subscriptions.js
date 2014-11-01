@@ -338,7 +338,7 @@ Tinytest.add(
 
     Wait(100);
     var metrics = GetPubSubPayload();
-    test.equal(metrics[0].pubs['tinytest-data'].totalObservers, 1);
+    test.equal(metrics[0].pubs['tinytest-data'].totalObserverHandlers, 1);
     test.equal(metrics[0].pubs['tinytest-data'].cachedObservers, 0);
     test.equal(metrics[0].pubs['tinytest-data'].avgObserverReuse, 0);
 
@@ -359,7 +359,7 @@ Tinytest.add(
 
     Wait(100);
     var metrics = GetPubSubPayload();
-    test.equal(metrics[0].pubs['tinytest-data'].totalObservers, 2);
+    test.equal(metrics[0].pubs['tinytest-data'].totalObserverHandlers, 2);
     test.equal(metrics[0].pubs['tinytest-data'].cachedObservers, 1);
     test.equal(metrics[0].pubs['tinytest-data'].avgObserverReuse, 0.5);
     h1.stop();
@@ -379,11 +379,11 @@ Tinytest.add(
 
     Wait(100);
     var metrics = GetPubSubPayload();
-    test.equal(metrics[0].pubs['tinytest-data'].totalObservers, 1);
+    test.equal(metrics[0].pubs['tinytest-data'].totalObserverHandlers, 1);
     test.equal(metrics[0].pubs['tinytest-data'].cachedObservers, 0);
     test.equal(metrics[0].pubs['tinytest-data'].avgObserverReuse, 0);
 
-    test.equal(metrics[0].pubs['tinytest-data-2'].totalObservers, 1);
+    test.equal(metrics[0].pubs['tinytest-data-2'].totalObserverHandlers, 1);
     test.equal(metrics[0].pubs['tinytest-data-2'].cachedObservers, 1);
     test.equal(metrics[0].pubs['tinytest-data-2'].avgObserverReuse, 1);
     h1.stop();
