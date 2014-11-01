@@ -196,7 +196,7 @@ Tinytest.add(
       model.buildPayload(),
       model.metricsByMinute
     ];
-    test.equal(metrics[0].pubMetrics[0].pubs.postsList.totalObservers, 2);
+    test.equal(metrics[0].pubMetrics[0].pubs.postsList.totalObserverHandlers, 2);
     test.equal(metrics[0].pubMetrics[0].pubs.postsList.cachedObservers, 0);
     Kadira.syncedDate.getTime = original;
   }
@@ -220,7 +220,7 @@ Tinytest.add(
       model.buildPayload(),
       model.metricsByMinute
     ];
-    test.equal(metrics[0].pubMetrics[0].pubs.postsList.totalObservers, 2);
+    test.equal(metrics[0].pubMetrics[0].pubs.postsList.totalObserverHandlers, 2);
     test.equal(metrics[0].pubMetrics[0].pubs.postsList.cachedObservers, 1);
     Kadira.syncedDate.getTime = original;
   }
@@ -244,9 +244,9 @@ Tinytest.add(
       model.buildPayload(),
       model.metricsByMinute
     ];
-    test.equal(metrics[0].pubMetrics[0].pubs.postsList.totalObservers, 1);
+    test.equal(metrics[0].pubMetrics[0].pubs.postsList.totalObserverHandlers, 1);
     test.equal(metrics[0].pubMetrics[0].pubs.postsList.cachedObservers, 0);
-    test.equal(metrics[0].pubMetrics[1].pubs.postsList.totalObservers, 1);
+    test.equal(metrics[0].pubMetrics[1].pubs.postsList.totalObserverHandlers, 1);
     test.equal(metrics[0].pubMetrics[1].pubs.postsList.cachedObservers, 1);
     Date.now = original;
   }
