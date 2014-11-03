@@ -12,6 +12,7 @@ Tinytest.add(
     test.isTrue(payload.memory > 0);
     test.isTrue(payload.pcpu >= 0);
     test.isTrue(payload.sessions >= 0);
+    test.isTrue(payload.eventLoopLag >= 0);
     test.isTrue(payload.endTime >= payload.startTime + 1000);
   }
 );
