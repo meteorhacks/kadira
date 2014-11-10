@@ -37,7 +37,17 @@ Tinytest.add(
 );
 
 Tinytest.add(
-  'Models - System - new Sessions - ignore local sessions',
+  'Models - System - new Sessions - ignore local sessions (by host)',
+  function (test) {
+    var model = new SystemModel();
+    var session = {socket: {headers: {'host': 'localhost'}}};
+    model.handleSessionActivity({msg: 'connect'}, session);
+    test.equal(model.newSessions, 0);
+  }
+);
+
+Tinytest.add(
+  'Models - System - new Sessions - ignore local sessions (by ip)',
   function (test) {
     var model = new SystemModel();
     var session = {socket: {headers: {'x-forwarded-for': '127.0.0.1'}}};
