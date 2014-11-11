@@ -86,7 +86,7 @@ function configurePackage(api) {
   if(api.versionsFrom) {
     api.versionsFrom('METEOR@0.9.1');
     // binary dependencies
-    api.use('meteorhacks:kadira-binary-deps@1.2.0');
+    api.use('meteorhacks:kadira-binary-deps@1.3.1');
     api.use('meteorhacks:meteorx@1.2.0');
     api.use('meteorhacks:zones@1.2.1', {weak: true});
   } else {
