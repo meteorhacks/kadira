@@ -1,2 +1,4 @@
 .build*
 .npm
+smart.lock
+versions.json
