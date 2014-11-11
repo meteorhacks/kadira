@@ -421,3 +421,21 @@ Tinytest.add(
     CloseClient(client3);
   }
 );
+
+Tinytest.add(
+  'Models - PubSub - Observers - simple',
+  function (test) {
+    CleanTestData();
+    var client = GetMeteorClient();
+    var h1 = SubscribeAndWait(client, 'tinytest-data');
+    Wait(200);
+    var payload = GetPubSubPayload();
+    test.equal(payload[0].pubs['tinytest-data'].createdObservers, 1);
+    test.equal(payload[0].pubs['tinytest-data'].deletedObservers, 0);
+    h1.stop();
+    Wait(200);
+    var payload = GetPubSubPayload();
+    test.equal(payload[0].pubs['tinytest-data'].deletedObservers, 1);
+    CloseClient(client);
+  }
+);
