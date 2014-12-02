@@ -6,6 +6,7 @@ Tinytest.addAsync(
     SettingsCollection.find().observe({added: _.once(function (options) {
       test.equal(!!options.appId, true);
       test.equal(!!options.endpoint, true);
+      test.equal(!!options.ntpDelay, true);
       done();
     })});
   }
