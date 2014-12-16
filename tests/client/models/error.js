@@ -11,7 +11,7 @@ Tinytest.add(
 
     test.equal(payloadReceived, {errors: [
       {name: "hello", count: 1}
-    ]});
+    ], host: undefined});
 
     test.equal(em.errorsSent["hello"], {
       name: "hello", count: 0
@@ -35,7 +35,7 @@ Tinytest.add(
 
     test.equal(payloadReceived, {errors: [
       {name: "hello", count: 1}
-    ]});
+    ], host: undefined});
 
     test.equal(em.errorsSent["hello"], {
       name: "hello", count: 1
@@ -140,7 +140,7 @@ Tinytest.addAsync(
     setTimeout(function() {
       test.equal(payloadReceived, {errors: [
         {name: "hello", count: 1}
-      ]});
+      ], host: undefined});
 
       test.equal(em.errorsSent["hello"], {
         name: "hello", count: 0
@@ -169,7 +169,7 @@ Tinytest.add(
 
     test.equal(payloadReceived, {errors: [
       {name: "hello", count: 1}
-    ]});
+    ], host: undefined});
 
     test.equal(em.errorsSent["hello"], {
       name: "hello", count: 0
@@ -201,7 +201,7 @@ Tinytest.add(
 
     test.equal(payloadReceived, {errors: [
       {name: "hello", count: 1, startTime: 600}
-    ]});
+    ], host: undefined});
 
     Kadira.syncedDate.syncTime = orginalSyncTime;
     em.close();
