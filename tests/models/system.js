@@ -13,6 +13,11 @@ Tinytest.add(
     test.isTrue(payload.pcpu >= 0);
     test.isTrue(payload.sessions >= 0);
     test.isTrue(payload.endTime >= payload.startTime + 1000);
+    test.isTrue(payload.endTime >= payload.startTime + 1000);
+    test.isTrue(payload.gcScavengeCount >= 0);
+    test.isTrue(payload.gcScavengeDuration >= 0);
+    test.isTrue(payload.gcFullCount >= 0);
+    test.isTrue(payload.gcFullDuration >= 0);
   }
 );
 

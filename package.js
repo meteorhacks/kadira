@@ -6,7 +6,8 @@ Package.describe({
 });
 
 var npmModules = {
-  "debug": "0.7.4"
+  "debug": "0.7.4",
+  "gc-profiler": "1.0.2"
 };
 
 if(!Package.onUse) {
