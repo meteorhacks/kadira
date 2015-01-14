@@ -64,6 +64,7 @@ Package.on_test(function(api) {
     'tests/error_tracking.js',
     'tests/wait_time_builder.js',
     'tests/profile/set_labels.js',
+    'tests/environment_variables.js',
   ], 'server');
 
   // common client
@@ -138,6 +139,7 @@ function configurePackage(api) {
     'lib/hijack/error.js',
     'lib/profile/server.js',
     'lib/profile/set_labels.js',
+    'lib/environment_variables.js',
     'lib/auto_connect.js'
   ], 'server');
 
