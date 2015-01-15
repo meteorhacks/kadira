@@ -334,6 +334,90 @@ Tinytest.add(
   }
 );
 
+Tinytest.add(
+  'Tracer - Filters - filter start',
+  function(test) {
+    var tracer = new Tracer();
+    tracer.addFilter(function(type, data) {
+      test.equal(type, "db");
+      return _.pick(data, 'coll');
+    });
+
+    var traceInfo = startTrace(tracer);
+    tracer.event(traceInfo, 'db', {coll: "posts", secret: ""});
+
+    var expected = {coll: "posts"};
+    test.equal(traceInfo.events[0].data, expected);
+  }
+);
+
+Tinytest.add(
+  'Tracer - Filters - filter end',
+  function(test) {
+    var tracer = new Tracer();
+    tracer.addFilter(function(type, data) {
+      test.equal(type, "dbend");
+      return _.pick(data, 'coll');
+    });
+
+    var traceInfo = startTrace(tracer);
+    var id = tracer.event(traceInfo, 'db');
+    tracer.eventEnd(traceInfo, id, {coll: "posts", secret: ""});
+
+    var expected = {coll: "posts"};
+    test.equal(traceInfo.events[1].data, expected);
+  }
+);
+
+Tinytest.add(
+  'Tracer - Filters - ignore side effects',
+  function(test) {
+    var tracer = new Tracer();
+    tracer.addFilter(function(type, data) {
+      data.someOtherField = "value";
+      return _.pick(data, 'coll');
+    });
+
+    var traceInfo = startTrace(tracer);
+    tracer.event(traceInfo, 'db', {coll: "posts", secret: ""});
+
+    var expected = {coll: "posts"};
+    test.equal(traceInfo.events[0].data, expected);
+  }
+);
+
+Tinytest.add(
+  'Tracer - Filters - multiple filters',
+  function(test) {
+    var tracer = new Tracer();
+    tracer.addFilter(function(type, data) {
+      return _.pick(data, 'coll');
+    });
+    tracer.addFilter(function(type, data) {
+      data.newField = "value";
+      return data;
+    });
+
+    var traceInfo = startTrace(tracer);
+    tracer.event(traceInfo, 'db', {coll: "posts", secret: ""});
+
+    var expected = {coll: "posts", newField: "value"};
+    test.equal(traceInfo.events[0].data, expected);
+  }
+);
+
+function startTrace(tracer) {
+  var ddpMessage = {
+    id: 'the-id',
+    msg: 'method',
+    method: 'method-name'
+  };
+  var info = {id: 'session-id', userId: 'uid'};
+  var traceInfo = Kadira.tracer.start(info, ddpMessage);
+
+  return traceInfo;
+}
+
 function removeDate(traceInfo) {
   traceInfo.events.forEach(function(event) {
     delete event.at;

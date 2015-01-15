@@ -4,7 +4,7 @@ Tinytest.add(
   function (test) {
     EnableTrackingMethods();
     var methodId = RegisterMethod(function () {
-      Email.send({from: 'arunoda@meteorhacks.com', from: 'hello@meteor.com'});
+      Email.send({from: 'arunoda@meteorhacks.com', to: 'hello@meteor.com'});
     });
     var client = GetMeteorClient();
     var result = client.call(methodId);
