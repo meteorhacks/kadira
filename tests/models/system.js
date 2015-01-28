@@ -27,6 +27,16 @@ Tinytest.add(
 );
 
 Tinytest.add(
+  'Models - System - new Sessions - count new sessions without a session.',
+  function (test) {
+    var model = new SystemModel();
+    model.handleSessionActivity({msg: 'connect'}, null);
+    test.equal(model.newSessions, 0);
+  }
+);
+
+
+Tinytest.add(
   'Models - System - new Sessions - initial _activeAt',
   function (test) {
     var model = new SystemModel();
