@@ -8,6 +8,7 @@ Package.describe({
 var npmModules = {
   "debug": "0.7.4",
   "request": "2.51.0",
+  "pidusage": "0.1.1"
 };
 
 if(!Package.onUse) {
@@ -15,7 +16,6 @@ if(!Package.onUse) {
   // we need to add usage @0.4.9 which contains platform specific builds
   // for 0.9+ we are using meteorhacks:kadira-binary-deps
   // which has platform specific builds
-  npmModules["usage"] = "0.4.9";
   npmModules["v8-profiler"] = "5.2.0";
 }
 
