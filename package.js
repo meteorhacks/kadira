@@ -147,6 +147,13 @@ function configurePackage(api) {
     'lib/client/kadira.js'
   ], 'client');
 
+  api.add_files([
+    // It's possible to remove this file after some since this just contains
+    // a notice to the user.
+    // Actual implementation is in the meteorhacks:kadira-profiler package
+    'lib/profiler/client.js',
+  ], 'client');
+
   // common after
   api.add_files([
     'lib/common/default_error_filters.js',
