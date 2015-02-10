@@ -11,14 +11,6 @@ var npmModules = {
   "pidusage": "0.1.1"
 };
 
-if(!Package.onUse) {
-  // this is not Meteor 0.9
-  // we need to add usage @0.4.9 which contains platform specific builds
-  // for 0.9+ we are using meteorhacks:kadira-binary-deps
-  // which has platform specific builds
-  npmModules["v8-profiler"] = "5.2.0";
-}
-
 Npm.depends(npmModules);
 
 Package.on_use(function(api) {
@@ -41,6 +33,7 @@ Package.on_test(function(api) {
   // common server
   api.add_files([
     'tests/ntp.js',
+    'tests/jobs.js',
     'tests/_helpers/globals.js',
     'tests/_helpers/helpers.js',
     'tests/_helpers/init.js',
@@ -64,7 +57,7 @@ Package.on_test(function(api) {
     'tests/check_for_oplog.js',
     'tests/error_tracking.js',
     'tests/wait_time_builder.js',
-    'tests/profile/set_labels.js',
+    'tests/hijack/set_labels.js',
     'tests/environment_variables.js',
   ], 'server');
 
@@ -88,8 +81,6 @@ Package.on_test(function(api) {
 function configurePackage(api) {
   if(api.versionsFrom) {
     api.versionsFrom('METEOR@0.9.1');
-    // binary dependencies
-    api.use('meteorhacks:kadira-binary-deps@1.3.1');
     api.use('meteorhacks:meteorx@1.2.1');
     api.use('meteorhacks:zones@1.2.1', {weak: true});
   } else {
@@ -139,8 +130,7 @@ function configurePackage(api) {
     'lib/hijack/email.js',
     'lib/hijack/async.js',
     'lib/hijack/error.js',
-    'lib/profile/server.js',
-    'lib/profile/set_labels.js',
+    'lib/hijack/set_labels.js',
     'lib/environment_variables.js',
     'lib/auto_connect.js'
   ], 'server');
@@ -154,8 +144,7 @@ function configurePackage(api) {
     'lib/client/error_reporters/zone.js',
     'lib/client/error_reporters/window_error.js',
     'lib/client/error_reporters/meteor_debug.js',
-    'lib/client/kadira.js',
-    'lib/profile/client.js'
+    'lib/client/kadira.js'
   ], 'client');
 
   // common after
