@@ -83,17 +83,6 @@ Wait = function (time) {
   return;
 }
 
-GetDataSize = function (docs) {
-  if(!(docs instanceof Array)) {
-    docs = [docs];
-  }
-  var size = 0;
-  docs.forEach(function(doc) {
-    size+= Buffer.byteLength(JSON.stringify(doc));
-  });
-  return size;
-}
-
 CleanTestData = function () {
   MethodStore = [];
   TestData.remove({});

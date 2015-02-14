@@ -375,54 +375,6 @@ Tinytest.add(
 );
 
 Tinytest.add(
-  'Models - PubSub - avgDocSize - single',
-  function (test) {
-    CleanTestData();
-    var docs = [{data: 'data1'}, {data: 'data2'}, {data: 'data3'}];
-    var size = docs.reduce(function (total, doc) {
-      var valuesArray = _.values(doc);
-      return total + Buffer.byteLength(JSON.stringify(doc));
-    }, 0);
-    docs.forEach(function(doc) {TestData.insert(doc)});
-    var client = GetMeteorClient();
-    var h1 = SubscribeAndWait(client, 'tinytest-data');
-    Wait(200);
-    var payload = GetPubSubPayload();
-    test.equal(payload[0].pubs['tinytest-data'].avgDocSize >  size/3, true);
-    h1.stop();
-    CloseClient(client);
-  }
-);
-
-Tinytest.add(
-  'Models - PubSub - avgDocSize - multiple',
-  function (test) {
-    CleanTestData();
-    var docs = [{data: 'data1'}, {data: 'data2'}, {data: 'data3'}];
-    var size = docs.reduce(function (total, doc) {
-      var valuesArray = _.values(doc);
-      return total + Buffer.byteLength(JSON.stringify(doc));
-    }, 0);
-    docs.forEach(function(doc) {TestData.insert(doc)});
-    var client1 = GetMeteorClient();
-    var h1 = SubscribeAndWait(client1, 'tinytest-data');
-    var client2 = GetMeteorClient();
-    var h2 = SubscribeAndWait(client2, 'tinytest-data');
-    var client3 = GetMeteorClient();
-    var h3 = SubscribeAndWait(client3, 'tinytest-data');
-    Wait(200);
-    var payload = GetPubSubPayload();
-    test.equal(payload[0].pubs['tinytest-data'].avgDocSize > 3*size/9, true);
-    h1.stop();
-    h2.stop();
-    h3.stop();
-    CloseClient(client1);
-    CloseClient(client2);
-    CloseClient(client3);
-  }
-);
-
-Tinytest.add(
   'Models - PubSub - Observers - simple',
   function (test) {
     CleanTestData();
