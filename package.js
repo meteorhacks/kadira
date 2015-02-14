@@ -81,7 +81,7 @@ Package.on_test(function(api) {
 function configurePackage(api) {
   if(api.versionsFrom) {
     api.versionsFrom('METEOR@0.9.1');
-    api.use('meteorhacks:meteorx@1.2.1');
+    api.use('meteorhacks:meteorx@1.3.1');
     api.use('meteorhacks:zones@1.2.1', {weak: true});
   } else {
     // for Meteor releases <= 0.8.3
