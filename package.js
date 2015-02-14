@@ -32,6 +32,7 @@ Package.on_test(function(api) {
 
   // common server
   api.add_files([
+    'tests/utils.js',
     'tests/ntp.js',
     'tests/jobs.js',
     'tests/_helpers/globals.js',
