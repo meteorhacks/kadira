@@ -18,6 +18,23 @@ Tinytest.add(
 );
 
 Tinytest.add(
+  'WaitTimeBuilder - no inQueue',
+  function (test) {
+    var wtb = new WaitTimeBuilder();
+    var session = {
+      id: 'session-id',
+      inQueue: null
+    };
+
+    wtb.register(session, 'myid');
+    var build = wtb.build(session, 'myid');
+    test.equal(build, []);
+    test.equal(wtb._messageCache, {});
+    test.equal(wtb._waitListStore, {});
+  }
+);
+
+Tinytest.add(
   'WaitTimeBuilder - register and build - cached _messageCache',
   function (test) {
     var wtb = new WaitTimeBuilder();
@@ -48,10 +65,10 @@ Tinytest.add(
       ]
     };
     wtb._currentProcessingMessages[session.id] = {id: '01'}
-    
+
     wtb.register(session, 'myid');
     var build = wtb.build(session, 'myid');
-    
+
     test.equal(build, [{id: '01'}, {id: "a"}, {id: "b"}]);
     test.equal(wtb._messageCache, {});
     test.equal(wtb._waitListStore, {});
