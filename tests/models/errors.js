@@ -193,3 +193,32 @@ Tinytest.add(
     });
   }
 );
+
+Tinytest.add(
+  'Models - Errors - format Error - with Meteor.Error details',
+  function(test) {
+    var model = new ErrorModel('_appId');
+    var details = Random.id();
+    var error = new Meteor.Error("code", "message", details);
+    var trace = {};
+    var payload = model._formatError(error, trace);
+
+    var hasDetails = payload.stacks[0].stack.indexOf(details);
+    test.isTrue(hasDetails >= 0);
+  }
+);
+
+Tinytest.add(
+  'Models - Errors - format Error - with Meteor.Error details, with trace',
+  function(test) {
+    var model = new ErrorModel('_appId');
+    var details = Random.id();
+    var error = new Meteor.Error("code", "message", details);
+    var traceError = {stack: "oldstack"};
+    var trace = {events: [0, 1, [0, 1, {error: traceError}]]};
+    var payload = model._formatError(error, trace);
+
+    var hasDetails = traceError.stack.indexOf(details);
+    test.isTrue(hasDetails >= 0);
+  }
+);
