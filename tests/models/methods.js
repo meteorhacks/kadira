@@ -24,7 +24,8 @@ Tinytest.add(
           }
         }
       ],
-      methodRequests: []
+      methodRequests: [],
+      methodHistograms: []
     };
 
     var startTime = expected.methodMetrics[0].startTime;

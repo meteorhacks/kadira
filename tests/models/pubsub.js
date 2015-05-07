@@ -234,10 +234,10 @@ Tinytest.add(
       new Date('2013 Dec 10 20:31:12').getTime(),
       new Date('2013 Dec 12 20:31:22').getTime()
     ];
+    var model = new PubsubModel();
     Date.now = function () {
       return dates.pop();
-    }
-    var model = new PubsubModel();
+    };
     model.incrementHandleCount({name: 'postsList'}, false);
     model.incrementHandleCount({name: 'postsList'}, true);
     var metrics = [
