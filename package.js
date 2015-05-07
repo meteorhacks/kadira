@@ -9,7 +9,7 @@ var npmModules = {
   "debug": "2.1.3",
   "request": "2.51.0",
   "pidusage": "0.1.1",
-  "histo-utils": "0.1.0"
+  "histo-utils": "0.1.1"
 };
 
 Npm.depends(npmModules);
