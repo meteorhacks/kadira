@@ -89,6 +89,60 @@ Tinytest.addAsync(
   }
 );
 
+Tinytest.addAsync(
+  'Errors - method error - track Meteor.Error',
+  function (test, done) {
+    var originalErrorTrackingStatus = Kadira.options.enableErrorTracking;
+    var methodId = RegisterMethod(function () {
+      throw new Meteor.Error("ERR_CODE", "reason");
+    });
+    var client = GetMeteorClient();
+    try {
+      var result = client.call(methodId);
+    } catch(ex) {
+      var errorMessage = 'reason [ERR_CODE]'
+      test.equal(ex.message, errorMessage);
+      var payload = Kadira.models.error.buildPayload();
+      var error = payload.errors[0];
+      test.isTrue(error.stacks[0].stack.indexOf(errorMessage) >= 0);
+
+      var lastEvent = error.trace.events[error.trace.events.length -1];
+      test.isTrue(lastEvent[2].error.message.indexOf(errorMessage) >=0);
+      test.isTrue(lastEvent[2].error.stack.indexOf(errorMessage) >=0);
+      done();
+    }
+
+    _resetErrorTracking(originalErrorTrackingStatus);
+  }
+);
+
+Tinytest.addAsync(
+  'Errors - method error - track NodeJs Error',
+  function (test, done) {
+    var originalErrorTrackingStatus = Kadira.options.enableErrorTracking;
+    var methodId = RegisterMethod(function () {
+      throw new Error("the-message");
+    });
+    var client = GetMeteorClient();
+    try {
+      var result = client.call(methodId);
+    } catch(ex) {
+      var errorMessage = 'the-message';
+      test.isTrue(ex.message.match(/Internal server error/));
+      var payload = Kadira.models.error.buildPayload();
+      var error = payload.errors[0];
+      test.isTrue(error.stacks[0].stack.indexOf(errorMessage) >= 0);
+
+      var lastEvent = error.trace.events[error.trace.events.length -1];
+      test.isTrue(lastEvent[2].error.message.indexOf(errorMessage) >=0);
+      test.isTrue(lastEvent[2].error.stack.indexOf(errorMessage) >=0);
+      done();
+    }
+
+    _resetErrorTracking(originalErrorTrackingStatus);
+  }
+);
+
 function _resetErrorTracking (status) {
   if(status) {
     Kadira.enableErrorTracking();
