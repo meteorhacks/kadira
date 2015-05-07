@@ -6,9 +6,10 @@ Package.describe({
 });
 
 var npmModules = {
-  "debug": "0.7.4",
+  "debug": "2.1.3",
   "request": "2.51.0",
-  "pidusage": "0.1.1"
+  "pidusage": "0.1.1",
+  "histo-utils": "0.1.0"
 };
 
 Npm.depends(npmModules);
@@ -111,6 +112,7 @@ function configurePackage(api) {
     'lib/utils.js',
     'lib/ntp.js',
     'lib/wait_time_builder.js',
+    'lib/histogram_builder.js',
     'lib/models/0model.js',
     'lib/models/methods.js',
     'lib/models/pubsub.js',
