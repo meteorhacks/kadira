@@ -59,6 +59,7 @@ Package.on_test(function(api) {
     'tests/check_for_oplog.js',
     'tests/error_tracking.js',
     'tests/wait_time_builder.js',
+    'tests/histogram_builder.js',
     'tests/hijack/set_labels.js',
     'tests/environment_variables.js',
   ], 'server');
