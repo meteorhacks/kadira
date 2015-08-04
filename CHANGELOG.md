@@ -1,5 +1,10 @@
 # Changelog
 
+### v2.23.0
+* Add first steps on decoupling kadira's tracing into a seperate package.
+* With this version, we allow an way to expose Kadira traces and some other metrics without connecting to Kadira.
+* See example: https://gist.github.com/arunoda/8a3dec21924f08ed83b3
+
 ### v2.22.1
 * Prevnt string errors crashing the app. Potential fix for: [#175](https://github.com/meteorhacks/kadira/issues/175)
 
