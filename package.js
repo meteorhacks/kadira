@@ -8,7 +8,8 @@ Package.describe({
 var npmModules = {
   "debug": "0.7.4",
   "request": "2.51.0",
-  "pidusage": "0.1.1"
+  "pidusage": "0.1.1",
+  "evloop-monitor": "0.1.0"
 };
 
 Npm.depends(npmModules);
