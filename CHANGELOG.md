@@ -1,5 +1,9 @@
 # Changelog
 
+### v2.23.1
+
+* Add support for Meteor 1.2. Fixes: [#181](https://github.com/meteorhacks/kadira/issues/181). It was an issue with how we are tracking `Fiber.yield`.
+
 ### v2.23.0
 * Add first steps on decoupling kadira's tracing into a seperate package.
 * With this version, we allow an way to expose Kadira traces and some other metrics without connecting to Kadira.
