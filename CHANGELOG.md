@@ -1,5 +1,8 @@
 # Changelog
 
+### v2.23.2
+* Change console.error in connect code to console.log. 
+
 ### v2.23.1
 
 * Add support for Meteor 1.2. Fixes: [#181](https://github.com/meteorhacks/kadira/issues/181). It was an issue with how we are tracking `Fiber.yield`.
