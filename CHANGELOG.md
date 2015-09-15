@@ -1,5 +1,8 @@
 # Changelog
 
+### v2.23.3
+* Fix a potential issue where the possiblity to mutate authHeaders.
+
 ### v2.23.2
 * Change console.error in connect code to console.log. 
 
