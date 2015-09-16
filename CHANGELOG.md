@@ -1,5 +1,8 @@
 # Changelog
 
+### v2.23.4
+* Fix for a weird bug we found from the customer support. Without this fix, his app won't bind to the port. 
+
 ### v2.23.3
 * Fix a potential issue where the possiblity to mutate authHeaders.
 
