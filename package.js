@@ -83,7 +83,7 @@ Package.on_test(function(api) {
 function configurePackage(api) {
   if(api.versionsFrom) {
     api.versionsFrom('METEOR@1.0');
-    api.use('meteorhacks:meteorx@1.4.1');
+    api.use('meteorhacks:meteorx@1.4.1', ['server']);
     api.use('meteorhacks:zones@1.2.1', {weak: true});
   }
 
