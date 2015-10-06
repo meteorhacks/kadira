@@ -1,5 +1,9 @@
 # Changelog
 
+### v2.23.6
+
+* Using MeteorX for the server only.
+
 ### v2.23.5
 
 * Using the latest MeteorX version, which has some fixes for startup related issues
