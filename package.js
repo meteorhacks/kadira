@@ -120,7 +120,7 @@ function configurePackage(api) {
     'lib/hijack/wrap_session.js',
     'lib/hijack/wrap_subscription.js',
     'lib/hijack/wrap_observers.js',
-    'lib/hijack/session.js',
+    'lib/hijack/instrument.js',
     'lib/hijack/db.js',
     'lib/hijack/http.js',
     'lib/hijack/email.js',
