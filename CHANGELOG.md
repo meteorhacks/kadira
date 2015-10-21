@@ -1,4 +1,6 @@
 # Changelog
+### v2.24.0
+* Start instrumenting Kadira rightway. So, we can get the CPU profile labeling.
 
 ### v2.23.6
 
