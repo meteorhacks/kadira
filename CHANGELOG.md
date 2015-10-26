@@ -1,4 +1,9 @@
 # Changelog
+
+### v2.24.1
+* Add better error reporting. Actually fixed this issue: https://github.com/meteorhacks/kadira/issues/193
+* How we fix is little unconventional but it worked.
+
 ### v2.24.0
 * Start instrumenting Kadira rightway. So, we can get the CPU profile labeling.
 
