@@ -406,6 +406,58 @@ Tinytest.add(
   }
 );
 
+Tinytest.add(
+  'Tracer - Filters - Filter by method name',
+  function(test) {
+    var tracer = new Tracer();
+    tracer.addFilter(function(type, data, info) {
+      if(info.type === 'method' && info.name === 'method-name'){
+        return _.pick(data, 'coll');
+      }
+      return data;
+    });
+
+    var ddpMessage = {
+      id: 'the-id',
+      msg: 'method',
+      method: 'method-name'
+    };
+    var info = {id: 'session-id', userId: 'uid'};
+    var traceInfo = Kadira.tracer.start(info, ddpMessage);
+
+    tracer.event(traceInfo, 'db', {coll: "posts", secret: ""});
+
+    var expected = {coll: "posts"};
+    test.equal(traceInfo.events[0].data, expected);
+  }
+);
+
+Tinytest.add(
+  'Tracer - Filters - Filter by sub name',
+  function(test) {
+    var tracer = new Tracer();
+    tracer.addFilter(function(type, data, info) {
+      if(info.type === 'sub' && info.name === 'sub-name'){
+        return _.pick(data, 'coll');
+      }
+      return data;
+    });
+
+    var ddpMessage = {
+      id: 'the-id',
+      msg: 'sub',
+      name: 'sub-name'
+    };
+    var info = {id: 'session-id', userId: 'uid'};
+    var traceInfo = Kadira.tracer.start(info, ddpMessage);
+
+    tracer.event(traceInfo, 'db', {coll: "posts", secret: ""});
+
+    var expected = {coll: "posts"};
+    test.equal(traceInfo.events[0].data, expected);
+  }
+);
+
 function startTrace(tracer) {
   var ddpMessage = {
     id: 'the-id',
