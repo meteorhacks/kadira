@@ -1,5 +1,8 @@
 # Changelog
 
+### v2.25.0
+* Allow to filter by method/sub name when striping trace data. See this [PR](https://github.com/meteorhacks/kadira/pull/195).
+
 ### v2.24.1
 * Add better error reporting. Actually fixed this issue: https://github.com/meteorhacks/kadira/issues/193
 * How we fix is little unconventional but it worked.
