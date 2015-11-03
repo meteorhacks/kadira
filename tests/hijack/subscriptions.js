@@ -131,6 +131,26 @@ Tinytest.add(
 // // );
 
 Tinytest.add(
+  'Subscriptions - ObserverLifetime - sub',
+  function (test) {
+    CleanTestData();
+    EnableTrackingMethods();
+    var client = GetMeteorClient();
+    var Future = Npm.require('fibers/future');
+    var f = new Future();
+    var h1 = SubscribeAndWait(client, 'tinytest-data');
+    Wait(100);
+    h1.stop();
+    Wait(100);
+    var metrics = FindMetricsForPub('tinytest-data');
+    
+    test.isTrue(CompareNear(metrics.observerLifetime, 100));
+    CloseClient(client);
+  }
+);
+
+
+Tinytest.add(
   'Subscriptions - active subs',
   function (test) {
     CleanTestData();
