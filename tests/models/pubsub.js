@@ -391,3 +391,83 @@ Tinytest.add(
     CloseClient(client);
   }
 );
+
+Tinytest.add(
+  'Models - PubSub - Observers - polledDocuments with oplog',
+  function (test) {
+    CleanTestData();
+    var client = GetMeteorClient();
+    TestData.insert({aa: 10});
+    TestData.insert({aa: 20});
+    var h1 = SubscribeAndWait(client, 'tinytest-data');
+    Wait(200);
+    var payload = GetPubSubPayload();
+    test.equal(payload[0].pubs['tinytest-data'].polledDocuments, 2);
+    CloseClient(client);
+  }
+);
+
+Tinytest.add(
+  'Models - PubSub - Observers - liveInsertedDocuments with oplog',
+  function (test) {
+    CleanTestData();
+    var client = GetMeteorClient();
+    var h1 = SubscribeAndWait(client, 'tinytest-data');
+    Wait(50);
+    TestData.insert({aa: 10});
+    TestData.insert({aa: 20});
+    Wait(100);
+    var payload = GetPubSubPayload();
+    test.equal(payload[0].pubs['tinytest-data'].liveInsertedDocuments, 2);
+    CloseClient(client);
+  }
+);
+
+Tinytest.add(
+  'Models - PubSub - Observers - liveDeletedDocuments with oplog',
+  function (test) {
+    CleanTestData();
+    var client = GetMeteorClient();
+    TestData.insert({aa: 10});
+    TestData.insert({aa: 20});
+    var h1 = SubscribeAndWait(client, 'tinytest-data');
+    Wait(200);
+    TestData.remove({});
+    Wait(100);
+    var payload = GetPubSubPayload();
+    test.equal(payload[0].pubs['tinytest-data'].liveDeletedDocuments, 2);
+    CloseClient(client);
+  }
+);
+
+Tinytest.add(
+  'Models - PubSub - Observers - liveUpdatedDocuments with oplog',
+  function (test) {
+    CleanTestData();
+    var client = GetMeteorClient();
+    TestData.insert({aa: 10});
+    TestData.insert({aa: 20});
+    var h1 = SubscribeAndWait(client, 'tinytest-data');
+    Wait(200);
+    TestData.update({}, {$set: {kk: 20}}, {multi: true});
+    Wait(100);
+    var payload = GetPubSubPayload();
+    test.equal(payload[0].pubs['tinytest-data'].liveUpdatedDocuments, 2);
+    CloseClient(client);
+  }
+);
+
+Tinytest.add(
+  'Models - PubSub - Observers - polledDocuments with no oplog',
+  function (test) {
+    CleanTestData();
+    var client = GetMeteorClient();
+    TestData.insert({aa: 10});
+    TestData.insert({aa: 20});
+    var h1 = SubscribeAndWait(client, 'tinytest-data-with-no-oplog');
+    Wait(200);
+    var payload = GetPubSubPayload();
+    test.equal(payload[0].pubs['tinytest-data-with-no-oplog'].polledDocuments, 2);
+    CloseClient(client);
+  }
+);
