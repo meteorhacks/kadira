@@ -1,4 +1,6 @@
 # Changelog
+### v2.26.0
+* Add more metrics which tracks the Live Query usage. This will be helpful for our upcoming LiveQuery tracking feature.
 
 ### v2.25.0
 * Allow to filter by method/sub name when striping trace data. See this [PR](https://github.com/meteorhacks/kadira/pull/195).
