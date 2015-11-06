@@ -57,6 +57,9 @@ Meteor.publish('tinytest-data-with-no-oplog', function() {
   return TestData.find({}, {_disableOplog: true});
 });
 
+Meteor.publish('tinytest-data-random', function() {
+  return TestData.find({aa: {$ne: Random.id()}});
+});
 
 Meteor.publish('tinytest-data-2', function() {
   return TestData.find();

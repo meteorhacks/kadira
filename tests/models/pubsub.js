@@ -408,7 +408,7 @@ Tinytest.add(
 );
 
 Tinytest.add(
-  'Models - PubSub - Observers - liveInsertedDocuments with oplog',
+  'Models - PubSub - Observers - oplogInsertedDocuments with oplog',
   function (test) {
     CleanTestData();
     var client = GetMeteorClient();
@@ -418,13 +418,13 @@ Tinytest.add(
     TestData.insert({aa: 20});
     Wait(100);
     var payload = GetPubSubPayload();
-    test.equal(payload[0].pubs['tinytest-data'].liveInsertedDocuments, 2);
+    test.equal(payload[0].pubs['tinytest-data'].oplogInsertedDocuments, 2);
     CloseClient(client);
   }
 );
 
 Tinytest.add(
-  'Models - PubSub - Observers - liveDeletedDocuments with oplog',
+  'Models - PubSub - Observers - oplogDeletedDocuments with oplog',
   function (test) {
     CleanTestData();
     var client = GetMeteorClient();
@@ -435,13 +435,13 @@ Tinytest.add(
     TestData.remove({});
     Wait(100);
     var payload = GetPubSubPayload();
-    test.equal(payload[0].pubs['tinytest-data'].liveDeletedDocuments, 2);
+    test.equal(payload[0].pubs['tinytest-data'].oplogDeletedDocuments, 2);
     CloseClient(client);
   }
 );
 
 Tinytest.add(
-  'Models - PubSub - Observers - liveUpdatedDocuments with oplog',
+  'Models - PubSub - Observers - oplogUpdatedDocuments with oplog',
   function (test) {
     CleanTestData();
     var client = GetMeteorClient();
@@ -452,7 +452,7 @@ Tinytest.add(
     TestData.update({}, {$set: {kk: 20}}, {multi: true});
     Wait(100);
     var payload = GetPubSubPayload();
-    test.equal(payload[0].pubs['tinytest-data'].liveUpdatedDocuments, 2);
+    test.equal(payload[0].pubs['tinytest-data'].oplogUpdatedDocuments, 2);
     CloseClient(client);
   }
 );
@@ -468,6 +468,79 @@ Tinytest.add(
     Wait(200);
     var payload = GetPubSubPayload();
     test.equal(payload[0].pubs['tinytest-data-with-no-oplog'].polledDocuments, 2);
+    CloseClient(client);
+  }
+);
+
+Tinytest.add(
+  'Models - PubSub - Observers - liveAddedDocuments - initally',
+  function (test) {
+    CleanTestData();
+    var client = GetMeteorClient();
+    // This will create two observers
+    TestData.insert({aa: 10});
+    TestData.insert({aa: 20});
+    Wait(50);
+    var h1 = SubscribeAndWait(client, 'tinytest-data-random');
+    var h2 = SubscribeAndWait(client, 'tinytest-data-random');
+    Wait(100);
+    var payload = GetPubSubPayload();
+    test.equal(payload[0].pubs['tinytest-data-random'].liveAddedDocuments, 4);
+    CloseClient(client);
+  }
+);
+
+Tinytest.add(
+  'Models - PubSub - Observers - liveAddedDocuments - later on',
+  function (test) {
+    CleanTestData();
+    var client = GetMeteorClient();
+    // This will create two observers
+    var h1 = SubscribeAndWait(client, 'tinytest-data-random');
+    var h2 = SubscribeAndWait(client, 'tinytest-data-random');
+    TestData.insert({aa: 10});
+    TestData.insert({aa: 20});
+    Wait(100);
+    var payload = GetPubSubPayload();
+    test.equal(payload[0].pubs['tinytest-data-random'].liveAddedDocuments, 4);
+    CloseClient(client);
+  }
+);
+
+Tinytest.add(
+  'Models - PubSub - Observers - liveChangedDocuments',
+  function (test) {
+    CleanTestData();
+    var client = GetMeteorClient();
+    // This will create two observers
+    TestData.insert({aa: 10});
+    TestData.insert({aa: 20});
+    var h1 = SubscribeAndWait(client, 'tinytest-data-random');
+    var h2 = SubscribeAndWait(client, 'tinytest-data-random');
+    Wait(100);
+    TestData.update({}, {$set: {kk: 20}}, {multi: true});
+    Wait(50);
+    var payload = GetPubSubPayload();
+    test.equal(payload[0].pubs['tinytest-data-random'].liveChangedDocuments, 4);
+    CloseClient(client);
+  }
+);
+
+Tinytest.add(
+  'Models - PubSub - Observers - liveRemovedDocuments',
+  function (test) {
+    CleanTestData();
+    var client = GetMeteorClient();
+    // This will create two observers
+    TestData.insert({aa: 10});
+    TestData.insert({aa: 20});
+    var h1 = SubscribeAndWait(client, 'tinytest-data-random');
+    var h2 = SubscribeAndWait(client, 'tinytest-data-random');
+    Wait(100);
+    TestData.remove({});
+    Wait(50);
+    var payload = GetPubSubPayload();
+    test.equal(payload[0].pubs['tinytest-data-random'].liveRemovedDocuments, 4);
     CloseClient(client);
   }
 );
