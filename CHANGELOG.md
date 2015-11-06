@@ -1,4 +1,8 @@
 # Changelog
+
+### v2.26.1
+* Change the metrics we track for LiveQuery tracking.
+
 ### v2.26.0
 * Add more metrics which tracks the Live Query usage. This will be helpful for our upcoming LiveQuery tracking feature.
 
