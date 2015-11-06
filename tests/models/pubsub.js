@@ -408,7 +408,7 @@ Tinytest.add(
 );
 
 Tinytest.add(
-  'Models - PubSub - Observers - liveInsertedDocuments with oplog',
+  'Models - PubSub - Observers - oplogInsertedDocuments with oplog',
   function (test) {
     CleanTestData();
     var client = GetMeteorClient();
@@ -418,13 +418,13 @@ Tinytest.add(
     TestData.insert({aa: 20});
     Wait(100);
     var payload = GetPubSubPayload();
-    test.equal(payload[0].pubs['tinytest-data'].liveInsertedDocuments, 2);
+    test.equal(payload[0].pubs['tinytest-data'].oplogInsertedDocuments, 2);
     CloseClient(client);
   }
 );
 
 Tinytest.add(
-  'Models - PubSub - Observers - liveDeletedDocuments with oplog',
+  'Models - PubSub - Observers - oplogDeletedDocuments with oplog',
   function (test) {
     CleanTestData();
     var client = GetMeteorClient();
@@ -435,13 +435,13 @@ Tinytest.add(
     TestData.remove({});
     Wait(100);
     var payload = GetPubSubPayload();
-    test.equal(payload[0].pubs['tinytest-data'].liveDeletedDocuments, 2);
+    test.equal(payload[0].pubs['tinytest-data'].oplogDeletedDocuments, 2);
     CloseClient(client);
   }
 );
 
 Tinytest.add(
-  'Models - PubSub - Observers - liveUpdatedDocuments with oplog',
+  'Models - PubSub - Observers - oplogUpdatedDocuments with oplog',
   function (test) {
     CleanTestData();
     var client = GetMeteorClient();
@@ -452,7 +452,7 @@ Tinytest.add(
     TestData.update({}, {$set: {kk: 20}}, {multi: true});
     Wait(100);
     var payload = GetPubSubPayload();
-    test.equal(payload[0].pubs['tinytest-data'].liveUpdatedDocuments, 2);
+    test.equal(payload[0].pubs['tinytest-data'].oplogUpdatedDocuments, 2);
     CloseClient(client);
   }
 );
