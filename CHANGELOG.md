@@ -1,5 +1,8 @@
 # Changelog
 
+### v2.26.2
+* Add initiallyAddedDocuments to track initial adds
+
 ### v2.26.1
 * Change the metrics we track for LiveQuery tracking.
 
