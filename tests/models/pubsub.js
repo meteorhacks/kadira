@@ -473,7 +473,7 @@ Tinytest.add(
 );
 
 Tinytest.add(
-  'Models - PubSub - Observers - liveAddedDocuments - initally',
+  'Models - PubSub - Observers - initiallyAddedDocuments',
   function (test) {
     CleanTestData();
     var client = GetMeteorClient();
@@ -485,19 +485,20 @@ Tinytest.add(
     var h2 = SubscribeAndWait(client, 'tinytest-data-random');
     Wait(100);
     var payload = GetPubSubPayload();
-    test.equal(payload[0].pubs['tinytest-data-random'].liveAddedDocuments, 4);
+    test.equal(payload[0].pubs['tinytest-data-random'].initiallyAddedDocuments, 4);
     CloseClient(client);
   }
 );
 
 Tinytest.add(
-  'Models - PubSub - Observers - liveAddedDocuments - later on',
+  'Models - PubSub - Observers - liveAddedDocuments',
   function (test) {
     CleanTestData();
     var client = GetMeteorClient();
     // This will create two observers
     var h1 = SubscribeAndWait(client, 'tinytest-data-random');
     var h2 = SubscribeAndWait(client, 'tinytest-data-random');
+    Wait(50);
     TestData.insert({aa: 10});
     TestData.insert({aa: 20});
     Wait(100);
