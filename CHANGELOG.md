@@ -1,5 +1,8 @@
 # Changelog
 
+### v2.26.3
+* Add potential fix for #200
+
 ### v2.26.2
 * Add initiallyAddedDocuments to track initial adds
 
