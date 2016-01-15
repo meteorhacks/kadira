@@ -4,19 +4,13 @@ Tinytest.addAsync(
     var value = 10;
     var id = 'the-id';
 
-    var newSend = function(payload, path, callback) {
-      test.equal(payload, {
-        action: 'get',
-        params: {id: id}
-      });
-      test.equal(path, '/jobs');
-      callback(null, value);
+    var newSend = function(_id) {
+      test.equal(_id, id);
+      done();
     };
 
-    WithKadiraSend(newSend, function() {
-      var result = Kadira.Jobs.get(id);
-      test.equal(result, value);
-      done();
+    hijackCoreApi('getJob', newSend, function() {
+      Kadira.Jobs.get(id);
     });
   }
 );
@@ -27,25 +21,21 @@ Tinytest.addAsync(
     var value = 10;
     var id = 'the-id';
 
-    var newSend = function(payload, path, callback) {
-      test.equal(payload, {
-        action: 'set',
-        params: {id: id, val: value},
-      });
-      test.equal(path, '/jobs');
-      callback(null);
+    var newSend = function(_id, _params) {
+      test.equal(_id, id);
+      test.equal(_params, {val: value});
+      done();
     };
 
-    WithKadiraSend(newSend, function() {
+    hijackCoreApi('updateJob', newSend, function() {
       Kadira.Jobs.set(id, {val: value});
-      done();
     });
   }
 );
 
-function WithKadiraSend(newFn, fn) {
+function hijackCoreApi(fnName, newFn, fn) {
   var originaSend = Kadira.send;
-  Kadira.send = newFn;
+  Kadira.coreApi[fnName] = newFn;
   fn();
-  Kadira.send = originaSend;
+  Kadira.coreApi[fnName] = originaSend;
 }
