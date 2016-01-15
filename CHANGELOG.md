@@ -1,5 +1,9 @@
 # Changelog
 
+### v2.17.0
+
+* Now, transport layer is handled by the `kadira-core` NPM module.
+
 ### v2.26.3
 * Add potential fix for #200
 
