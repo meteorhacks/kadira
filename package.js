@@ -9,7 +9,8 @@ var npmModules = {
   "debug": "0.7.4",
   "kadira-core": "1.3.1",
   "pidusage": "0.1.1",
-  "evloop-monitor": "0.1.0"
+  "evloop-monitor": "0.1.0",
+  "lru-cache": "4.0.0",
 };
 
 Npm.depends(npmModules);
@@ -61,6 +62,7 @@ Package.on_test(function(api) {
     'tests/wait_time_builder.js',
     'tests/hijack/set_labels.js',
     'tests/environment_variables.js',
+    'tests/docsize_cache.js',
   ], 'server');
 
   // common client
@@ -128,7 +130,8 @@ function configurePackage(api) {
     'lib/hijack/error.js',
     'lib/hijack/set_labels.js',
     'lib/environment_variables.js',
-    'lib/auto_connect.js'
+    'lib/auto_connect.js',
+    'lib/docsize_cache.js',
   ], 'server');
 
   // only client
