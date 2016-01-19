@@ -1,5 +1,9 @@
 # Changelog
 
+### v2.17.2
+
+* Fix potential issue of not sending data to engine. Earlier we stopped sending when we see an error. Actually, we need to reschedule to send data to engine even if there is an error.
+
 ### v2.17.1
 
 * Fix an issue on server crashing due to a bug on kadira-core. Fixed by adding kadira-core v1.3.1, which has a fix for that.
