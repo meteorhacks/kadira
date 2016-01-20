@@ -117,6 +117,7 @@ function configurePackage(api) {
     'lib/models/pubsub.js',
     'lib/models/system.js',
     'lib/models/errors.js',
+    'lib/docsize_cache.js',
     'lib/kadira.js',
     'lib/hijack/wrap_server.js',
     'lib/hijack/wrap_session.js',
@@ -131,7 +132,6 @@ function configurePackage(api) {
     'lib/hijack/set_labels.js',
     'lib/environment_variables.js',
     'lib/auto_connect.js',
-    'lib/docsize_cache.js',
   ], 'server');
 
   // only client
