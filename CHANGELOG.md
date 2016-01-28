@@ -1,5 +1,9 @@
 # Changelog
 
+### v2.17.3
+
+* Update pidusage to v1.0.1
+
 ### v2.17.2
 
 * Fix potential issue of not sending data to engine. Earlier we stopped sending when we see an error. Actually, we need to reschedule to send data to engine even if there is an error.
