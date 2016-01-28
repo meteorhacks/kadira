@@ -1,4 +1,4 @@
-[![](https://api.travis-ci.org/meteorhacks/kadira.svg)](https://travis-ci.org/meteorhacks/kadira)
+[![Build Status](https://travis-ci.org/meteorhacks/kadira.svg?branch=master)](https://travis-ci.org/meteorhacks/kadira)
 
 ## [Kadira - Performance Monitoring for Meteor](https://kadira.io) 
 
