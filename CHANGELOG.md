@@ -1,18 +1,18 @@
 # Changelog
 
-### v2.17.3
+### v2.27.3
 
 * Update pidusage to v1.0.1
 
-### v2.17.2
+### v2.27.2
 
 * Fix potential issue of not sending data to engine. Earlier we stopped sending when we see an error. Actually, we need to reschedule to send data to engine even if there is an error.
 
-### v2.17.1
+### v2.27.1
 
 * Fix an issue on server crashing due to a bug on kadira-core. Fixed by adding kadira-core v1.3.1, which has a fix for that.
 
-### v2.17.0
+### v2.27.0
 
 * Now, transport layer is handled by the `kadira-core` NPM module.
 
