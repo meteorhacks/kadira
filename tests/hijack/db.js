@@ -143,6 +143,7 @@ Tinytest.add(
         cursor: true,
         selector: JSON.stringify({_id: 'aa'}),
         docsFetched: 1,
+        docSize: JSON.stringify({_id: 'aa', dd: 10}).length,
         limit: 1
       }],
       ['complete']
@@ -180,6 +181,7 @@ Tinytest.add(
         sort: JSON.stringify({dd: -1}),
         fields: JSON.stringify({dd: 1}),
         docsFetched: 1,
+        docSize: JSON.stringify({_id: 'aa', dd: 10}).length,
         limit: 1
       }],
       ['complete']
@@ -304,7 +306,7 @@ Tinytest.add(
       ['start',,{userId: null, params: '[]'}],
       ['wait',,{waitOn: []}],
       ['db',,{coll: 'tinytest-data', func: 'find', selector: JSON.stringify({_id: {$exists: true}})}],
-      ['db',,{coll: 'tinytest-data', cursor: true, func: 'fetch', selector: JSON.stringify({_id: {$exists: true}}), docsFetched: 2}],
+      ['db',,{coll: 'tinytest-data', cursor: true, func: 'fetch', selector: JSON.stringify({_id: {$exists: true}}), docsFetched: 2, docSize: JSON.stringify({_id: 'aa'}).length*2}],
       ['complete']
     ];
     test.equal(result, [{_id: 'aa'}, {_id: 'bb'}]);
@@ -533,9 +535,9 @@ Tinytest.add(
       ['start',,{userId: null, params: '[]'}],
       ['wait',,{waitOn: []}],
       ['db',,{coll: 'tinytest-data', func: 'find', selector: JSON.stringify({_id: {$exists: true}})}],
-      ['db',,{coll: 'tinytest-data', func: 'fetch', cursor: true, selector: JSON.stringify({_id: {$exists: true}}), docsFetched: 2}],
+      ['db',,{coll: 'tinytest-data', func: 'fetch', cursor: true, selector: JSON.stringify({_id: {$exists: true}}), docsFetched: 2, docSize: JSON.stringify({_id: 'aa'}).length*2}],
       ['db',,{coll: 'tinytest-data', func: 'rewind', cursor: true, selector: JSON.stringify({_id: {$exists: true}})}],
-      ['db',,{coll: 'tinytest-data', func: 'fetch', cursor: true, selector: JSON.stringify({_id: {$exists: true}}), docsFetched: 2}],
+      ['db',,{coll: 'tinytest-data', func: 'fetch', cursor: true, selector: JSON.stringify({_id: {$exists: true}}), docsFetched: 2, docSize: JSON.stringify({_id: 'aa'}).length*2}],
       ['complete']
     ];
     test.equal(result, [{_id: 'aa'}, {_id: 'bb'}]);
