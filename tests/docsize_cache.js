@@ -17,11 +17,11 @@ Tinytest.add(
 
     var hash1 = cache.getKey('c1', 'q1', 'o1');
     test.equal(typeof hash1, 'string');
-    test.equal(hash1.length, 32);
+    test.equal(hash1, '["c1","q1","o1"]');
 
     var hash2 = cache.getKey('c1', 'q2', 'o1');
     test.equal(typeof hash2, 'string');
-    test.equal(hash2.length, 32);
+    test.equal(hash2, '["c1","q2","o1"]');
 
     test.notEqual(hash1, hash2);
   }
