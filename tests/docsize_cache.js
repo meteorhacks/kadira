@@ -90,9 +90,7 @@ Tinytest.add(
     score = 0.51;
     test.isTrue(cache.needsUpdate(item));
 
-    pcpu = 80.1;
-    test.isFalse(cache.needsUpdate(item));
-
+    score = 0;
     item.updated = Date.now() - 60001;
     test.isTrue(cache.needsUpdate(item));
 
