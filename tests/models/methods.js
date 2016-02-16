@@ -20,7 +20,8 @@ Tinytest.add(
               async: 0,
               compute: 7.5,
               total: 7.5,
-              fetchedDocSize: 0
+              fetchedDocSize: 0,
+              sentMsgSize: 0
             }
           }
         }
@@ -55,7 +56,8 @@ Tinytest.add(
           async: 0,
           compute: 7.5,
           total: 7.5,
-          fetchedDocSize: 0
+          fetchedDocSize: 0,
+          sentMsgSize: 0
         }
       }
     }];

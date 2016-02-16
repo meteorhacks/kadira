@@ -93,7 +93,7 @@ function configurePackage(api) {
   }
 
   api.use([
-    'minimongo', 'livedata', 'mongo-livedata', 'ejson',
+    'minimongo', 'livedata', 'mongo-livedata', 'ejson', 'ddp-common',
     'underscore', 'http', 'email', 'random'
   ], ['server']);
   api.use(['underscore', 'random', 'jquery', 'localstorage'], ['client']);
@@ -126,6 +126,7 @@ function configurePackage(api) {
     'lib/hijack/wrap_session.js',
     'lib/hijack/wrap_subscription.js',
     'lib/hijack/wrap_observers.js',
+    'lib/hijack/wrap_ddp_stringify.js',
     'lib/hijack/instrument.js',
     'lib/hijack/db.js',
     'lib/hijack/http.js',
