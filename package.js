@@ -9,7 +9,9 @@ var npmModules = {
   "debug": "0.7.4",
   "kadira-core": "1.3.1",
   "pidusage": "1.0.1",
-  "evloop-monitor": "0.1.0"
+  "evloop-monitor": "0.1.0",
+  "pidusage": "0.1.1",
+  "lru-cache": "4.0.0"
 };
 
 Npm.depends(npmModules);
@@ -61,6 +63,7 @@ Package.on_test(function(api) {
     'tests/wait_time_builder.js',
     'tests/hijack/set_labels.js',
     'tests/environment_variables.js',
+    'tests/docsize_cache.js',
   ], 'server');
 
   // common client
@@ -88,7 +91,7 @@ function configurePackage(api) {
   }
 
   api.use([
-    'minimongo', 'livedata', 'mongo-livedata', 'ejson',
+    'minimongo', 'livedata', 'mongo-livedata', 'ejson', 'ddp-common',
     'underscore', 'http', 'email', 'random'
   ], ['server']);
   api.use(['underscore', 'random', 'jquery', 'localstorage'], ['client']);
@@ -115,11 +118,13 @@ function configurePackage(api) {
     'lib/models/pubsub.js',
     'lib/models/system.js',
     'lib/models/errors.js',
+    'lib/docsize_cache.js',
     'lib/kadira.js',
     'lib/hijack/wrap_server.js',
     'lib/hijack/wrap_session.js',
     'lib/hijack/wrap_subscription.js',
     'lib/hijack/wrap_observers.js',
+    'lib/hijack/wrap_ddp_stringify.js',
     'lib/hijack/instrument.js',
     'lib/hijack/db.js',
     'lib/hijack/http.js',
@@ -128,7 +133,7 @@ function configurePackage(api) {
     'lib/hijack/error.js',
     'lib/hijack/set_labels.js',
     'lib/environment_variables.js',
-    'lib/auto_connect.js'
+    'lib/auto_connect.js',
   ], 'server');
 
   // only client

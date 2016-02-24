@@ -19,7 +19,9 @@ Tinytest.add(
               email: 0,
               async: 0,
               compute: 7.5,
-              total: 7.5
+              total: 7.5,
+              fetchedDocSize: 0,
+              sentMsgSize: 0
             }
           }
         }
@@ -29,8 +31,8 @@ Tinytest.add(
 
     var startTime = expected.methodMetrics[0].startTime;
     expected.methodMetrics[0].startTime = Kadira.syncedDate.syncTime(startTime);
-    // TODO comparing without stringify fails
-    test.equal(EJSON.stringify(payload), EJSON.stringify(expected));
+    // TODO comparing without parsing and stringifing fails
+    test.equal(EJSON.parse(EJSON.stringify(payload)), EJSON.parse(EJSON.stringify(expected)));
     CleanTestData();
   }
 );
@@ -53,13 +55,15 @@ Tinytest.add(
           email: 0,
           async: 0,
           compute: 7.5,
-          total: 7.5
+          total: 7.5,
+          fetchedDocSize: 0,
+          sentMsgSize: 0
         }
       }
     }];
     // TODO comparing without stringify fails
     expected[0].startTime = Kadira.syncedDate.syncTime(expected[0].startTime);
-    test.equal(EJSON.stringify(payload.methodMetrics), EJSON.stringify(expected));
+    test.equal(EJSON.parse(EJSON.stringify(payload.methodMetrics)), EJSON.parse(EJSON.stringify(expected)));
     CleanTestData();
   }
 );
