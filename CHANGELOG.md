@@ -1,5 +1,9 @@
 # Changelog
 
+### v2.28.0
+
+* Tracking different data size meterics (all in and out data sizes from the app). This is done is very efficient manner. So, this doesn't impact to the app's CPU usage.
+
 ### v2.27.3
 
 * Update pidusage to v1.0.1
