@@ -95,7 +95,7 @@ Tinytest.addAsync(
       test.equal(wtb._messageCache, {});
       test.equal(wtb._waitListStore, {});
       done();
-    }, 100);
+    }, 200);
   }
 );
 

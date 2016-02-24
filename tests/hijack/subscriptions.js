@@ -100,7 +100,7 @@ Tinytest.add(
     var h1 = SubscribeAndWait(client, 'tinytest-data');
     Wait(100);
     h1.stop();
-    Wait(100);
+    Wait(200);
     var metrics = FindMetricsForPub('tinytest-data');
     test.isTrue(CompareNear(metrics.lifeTime, 100));
     CloseClient(client);
@@ -143,7 +143,7 @@ Tinytest.add(
     h1.stop();
     Wait(100);
     var metrics = FindMetricsForPub('tinytest-data');
-    
+
     test.isTrue(CompareNear(metrics.observerLifetime, 100));
     CloseClient(client);
   }
