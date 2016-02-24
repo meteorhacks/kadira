@@ -426,7 +426,7 @@ Tinytest.add(
       ['start',,{userId: null, params: '[]'}],
       ['wait',,{waitOn: []}],
       ['db',,{coll: 'tinytest-data', func: 'find', selector: JSON.stringify({})}],
-      ['db',,{coll: 'tinytest-data', cursor: true, func: 'observeChanges', selector: JSON.stringify({}), oplog: false, noOfHandles: 1, noOfCachedDocs: 2, wasMultiplexerReady: false}],
+      ['db',,{coll: 'tinytest-data', cursor: true, func: 'observeChanges', selector: JSON.stringify({}), oplog: false, noOfCachedDocs: 2, wasMultiplexerReady: false}],
       ['complete']
     ];
     test.equal(result, [{_id: 'aa'}, {_id: 'bb'}]);
@@ -468,9 +468,9 @@ Tinytest.add(
       ['start',,{userId: null, params: '[]'}],
       ['wait',,{waitOn: []}],
       ['db',,{coll: 'tinytest-data', func: 'find', selector: JSON.stringify({})}],
-      ['db',,{coll: 'tinytest-data', cursor: true, func: 'observeChanges', selector: JSON.stringify({}), oplog: false, noOfHandles: 1, noOfCachedDocs: 2, wasMultiplexerReady: false}],
+      ['db',,{coll: 'tinytest-data', cursor: true, func: 'observeChanges', selector: JSON.stringify({}), oplog: false, noOfCachedDocs: 2, wasMultiplexerReady: false}],
       ['db',,{coll: 'tinytest-data', func: 'find', selector: JSON.stringify({})}],
-      ['db',,{coll: 'tinytest-data', cursor: true, func: 'observeChanges', selector: JSON.stringify({}), oplog: false, noOfHandles: 2, noOfCachedDocs: 2, wasMultiplexerReady: true}],
+      ['db',,{coll: 'tinytest-data', cursor: true, func: 'observeChanges', selector: JSON.stringify({}), oplog: false, noOfCachedDocs: 2, wasMultiplexerReady: true}],
       ['complete']
     ];
     test.equal(result, [{_id: 'aa'}, {_id: 'bb'}]);
@@ -505,7 +505,7 @@ Tinytest.add(
       ['start',,{userId: null, params: '[]'}],
       ['wait',,{waitOn: []}],
       ['db',,{coll: 'tinytest-data', func: 'find', selector: JSON.stringify({})}],
-      ['db',,{coll: 'tinytest-data', func: 'observe', cursor: true, selector: JSON.stringify({}), oplog: false, noOfHandles: 1, noOfCachedDocs: 2, wasMultiplexerReady: false}],
+      ['db',,{coll: 'tinytest-data', func: 'observe', cursor: true, selector: JSON.stringify({}), oplog: false, noOfCachedDocs: 2, wasMultiplexerReady: false}],
       ['complete']
     ];
 
