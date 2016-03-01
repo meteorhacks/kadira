@@ -1,5 +1,10 @@
 # Changelog
 
+### v2.28.2
+01-03-2016
+
+* Fix issue of not tracking null publications properly in data size tracking.
+
 ### v2.28.1
 
 * Remove cache handlers tracking from observers. This leads to better CPU usage.
