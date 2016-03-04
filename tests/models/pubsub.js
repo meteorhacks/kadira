@@ -545,3 +545,83 @@ Tinytest.add(
     CloseClient(client);
   }
 );
+
+Tinytest.add(
+  'Models - PubSub - Observers - initiallySentMsgSize',
+  function (test) {
+    CleanTestData();
+    var client = GetMeteorClient();
+    TestData.insert({aa: 10});
+    TestData.insert({aa: 20});
+    Wait(50);
+    var h1 = SubscribeAndWait(client, 'tinytest-data-random');
+    Wait(100);
+    var payload = GetPubSubPayload();
+
+    var templateMsg = '{"msg":"added","collection":"tinytest-data","id":"17digitslongidxxx","fields":{"aa":10}}';
+    var expectedMsgSize = templateMsg.length * 2;
+
+    test.equal(payload[0].pubs['tinytest-data-random'].initiallySentMsgSize, expectedMsgSize);
+    CloseClient(client);
+  }
+);
+
+Tinytest.add(
+  'Models - PubSub - Observers - liveSentMsgSize',
+  function (test) {
+    CleanTestData();
+    var client = GetMeteorClient();
+    var h1 = SubscribeAndWait(client, 'tinytest-data-random');
+    Wait(50);
+    TestData.insert({aa: 10});
+    TestData.insert({aa: 20});
+    Wait(100);
+    var payload = GetPubSubPayload();
+
+    var templateMsg = '{"msg":"added","collection":"tinytest-data","id":"17digitslongidxxx","fields":{"aa":10}}';
+    var expectedMsgSize = templateMsg.length * 2;
+
+    test.equal(payload[0].pubs['tinytest-data-random'].liveSentMsgSize, expectedMsgSize);
+    CloseClient(client);
+  }
+);
+
+Tinytest.add(
+  'Models - PubSub - Observers - liveFetchedDocSize',
+  function (test) {
+    WithDocCacheGetSize(function () {
+      CleanTestData();
+
+      var client = GetMeteorClient();
+      var h1 = SubscribeAndWait(client, 'tinytest-data-random');
+      Wait(50);
+      TestData.insert({aa: 10});
+      TestData.insert({aa: 20});
+      Wait(100);
+      var payload = GetPubSubPayload();
+
+      test.equal(payload[0].pubs['tinytest-data-random'].liveFetchedDocSize, 50);
+      CloseClient(client);
+    }, 25);
+  }
+);
+
+Tinytest.add(
+  'Models - PubSub - Observers - initiallyFetchedDocSize',
+  function (test) {
+    WithDocCacheGetSize(function () {
+      CleanTestData();
+
+      var client = GetMeteorClient();
+      TestData.insert({aa: 10});
+      TestData.insert({aa: 20});
+      Wait(50);
+      var h1 = SubscribeAndWait(client, 'tinytest-data-random');
+      Wait(100);
+      var payload = GetPubSubPayload();
+
+      test.equal(payload[0].pubs['tinytest-data-random'].initiallyFetchedDocSize, 60);
+      CloseClient(client);
+    }, 30);
+  }
+);
