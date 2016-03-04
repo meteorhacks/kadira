@@ -1,5 +1,10 @@
 # Changelog
 
+### v2.28.3
+04-03-2016
+
+* Fix re-opened bug [#83](https://github.com/meteorhacks/kadira/issues/83) which tries to use update options when it's undefined or null. This came with the recent addition of size tracking.
+
 ### v2.28.2
 01-03-2016
 
