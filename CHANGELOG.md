@@ -1,5 +1,10 @@
 # Changelog
 
+### v2.28.4
+04-03-2016
+
+* Fix regression of not tracking size data correctly. See: [#219](https://github.com/meteorhacks/kadira/pull/219)
+
 ### v2.28.3
 04-03-2016
 
