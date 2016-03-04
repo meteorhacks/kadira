@@ -136,3 +136,13 @@ CloseClient = function(client) {
   checkClientExtence(sessionId);
   return f.wait();
 };
+
+WithDocCacheGetSize = function(fn, patchedSize){
+  var original = Kadira.docSzCache.getSize
+  Kadira.docSzCache.getSize = function(){return patchedSize}
+  try {
+    fn();
+  } finally {
+    Kadira.docSzCache.getSize = original
+  }
+}
