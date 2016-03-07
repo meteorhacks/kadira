@@ -625,3 +625,23 @@ Tinytest.add(
     }, 30);
   }
 );
+
+Tinytest.add(
+  'Models - PubSub - Observers - fetchedDocSize',
+  function (test) {
+    WithDocCacheGetSize(function () {
+      CleanTestData();
+
+      var client = GetMeteorClient();
+      TestData.insert({aa: 10});
+      TestData.insert({aa: 20});
+      Wait(50);
+      var h1 = SubscribeAndWait(client, 'tinytest-data-cursor-fetch');
+      Wait(100);
+      var payload = GetPubSubPayload();
+
+      test.equal(payload[0].pubs['tinytest-data-cursor-fetch'].fetchedDocSize, 60);
+      CloseClient(client);
+    }, 30);
+  }
+);
