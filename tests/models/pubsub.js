@@ -468,6 +468,7 @@ Tinytest.add(
     Wait(200);
     var payload = GetPubSubPayload();
     test.equal(payload[0].pubs['tinytest-data-with-no-oplog'].polledDocuments, 2);
+    h1.stop();
     CloseClient(client);
   }
 );
@@ -587,31 +588,10 @@ Tinytest.add(
 );
 
 Tinytest.add(
-  'Models - PubSub - Observers - liveFetchedDocSize',
-  function (test) {
-    WithDocCacheGetSize(function () {
-      CleanTestData();
-
-      var client = GetMeteorClient();
-      var h1 = SubscribeAndWait(client, 'tinytest-data-random');
-      Wait(50);
-      TestData.insert({aa: 10});
-      TestData.insert({aa: 20});
-      Wait(100);
-      var payload = GetPubSubPayload();
-
-      test.equal(payload[0].pubs['tinytest-data-random'].liveFetchedDocSize, 50);
-      CloseClient(client);
-    }, 25);
-  }
-);
-
-Tinytest.add(
   'Models - PubSub - Observers - initiallyFetchedDocSize',
   function (test) {
     WithDocCacheGetSize(function () {
       CleanTestData();
-
       var client = GetMeteorClient();
       TestData.insert({aa: 10});
       TestData.insert({aa: 20});
@@ -627,20 +607,79 @@ Tinytest.add(
 );
 
 Tinytest.add(
+  'Models - PubSub - Observers - liveFetchedDocSize',
+  function (test) {
+    WithDocCacheGetSize(function () {
+      CleanTestData();
+      var client = GetMeteorClient();
+      var h1 = SubscribeAndWait(client, 'tinytest-data-random');
+      Wait(50);
+      TestData.insert({aa: 10});
+      TestData.insert({aa: 20});
+      Wait(100);
+      var payload = GetPubSubPayload();
+
+      test.equal(payload[0].pubs['tinytest-data-random'].liveFetchedDocSize, 50);
+      CloseClient(client);
+    }, 25);
+  }
+);
+
+Tinytest.add(
   'Models - PubSub - Observers - fetchedDocSize',
   function (test) {
     WithDocCacheGetSize(function () {
       CleanTestData();
-
       var client = GetMeteorClient();
       TestData.insert({aa: 10});
       TestData.insert({aa: 20});
-      Wait(50);
       var h1 = SubscribeAndWait(client, 'tinytest-data-cursor-fetch');
       Wait(100);
       var payload = GetPubSubPayload();
 
       test.equal(payload[0].pubs['tinytest-data-cursor-fetch'].fetchedDocSize, 60);
+      h1.stop()
+      CloseClient(client);
+    }, 30);
+  }
+);
+
+Tinytest.add(
+  'Models - PubSub - Observers - polledDocSize',
+  function (test) {
+    WithDocCacheGetSize(function () {
+      CleanTestData();
+      var client = GetMeteorClient();
+      TestData.insert({aa: 10});
+      TestData.insert({aa: 20});
+      Wait(100);
+      var h1 = SubscribeAndWait(client, 'tinytest-data-random');
+      Wait(100);
+      var payload = GetPubSubPayload();
+
+      test.equal(payload[0].pubs['tinytest-data-random'].polledDocSize, 60);
+      h1.stop()
+      CloseClient(client);
+    }, 30);
+  }
+);
+
+Tinytest.add(
+  'Models - PubSub - Observers - fetchesByPolling',
+  function (test) {
+    WithDocCacheGetSize(function () {
+      CleanTestData();
+      var client = GetMeteorClient();
+      TestData.insert({aa: 10});
+      TestData.insert({aa: 20});
+
+      Wait(50);
+      var h1 = SubscribeAndWait(client, 'tinytest-data-with-no-oplog');
+      Wait(200);
+      var payload = GetPubSubPayload();
+
+      test.equal(payload[0].pubs['tinytest-data-with-no-oplog'].fetchedDocSize, 60);
+      h1.stop();
       CloseClient(client);
     }, 30);
   }
