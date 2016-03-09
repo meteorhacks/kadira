@@ -182,6 +182,7 @@ Tinytest.add(
       this.ready();
       this.ready();
     });
+    var original = Kadira.models.pubsub._trackReady;
     Kadira.models.pubsub._trackReady = function(session, sub) {
       if(sub._name == pubId) {
         ReadyCounts++;
@@ -191,6 +192,7 @@ Tinytest.add(
     var h1 = SubscribeAndWait(client, pubId);
 
     test.equal(ReadyCounts, 1);
+    Kadira.models.pubsub._trackReady = original;
     CloseClient(client);
   }
 );
