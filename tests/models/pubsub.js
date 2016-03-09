@@ -659,34 +659,12 @@ Tinytest.add(
 
     var h1;
     WithDocCacheGetSize(function () {
-      h1 = SubscribeAndWait(client, 'tinytest-data-random');
-      Wait(200);
-    }, 30);
-
-    var payload = GetPubSubPayload();
-    test.equal(payload[0].pubs['tinytest-data-random'].polledDocSize, 60);
-    h1.stop()
-    CloseClient(client);
-  }
-);
-
-Tinytest.add(
-  'Models - PubSub - Observers - fetchesByPolling',
-  function (test) {
-    CleanTestData();
-    var client = GetMeteorClient();
-    TestData.insert({aa: 10});
-    TestData.insert({aa: 20});
-    Wait(100);
-
-    var h1;
-    WithDocCacheGetSize(function () {
       h1 = SubscribeAndWait(client, 'tinytest-data-with-no-oplog');
       Wait(200);
     }, 30);
 
     var payload = GetPubSubPayload();
-    test.equal(payload[0].pubs['tinytest-data-with-no-oplog'].fetchedDocSize, 60);
+    test.equal(payload[0].pubs['tinytest-data-with-no-oplog'].polledDocSize, 60);
     h1.stop();
     CloseClient(client);
   }
