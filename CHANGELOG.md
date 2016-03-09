@@ -1,5 +1,11 @@
 # Changelog
 
+### v2.28.5
+09-03-2016
+
+* Fix coding style issues
+* Track polledDocSize on polling observers as well
+
 ### v2.28.4
 04-03-2016
 
