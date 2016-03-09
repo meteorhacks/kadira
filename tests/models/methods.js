@@ -68,6 +68,53 @@ Tinytest.add(
   }
 );
 
+Tinytest.add(
+  'Models - Method - Metrics - fetchedDocSize',
+  function (test) {
+    var docs = [{data: 'data1'}, {data: 'data2'}];
+    docs.forEach(function(doc) {TestData.insert(doc)});
+
+    var methodId = RegisterMethod(function(){
+      var data = TestData.find({}).fetch();
+    });
+
+    var client = GetMeteorClient();
+    WithDocCacheGetSize(function () {
+      client.call(methodId);
+    }, 30);
+    Wait(100);
+
+    var payload = Kadira.models.methods.buildPayload();
+    test.equal(payload.methodMetrics[0].methods[methodId].fetchedDocSize, 60);
+    CleanTestData();
+  }
+);
+
+Tinytest.add(
+  'Models - Method - Metrics - sentMsgSize',
+  function (test) {
+    var docs = [{data: 'data1'}, {data: 'data2'}];
+    docs.forEach(function(doc) {TestData.insert(doc)});
+
+    var returnValue = "Some return value";
+    var methodId = RegisterMethod(function(){
+      var data = TestData.find({}).fetch();
+      return returnValue;
+    });
+
+    var client = GetMeteorClient();
+    client.call(methodId);
+
+    var payload = Kadira.models.methods.buildPayload();
+
+    var expected = (JSON.stringify({ msg: 'updated', methods: [ '1' ] }) +
+        JSON.stringify({ msg: 'result', id: '1', result: returnValue })).length
+
+    test.equal(payload.methodMetrics[0].methods[methodId].sentMsgSize, expected);
+    CleanTestData();
+  }
+);
+
 function GetPayload (buildDetailInfo) {
   return model.buildPayload(buildDetailInfo);
 }

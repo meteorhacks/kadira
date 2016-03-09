@@ -61,6 +61,11 @@ Meteor.publish('tinytest-data-random', function() {
   return TestData.find({aa: {$ne: Random.id()}});
 });
 
+Meteor.publish('tinytest-data-cursor-fetch', function() {
+  var data = TestData.find({}).fetch();
+  this.ready();
+});
+
 Meteor.publish('tinytest-data-2', function() {
   return TestData.find();
 });
