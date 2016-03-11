@@ -669,3 +669,28 @@ Tinytest.add(
     CloseClient(client);
   }
 );
+
+Tinytest.add(
+  'Models - PubSub - Observers - insertedDocSize',
+  function (test) {
+    CleanTestData();
+    var client = GetMeteorClient();
+
+    var pubId = RegisterPublication(function () {
+      TestData.insert({aa: 10});
+      TestData.insert({aa: 20});
+      this.ready();
+    })
+
+    var h1;
+    WithDocCacheGetSize(function () {
+      h1 = SubscribeAndWait(client, pubId);
+      Wait(200);
+    }, 30);
+
+    var payload = GetPubSubPayload();
+    test.equal(payload[0].pubs[pubId].insertedDocSize, 60);
+    h1.stop();
+    CloseClient(client);
+  }
+);

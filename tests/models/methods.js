@@ -21,6 +21,7 @@ Tinytest.add(
               compute: 7.5,
               total: 7.5,
               fetchedDocSize: 0,
+              insertedDocSize: 0,
               sentMsgSize: 0
             }
           }
@@ -57,6 +58,7 @@ Tinytest.add(
           compute: 7.5,
           total: 7.5,
           fetchedDocSize: 0,
+          insertedDocSize: 0,
           sentMsgSize: 0
         }
       }
@@ -86,6 +88,26 @@ Tinytest.add(
 
     var payload = Kadira.models.methods.buildPayload();
     test.equal(payload.methodMetrics[0].methods[methodId].fetchedDocSize, 60);
+    CleanTestData();
+  }
+);
+
+Tinytest.add(
+  'Models - Method - Metrics - insertedDocSize',
+  function (test) {
+    var methodId = RegisterMethod(function(){
+      var docs = [{data: 'data1'}, {data: 'data2'}];
+      docs.forEach(function(doc) {TestData.insert(doc)});
+      var data = TestData.find({}).fetch();
+    });
+
+    var client = GetMeteorClient();
+    WithDocCacheGetSize(function () {
+      client.call(methodId);
+    }, 30);
+
+    var payload = Kadira.models.methods.buildPayload();
+    test.equal(payload.methodMetrics[0].methods[methodId].insertedDocSize, 60);
     CleanTestData();
   }
 );
