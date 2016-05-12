@@ -1,5 +1,10 @@
 # Changelog
 
+### v2.28.6
+12-05-2016
+
+* Fix an issue of potentially, killing the due to CPU labeling of the MongoDB module.
+
 ### v2.28.5
 09-03-2016
 
