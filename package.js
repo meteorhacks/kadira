@@ -94,7 +94,7 @@ function configurePackage(api) {
     'minimongo', 'livedata', 'mongo-livedata', 'ejson', 'ddp-common',
     'underscore', 'http', 'email', 'random'
   ], ['server']);
-  api.use(['underscore', 'random', 'jquery', 'localstorage'], ['client']);
+  api.use(['underscore', 'random', 'http', 'localstorage'], ['client']);
 
   // common before
   api.add_files([
