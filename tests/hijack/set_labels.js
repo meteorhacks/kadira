@@ -6,15 +6,6 @@ Tinytest.add(
 );
 
 Tinytest.add(
-  'CPU Profiler - set labels - mongodb.Connection.createDataHandler',
-  function (test) {
-    var mongodb = MongoInternals.NpmModule;
-    var handler = mongodb.Connection.createDataHandler();
-    test.equal(handler.name, 'kadira_MongoDB_dataHandler');
-  }
-);
-
-Tinytest.add(
   'CPU Profiler - set labels - MongoCursor methods',
   function (test) {
     var cursorProto = MeteorX.MongoCursor.prototype;
