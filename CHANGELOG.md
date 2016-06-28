@@ -1,5 +1,9 @@
 # Changelog
 
+### v2.29.1
+
+* Remove MongoDB labeling. See: [PR239](https://github.com/meteorhacks/kadira/pull/239)
+
 ### v2.29.0
 
 * DocSzCache size is now configurable. See [PR238](https://github.com/meteorhacks/kadira/pull/238)
