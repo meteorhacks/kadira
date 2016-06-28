@@ -1,5 +1,9 @@
 # Changelog
 
+### v2.29.0
+
+* DocSzCache size is now configurable. See [PR238](https://github.com/meteorhacks/kadira/pull/238)
+
 ### v2.28.7
 20-05-2016
 
