@@ -1,5 +1,9 @@
 # Changelog
 
+### v2.30.0
+
+* Stop sending hostname to the client side. See [#245](https://github.com/meteorhacks/kadira/issues/245).
+
 ### v2.29.1
 
 * Remove MongoDB labeling. See: [PR239](https://github.com/meteorhacks/kadira/pull/239)
