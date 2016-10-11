@@ -1,5 +1,9 @@
 # Changelog
 
+### v2.30.1
+
+Fix [#144](https://github.com/meteorhacks/kadira/issues/144).
+
 ### v2.30.0
 
 * Stop sending hostname to the client side. See [#245](https://github.com/meteorhacks/kadira/issues/245).
