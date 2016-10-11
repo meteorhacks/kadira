@@ -11,7 +11,8 @@ var npmModules = {
   "pidusage": "1.0.1",
   "evloop-monitor": "0.1.0",
   "pidusage": "0.1.1",
-  "lru-cache": "4.0.0"
+  "lru-cache": "4.0.0",
+  "json-stringify-safe": "5.0.1"
 };
 
 Npm.depends(npmModules);
