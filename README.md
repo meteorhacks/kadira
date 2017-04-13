@@ -1,7 +1,7 @@
 # Meteor APM (formerly Kadira)
 ## [Performance Monitoring for Meteor Apps on Galaxy](https://www.meteor.com/hosting) 
 
-[![APM - Performance Monitoring for Meteor Apps on Galaxy](https://i.cloudup.com/LwrCCa_RRE.png)](https://www.meteor.com/hosting)
+[![APM - Performance Monitoring for Meteor Apps on Galaxy](https://s3.amazonaws.com/dev-apm-screenshots/meteor-apm-agent/README-2.png)](https://www.meteor.com/hosting)
 
 ### Getting started
 
