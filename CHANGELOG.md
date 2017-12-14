@@ -1,8 +1,12 @@
 # Changelog
 
+### v2.30.3
+
+* Ensure error strings are encapsulated in an `Error`-like object for transmission to the APM server.
+
 ### v2.30.2
 
-Fix [#144](https://github.com/meteorhacks/kadira/issues/144).
+* Fix [#144](https://github.com/meteorhacks/kadira/issues/144).
 
 ### v2.30.0
 
