@@ -1,5 +1,9 @@
 # Changelog
 
+### v2.30.4
+
+* Use `Object.create(null)` rather than object initializer notation when initializing objects to store metric data.
+
 ### v2.30.3
 
 * Ensure error strings are encapsulated in an `Error`-like object for transmission to the APM server.
