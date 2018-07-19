@@ -279,10 +279,25 @@ Tinytest.add(
     test.isNotUndefined(error1.stack.source);
 
     // Invalid error should be ignored
+    var getInfo = Kadira._getInfo;
+    Kadira._getInfo = function () {
+      return {
+        trace: {
+          id: 'abc123',
+          events: [{
+            key: 'value',
+          }],
+        },
+      };
+    };
+
+    subscription._subscriptionId = 'abc123';
     try {
       subscription.error(undefined);
     } catch (error) {
       test.fail('Invalid errors should not throw an exception');
+    } finally {
+      Kadira._getInfo = getInfo;
     }
   }
 );
