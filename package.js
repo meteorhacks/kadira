@@ -12,7 +12,8 @@ var npmModules = {
   "evloop-monitor": "0.1.0",
   "pidusage": "0.1.1",
   "lru-cache": "4.0.0",
-  "json-stringify-safe": "5.0.1"
+  "json-stringify-safe": "5.0.1",
+  "uuid": "3.3.2"
 };
 
 Npm.depends(npmModules);
