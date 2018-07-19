@@ -260,3 +260,29 @@ Tinytest.add(
     CloseClient(client);
   }
 );
+
+Tinytest.add(
+  'Subscriptions - wrapSubscription - handle undefined errors',
+  function (test) {
+    var subscription = {
+      error: function (error) {
+        // Do nothing
+      }
+    };
+
+    wrapSubscription(subscription);
+
+    // Valid error should work
+    var error1 = new Error('Oh no!');
+    test.isUndefined(error1.stack.source);
+    subscription.error(error1);
+    test.isNotUndefined(error1.stack.source);
+
+    // Invalid error should be ignored
+    try {
+      subscription.error(undefined);
+    } catch (error) {
+      test.fail('Invalid errors should not throw an exception');
+    }
+  }
+);
