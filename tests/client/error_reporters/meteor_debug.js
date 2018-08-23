@@ -1,3 +1,4 @@
+var uuid = Npm.require('uuid');
 
 Tinytest.add(
   'Client Side - Error Manager - Reporters - meteor._debug - with zone',
@@ -5,7 +6,7 @@ Tinytest.add(
     hijackKadiraSendErrors(mock_KadiraSendErrors);
     test.equal(typeof Meteor._debug, 'function');
     var errorSent = false;
-    var message = Meteor.uuid();
+    var message = uuid();
 
     // set window.zone as nothing
     var originalZone = window.zone;
@@ -15,7 +16,7 @@ Tinytest.add(
     test.equal(errorSent, false);
     restoreKadiraSendErrors();
 
-    // cleajr 
+    // cleajr
     window.zone = originalZone;
     function mock_KadiraSendErrors(data) {
       errorSent = true;
@@ -30,7 +31,7 @@ Tinytest.add(
     test.equal(typeof Meteor._debug, 'function');
     var errorSent = false;
     var originalZone = window.zone;
-    var message = Meteor.uuid();
+    var message = uuid();
     window.zone = undefined;
 
     try {
@@ -61,7 +62,7 @@ Tinytest.add(
     test.equal(typeof Meteor._debug, 'function');
     var errorSent = false;
     var originalZone = window.zone;
-    var message = Meteor.uuid();
+    var message = uuid();
     window.zone = undefined;
 
     try {

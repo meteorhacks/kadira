@@ -1,8 +1,8 @@
 Package.describe({
   "summary": "Performance Monitoring for Meteor",
-  "version": "2.30.2",
-  "git": "https://github.com/meteorhacks/kadira.git",
-  "name": "meteorhacks:kadira"
+  "version": "3.1.2",
+  "git": "https://github.com/meteor/meteor-apm-agent.git",
+  "name": "mdg:meteor-apm-agent"
 });
 
 var npmModules = {
@@ -12,7 +12,8 @@ var npmModules = {
   "evloop-monitor": "0.1.0",
   "pidusage": "0.1.1",
   "lru-cache": "4.0.0",
-  "json-stringify-safe": "5.0.1"
+  "json-stringify-safe": "5.0.1",
+  "uuid": "3.3.2"
 };
 
 Npm.depends(npmModules);
@@ -95,7 +96,7 @@ function configurePackage(api) {
     'minimongo', 'livedata', 'mongo-livedata', 'ejson', 'ddp-common',
     'underscore', 'http', 'email', 'random'
   ], ['server']);
-  api.use(['underscore', 'random', 'jquery', 'localstorage'], ['client']);
+  api.use(['underscore', 'random', 'http', 'localstorage'], ['client']);
 
   // common before
   api.add_files([
